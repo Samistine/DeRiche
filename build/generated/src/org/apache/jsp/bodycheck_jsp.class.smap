@@ -1,0 +1,10 @@
+SMAP
+bodycheck_jsp.java
+JSP
+*S JSP
+*F
++ 0 bodycheck.jsp
+bodycheck.jsp
+*L
+1,408:44
+*E
