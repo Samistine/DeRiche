@@ -5,7 +5,7 @@
  */
 package Business;
 
-import dataAccess.db;
+import dataAccess.DB;
 import dataAccess.Access;
 import dataAccess.*;
 import java.sql.Connection;
@@ -18,6 +18,7 @@ import java.sql.SQLException;
  * @author Carl
  */
 public class Goal extends Access {
+
     private String goalID;
     private String description;
     private String objective;
@@ -123,48 +124,50 @@ public class Goal extends Access {
     public void setPatientID(String patientID) {
         this.patientID = patientID;
     }
-/******************************************************************************************
-*   
-* User display for testing.
- *****************************************************************************************/
-    public void display()
-    {
+
+    /**
+     * ****************************************************************************************
+     *
+     * User display for testing.
+ ****************************************************************************************
+     */
+    public void display() {
         System.out.println("Begin Goal.java display ");
-        System.out.println("Goal Id: "+getGoalID());
-        System.out.println("Description: "+getDescription());
-        System.out.println("Objective: "+getObjective());
-        System.out.println("Note: "+getGuidanceNote());
-        System.out.println("Frequency: "+getFrequency());
-        System.out.println("IsWeekly: "+getIsWeekly());
-        System.out.println("PatientID: "+getPatientID());
+        System.out.println("Goal Id: " + getGoalID());
+        System.out.println("Description: " + getDescription());
+        System.out.println("Objective: " + getObjective());
+        System.out.println("Note: " + getGuidanceNote());
+        System.out.println("Frequency: " + getFrequency());
+        System.out.println("IsWeekly: " + getIsWeekly());
+        System.out.println("PatientID: " + getPatientID());
         System.out.println("End Goal.java display ");
     }//end display
-/******************************************************************************************
-* SelectDB() Method
-* This selectDB method will go in to the Appointments table in the Dentist DB.
-* @deprecated
-*****************************************************************************************/
-public void selectDB(String gid) throws SQLException
-{
-    goalID = gid;
- 
-    
-    Connection con1 = null;
-    PreparedStatement ps = null;
-    
-    String sql = "Select * from goal where GoalID = ?";
-    
-        try
-        {
-            con1 = db.dbc();
+
+    /**
+     * ****************************************************************************************
+     * SelectDB() Method This selectDB method will go in to the Appointments
+     * table in the Dentist DB.
+     *
+     * @deprecated
+****************************************************************************************
+     */
+    public void selectDB(String gid) throws SQLException {
+        goalID = gid;
+
+        Connection con1 = null;
+        PreparedStatement ps = null;
+
+        String sql = "Select * from goal where GoalID = ?";
+
+        try {
+            con1 = DB.dbc();
             ps = con1.prepareStatement(sql);
             ps.setString(1, getGoalID());
             //execute sql statement
             ResultSet rs = ps.executeQuery();
-            
-            while(rs.next())
-            { 
-         
+
+            while (rs.next()) {
+
                 setDescription(rs.getString(2));
                 setObjective(rs.getString(3));
                 setGuidanceNote(rs.getString(4));
@@ -172,221 +175,177 @@ public void selectDB(String gid) throws SQLException
                 setIsWeekly(rs.getString(6));
                 setPatientID(rs.getString(7));
             }
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
-            
-        finally
-        {
-            if (ps != null)
-            {
+        } finally {
+            if (ps != null) {
                 ps.close();
             }
-            
-            if(con1 != null)
-            {
-            con1.close();
+
+            if (con1 != null) {
+                con1.close();
             }
         }
-           
-}// end public void selectDB
-/*******************************************************************************
-* Insert method will put user info into the DeRichie web app.
-* Inserts into the note table.
-* @deprecated
-*******************************************************************************/
-public void insertDB(String gid, String d, String ob, String nt, String fr, String wkly, String pid) throws SQLException
-{
-    goalID = gid;
-    description = d;
-    objective = ob;
-    guidanceNote = nt;
-    frequency = fr;
-    isWeekly = wkly;
-    patientID = pid;  
-    
-    Connection con1 = null;
-    PreparedStatement ps = null;
-    
-    String sql = "insert into goal"
-                                      +"(goalid, Description, objective, note, frequency, isweekly, patientID) values" 
-            
-                                      +"(?,?,?,?,?,?,?)";
-        
-    try 
-    {
-        con1 = db.dbc();
-        ps = con1.prepareStatement(sql);
-       
-        ps.setString(1, getGoalID());
-        ps.setString(2, getDescription());
-        ps.setString(3, getObjective());
-        ps.setString(4, getGuidanceNote());
-        ps.setString(5, getFrequency());
-        ps.setString(6, getIsWeekly());
-        ps.setString(7, getPatientID());
-        
-        
-        
-         int n = ps.executeUpdate();
-          
-        if(n==1)
-        { 
-            System.out.println("Insert Goal.java Successful!!!");
-        }
-        else
-        {
-            System.out.println("Insert Goal.java Failed!!!");
-           
-        }
-    }
-    catch(SQLException e)
-    {
-        e.printStackTrace();
-    }
-    finally
-    {
-        if(ps != null)
-        {
-            ps.close();
-        }
-        
-        if(con1 != null)
-        {
-            con1.close();
-        }
-    }
-}// end public void insertDB
-/******************************************************************************************
-** updateDBAdmin() Method
-* This will allow the admin to update
-* the note table in the in the DeRichie DB.
-* @deprecated
-*****************************************************************************************/
-public void updateDB() throws SQLException
-{
-    Connection con1 = null;
-    PreparedStatement ps = null;
-   
-    String sql = "update goal set description = ?, objective = ?, note = ?, frequency = ?, isweekly = ?, patientID = ? Where GoalID = ?";
-    
-    try
-    {
-        con1 = db.dbc();
-        ps = con1.prepareStatement(sql);
-        
-        
-        
-        ps.setString(1, getDescription());
-        ps.setString(2, getObjective());
-        ps.setString(3, getGuidanceNote());
-        ps.setString(4, getFrequency());
-        ps.setString(5, getIsWeekly());
-        ps.setString(6, getPatientID());
-        ps.setString(7, getGoalID());
-        
-        System.out.println(sql);
-          
-          
-          
-        int n = ps.executeUpdate();
-          
-        if(n==1)
-        { 
-            System.out.println("Goal Update Successful!!!");
-        }
-        else
-        {
-            System.out.println("Goal Update Failed!!!");
-           
-        }
-    }
-    catch(SQLException e)
-    {
-        e.printStackTrace();
-    }
-    finally
-    {
-        if(ps != null)
-        {
-            ps.close();
-        }
-        
-        if(con1 != null)
-        {
-            con1.close();
-        }
-    }
-}//end updateDBAdmin
-/******************************************************************************************
-* deleteDB() Method
-* This deleteDB method will go in to the  table in the Dentist DB.
-* @deprecated
-*****************************************************************************************/
-public void deleteDB() throws SQLException
-{
-      
-    PreparedStatement ps = null;
-    Connection con1 = null;
-    
-    
- 
-    String sql = "delete from goal where GoalID = ?";
-    
-    
-        try
-        {
-          con1 = db.dbc();
-          ps = con1.prepareStatement(sql);
-          
-          ps.setString(1, getGoalID());
 
-          
-          System.out.println(sql);
-          
-          
-          
-           int n = ps.executeUpdate();
-          
-           if(n==1)
-           { 
-               System.out.println("Delete Successful!!!");
-           }
-           else
-           {
-               System.out.println("Delete Failed!!!");
-           
-           }
-                  
-        }//end try
-        catch(SQLException e)
-        {
-           e.printStackTrace();
+    }// end public void selectDB
+
+    /**
+     * *****************************************************************************
+     * Insert method will put user info into the DeRichie web app. Inserts into
+     * the note table.
+     *
+     * @deprecated
+******************************************************************************
+     */
+    public void insertDB(String gid, String d, String ob, String nt, String fr, String wkly, String pid) throws SQLException {
+        goalID = gid;
+        description = d;
+        objective = ob;
+        guidanceNote = nt;
+        frequency = fr;
+        isWeekly = wkly;
+        patientID = pid;
+
+        Connection con1 = null;
+        PreparedStatement ps = null;
+
+        String sql = "insert into goal"
+                + "(goalid, Description, objective, note, frequency, isweekly, patientID) values"
+                + "(?,?,?,?,?,?,?)";
+
+        try {
+            con1 = DB.dbc();
+            ps = con1.prepareStatement(sql);
+
+            ps.setString(1, getGoalID());
+            ps.setString(2, getDescription());
+            ps.setString(3, getObjective());
+            ps.setString(4, getGuidanceNote());
+            ps.setString(5, getFrequency());
+            ps.setString(6, getIsWeekly());
+            ps.setString(7, getPatientID());
+
+            int n = ps.executeUpdate();
+
+            if (n == 1) {
+                System.out.println("Insert Goal.java Successful!!!");
+            } else {
+                System.out.println("Insert Goal.java Failed!!!");
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                ps.close();
+            }
+
+            if (con1 != null) {
+                con1.close();
+            }
         }
-        finally
-        {
-            try
-            {    
-                if(ps != null)
-                {
+    }// end public void insertDB
+
+    /**
+     * ****************************************************************************************
+     ** updateDBAdmin() Method This will allow the admin to update the note
+     * table in the in the DeRichie DB.
+     *
+     * @deprecated
+****************************************************************************************
+     */
+    public void updateDB() throws SQLException {
+        Connection con1 = null;
+        PreparedStatement ps = null;
+
+        String sql = "update goal set description = ?, objective = ?, note = ?, frequency = ?, isweekly = ?, patientID = ? Where GoalID = ?";
+
+        try {
+            con1 = DB.dbc();
+            ps = con1.prepareStatement(sql);
+
+            ps.setString(1, getDescription());
+            ps.setString(2, getObjective());
+            ps.setString(3, getGuidanceNote());
+            ps.setString(4, getFrequency());
+            ps.setString(5, getIsWeekly());
+            ps.setString(6, getPatientID());
+            ps.setString(7, getGoalID());
+
+            System.out.println(sql);
+
+            int n = ps.executeUpdate();
+
+            if (n == 1) {
+                System.out.println("Goal Update Successful!!!");
+            } else {
+                System.out.println("Goal Update Failed!!!");
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                ps.close();
+            }
+
+            if (con1 != null) {
+                con1.close();
+            }
+        }
+    }//end updateDBAdmin
+
+    /**
+     * ****************************************************************************************
+     * deleteDB() Method This deleteDB method will go in to the table in the
+     * Dentist DB.
+     *
+     * @deprecated
+****************************************************************************************
+     */
+    public void deleteDB() throws SQLException {
+
+        PreparedStatement ps = null;
+        Connection con1 = null;
+
+        String sql = "delete from goal where GoalID = ?";
+
+        try {
+            con1 = DB.dbc();
+            ps = con1.prepareStatement(sql);
+
+            ps.setString(1, getGoalID());
+
+            System.out.println(sql);
+
+            int n = ps.executeUpdate();
+
+            if (n == 1) {
+                System.out.println("Delete Successful!!!");
+            } else {
+                System.out.println("Delete Failed!!!");
+
+            }
+
+        }//end try//end try
+        catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
                     ps.close();
                 }
-                if(con1 != null)
-                {
+                if (con1 != null) {
                     con1.close();
                 }
-            }
-            catch(SQLException sqle)
-            {
+            } catch (SQLException sqle) {
                 System.out.println(sqle);
             }
         }//end finally
-   }//end deleteDB
-public static void main(String[] args)
-{
- /* 
+    }//end deleteDB
+
+    public static void main(String[] args) {
+        /* 
 //Testing selectDB(String un)
      try
     {
@@ -398,8 +357,8 @@ public static void main(String[] args)
     {
         System.out.println(e);
     }
-     */
-    /*
+         */
+ /*
      //Testing insertDB
     try
     {
@@ -411,8 +370,8 @@ public static void main(String[] args)
     {
         System.out.println(e);
     }
-    */
-    /*
+         */
+ /*
     //Testing updateDB
     try
     {
@@ -426,20 +385,17 @@ public static void main(String[] args)
     {
         System.out.println(e);
     } 
-    */
-    
-    //Testing deleteDB
-    try
-    {
-        Goal g = new Goal();
-        g.selectDB("14");
-        g.display();
-        g.deleteDB();
-    }
-    catch(SQLException e)
-    {
-        System.out.println(e);
-    }
-     
-}//end main method             
+         */
+
+        //Testing deleteDB
+        try {
+            Goal g = new Goal();
+            g.selectDB("14");
+            g.display();
+            g.deleteDB();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+    }//end main method             
 }//end public class Goal 

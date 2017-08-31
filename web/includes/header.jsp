@@ -16,7 +16,7 @@
                 <h1>DeRiche Agency, Inc.</h1>
             </header>
             <nav>
-                <ul> 
+                <ul>
                     <li><a href="dbhome.jsp">Home</a></li>
                     <li><a href="bodycheck.jsp">Create Form</a></li>
                     <ul class="nav-dropdown">

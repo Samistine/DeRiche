@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Business;
+package servlets;
 
+import Business.FormInfo;
+import Business.Forms;
+import Business.User;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -15,7 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import Business.User;
+
 /**
  *
  * @author Carl Moon
@@ -34,7 +37,7 @@ public class BodyCheckServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         String canvasData;
         String sigData;
         String firstName;
@@ -45,7 +48,7 @@ public class BodyCheckServlet extends HttpServlet {
         String why;
         String firstAid;
         String recommend;
-        
+
         canvasData = request.getParameter("picURL");
         sigData = request.getParameter("sigURL");
         firstName = request.getParameter("firstName");
@@ -56,24 +59,21 @@ public class BodyCheckServlet extends HttpServlet {
         why = request.getParameter("why");
         firstAid = request.getParameter("firstAid");
         recommend = request.getParameter("recommend");
-        
+
         FormInfo info = new FormInfo(FormInfo.BODY_CHECK);
-        info.setValues(new String[] {canvasData, sigData, firstName, lastName, what, where, when, why, firstAid, recommend});
+        info.setValues(new String[]{canvasData, sigData, firstName, lastName, what, where, when, why, firstAid, recommend});
 
         Calendar cal = new GregorianCalendar();
-        String date = cal.YEAR +"-"+ cal.MONTH +"-"+ cal.DAY_OF_MONTH;
-                //+" "+ cal.HOUR_OF_DAY+":"+cal.MINUTE+":"+cal.SECOND;
-        
+        String date = cal.YEAR + "-" + cal.MONTH + "-" + cal.DAY_OF_MONTH;
+        //+" "+ cal.HOUR_OF_DAY+":"+cal.MINUTE+":"+cal.SECOND;
+
         HttpSession session = request.getSession();
-        
-        
+
         //session.setAttribute("User", User);
-       
-        User user = (User)session.getAttribute("User");
-        
+        User user = (User) session.getAttribute("User");
 
         Forms form = new Forms();
-        
+
         form.insertDB(user.getUserId(), "7", "BODY_CHECK", "test", date, "1");
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("FormRetrieval.jsp");
