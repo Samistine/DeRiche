@@ -8,7 +8,7 @@
     <head>
         <title>${param.pageTitle}</title>
         <meta charset="utf-8">
-        <link href="includes/style.css" rel="stylesheet">
+        <link href="static/style.css" rel="stylesheet">
     </head>
     <body onload="init()">
         <div id="wrapper" onload="speak()">
