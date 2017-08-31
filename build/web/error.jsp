@@ -1,16 +1,11 @@
 <%-- 
-  R. Carl Moon
+    Adjuster: Syed A.
 --%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Login Failed!!!</h1>
-        <a href="index.jsp">Try Again!<a/>
-    </body>
-</html>
+<jsp:include page="includes/header.jsp">
+    <jsp:param name="pageTitle" value="Body Check Form"/>
+</jsp:include>
+<main>
+    <h2>Login Failed!!!</h1>
+    <a href="index.jsp">Try Again!<a/>
+</main>
+<jsp:include page="includes/footer.jsp"/>

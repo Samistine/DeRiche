@@ -8,7 +8,7 @@ body { background-color: #330000;
 		   color: #330000;
 		   box-shadow: 5px 5px 5px #000000;
 }
-h1 { background-image: url(images/logo.gif);
+h1 {
      background-repeat: no-repeat;
      background-color: #F4E8BC;
 	 height: 110px;
