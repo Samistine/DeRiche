@@ -64,8 +64,7 @@ public class BodyCheckServlet extends HttpServlet {
         String date = cal.YEAR +"-"+ cal.MONTH +"-"+ cal.DAY_OF_MONTH;
                 //+" "+ cal.HOUR_OF_DAY+":"+cal.MINUTE+":"+cal.SECOND;
         
-        HttpSession session;
-        session = request.getSession();
+        HttpSession session = request.getSession();
         
         
         //session.setAttribute("User", User);
