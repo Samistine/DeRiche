@@ -1,5 +1,6 @@
 <%-- 
     Author: Syed A.
+    TODO: DELETE THIS
 --%>
 <jsp:include page="includes/header.jsp">
     <jsp:param name="pageTitle" value="Home | Login"/>
