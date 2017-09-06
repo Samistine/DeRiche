@@ -3,3 +3,4 @@ build/
 nbproject/private
 Java Project/web/META-INF/context.xml
 Java Project/nbbuild.xml
+.DS_STORE
