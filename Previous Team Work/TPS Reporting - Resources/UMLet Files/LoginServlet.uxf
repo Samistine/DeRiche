@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.1.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>310</y>
+      <w>540</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>HttpServlet
+--
++HttpServlet()
+#doDelete(HttpServletRequest req, HttpServletResponse resp): void
+#doGet(HttpServletRequest req, HttpServletResponse resp): void
+#doHead(HttpServletRequest req, HttpServletResponse resp): void
+#doOptions(HttpServletRequest req, HttpServletResponse resp): void
+#doPost(HttpServletRequest req, HttpServletResponse resp): void
+#doPut(HttpServletRequest req, HttpServletResponse resp): void
+#doTrace(HttpServletRequest req, HttpServletResponse resp): void
+#getLastModified(HttpServletRequest req): void
+#service(HttpServletRequest req, HttpServletResponse resp): void
+#service(ServletRequest req, ServletResponse res): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>280</x>
+      <y>200</y>
+      <w>30</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>80</y>
+      <w>540</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>LoginServlet
+--
+-loginID: String
+-loginPassword: String
+--
+#processRequest(HttpServletRequest request, HttpServletResponse response): void
+#doGet(HttpServletRequest request, HttpServletResponse response): void
+#doPost(HttpServletRequest request, HttpServletResponse response): void
++getServletInfo(): String</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

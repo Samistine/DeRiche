@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.1.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>120</x>
+      <y>160</y>
+      <w>410</w>
+      <h>290</h>
+    </coordinates>
+    <panel_attributes>DBConnection
+--
+_+SELECT: char_
+_+INSERT: char_
+_+UPDATE: char_
+_+DELETE: char_
+_-connection: String_
+_-driver: String_
+--
+_+setConnection(String connection): void_
+_+setDriver(String driver): void_
+_+getConnection(): String_
+_+getDriver(): String_
+_+select(String sql, String var): Object[] &lt;&lt; deprecated &gt;&gt;_
+_+select(String sql, String var, int column, boolean set): Object[][]_
+_+insert(String sql, String var, boolean set): void_
+_+update(String sql, String var, int column): void_
+_+delete(String sql, String var, int column): void_
+_+establish(): Connection_</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

@@ -1,0 +1,340 @@
+For a basic business object class like User shown below, you can either implement or Accessible, or extend Access.
+If you decide to custom fit your class' setStatementValues(PreparedStatement statement, Object[] values) and getPrimaryKeyIndex() methods, this is a basic example of how exactly you would go about it.
+
+It is usually easier to just extend the Access class, but situations may call for you to do this. The end result will be the same either way, as long as you can set up the methods right.
+Since Access is a super class, you can use either the overriden method or the super methods in the same class if you wish.
+
+I know it's kind of complicated, but trust me when I say that this makes database access extremely simple.
+
+
+/******************************************************************************************
+* @author Carl Moon 3-28-17
+* User business object for DeRichie web app.
+*****************************************************************************************/
+package business;
+
+import java.sql.PreparedStatement;
+
+import dataAccess.Accessible;
+import dataAccess.DBConnection;
+
+/******************************************************************************************
+* 
+* User main class for DeRichie web app.
+*****************************************************************************************/
+public class User implements Accessible {
+	
+	//User Identification Number
+	private String userId;
+    //User Name
+	private String userName;
+	//Password
+    private String password;
+    //Pin Number
+    private String pin;
+    //First Name
+    private String firstName;
+    //Last Name
+    private String lastName;
+    //User title
+    private String title;
+    //Clearance level
+    private String clearance;
+    
+    /**
+     * Constructs a new instance of a User object
+     */
+	public User() {
+    	//Test Select
+    	//selectDB(1240);
+    	//display();
+    	
+    	//Test Insert
+    	//Object[] values = new Object[] {1240, "DudetheNoob", "GottaCatchem'", "222", "Harold", "Rayman", "admin", "1"};
+    	//insertDB(values);
+    	//display();
+    	
+    	//Test Update
+    	//selectDB(1240);
+    	//password = "myPassw0rd";
+    	//updateDB(1240);
+    	//display();
+    	
+    	//Test Delete
+    	//deleteDB(1240);
+	}
+	
+    /**
+     * Constructs a new instance of a User object with all of its attributes set
+     */
+    public User(String userId, String userName, String password, String pin, String firstName, String lastName,
+			String title, String clearance) {
+    	
+		this.userId = userId;
+		this.userName = userName;
+		this.password = password;
+		this.pin = pin;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.title = title;
+		this.clearance = clearance;
+	}
+    
+    /**
+     * @return the userId
+     */
+    public String getUserId() {
+    	return userId;
+    }
+    
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(String userId) {
+    	this.userId = userId;
+    }
+    
+    /**
+     * @return the userName
+     */
+    public String getUserName() {
+    	return userName;
+    }
+    
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+    	this.userName = userName;
+    }
+    
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+		return password;
+	}
+
+    /**
+     * @param password the password to set
+     */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+    /**
+     * @return the pin
+     */
+    public String getPin() {
+    	return pin;
+    }
+    
+    /**
+     * @param pin the pin to set
+     */
+    public void setPin(String pin) {
+    	this.pin = pin;
+    }
+
+    /**
+     * @return the firstName
+     */
+	public String getFirstName() {
+		return firstName;
+	}
+
+    /**
+     * @param firstName the firstName to set
+     */
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+    /**
+     * @return the lastName
+     */
+	public String getLastName() {
+		return lastName;
+	}
+
+    /**
+     * @param lastName the lastName to set
+     */
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+    /**
+     * @return the title
+     */
+	public String getTitle() {
+		return title;
+	}
+
+    /**
+     * @param title the title to set
+     */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+    /**
+     * @return the clearance
+     */
+	public String getClearance() {
+		return clearance;
+	}
+
+    /**
+     * @param clearance the clearance to set
+     */
+	public void setClearance(String clearance) {
+		this.clearance = clearance;
+	}
+	
+    /******************************************************************************************
+     * 
+    * User display for testing.
+     *****************************************************************************************/
+    public void display()
+    {
+        System.out.println("Begin User.java display ");
+        System.out.println("User Id: "+ getUserId());
+        System.out.println("User Name: "+ getUserName());
+        System.out.println("Password: "+ getPassword());
+        System.out.println("Pin: "+ getPin());
+        System.out.println("First Name: "+ getFirstName());
+        System.out.println("Last Name: "+ getLastName());
+        System.out.println("Title: "+ getTitle());
+        System.out.println("Clearence: "+ getClearance());
+        System.out.println("End User.java display ");
+    }//end display
+
+    /******************************************************************************************
+    * SelectDB() Method
+    * This selectDB method will go in to the Appointments table in the Dentist DB.
+    *****************************************************************************************/
+    public void selectDB(int primaryKey) {
+    	try {
+    		setStatementValues(null, DBConnection.select(this, primaryKey));
+    	}
+    	
+    	catch (Exception ex) {
+    		ex.printStackTrace();
+    	}
+    }
+    
+    /*******************************************************************************
+    * Insert method will put patient info into the DeRichie web application.
+    * Inserts into the Participant table.
+    * 3-2-17 Changed the local var's so that they were not the same as the global
+    * var's. I also corrected the number of place holders to match the number of
+    * var's being inserted into the database. Corrected int's to strings.
+    * 
+    *******************************************************************************/
+    public void insertDB(Object[] values) {
+    	try {
+    		System.out.println(DBConnection.insert(this, values));
+    	}
+    	
+    	catch (Exception ex) {
+    		ex.printStackTrace();
+    	}
+    }
+    
+    /******************************************************************************************
+    * updateDB() Method
+    * This updateDB method will allow a non admin
+    * user to update the user table with limited access in the in the DeRichie DB.
+    * Corrected int's to strings.
+    *****************************************************************************************/
+    public void updateDB(int primaryKey) {
+    	try {
+    		System.out.println(DBConnection.update(this, primaryKey));
+    	}
+    	
+    	catch (Exception ex) {
+    		ex.printStackTrace();
+    	}
+    }
+    
+    /******************************************************************************************
+    * deleteDB() Method
+    * This deleteDB method will go in to participant table.
+    * Carl Moon II 3-1-17 Corrected int's to strings.
+    *****************************************************************************************/
+    public void deleteDB(int primaryKey) {
+    	try {
+    		System.out.println(DBConnection.delete(this, primaryKey));
+    	}
+    	
+    	catch (Exception ex) {
+    		ex.printStackTrace();
+    	}
+    }
+    
+	@Override
+	public PreparedStatement setStatementValues(PreparedStatement statement, Object[] values) {
+		
+		if (values != null) {
+			
+		    setUserId(values[0] + "");
+		    setUserName((String)values[1]);
+		    setPassword((String)values[2]);
+		    setPin((String)values[3]);
+		    setFirstName((String)values[4]);
+		    setLastName((String)values[5]);
+	        setTitle((String)values[6]);
+	        setClearance((String)values[7]);
+	        
+	        if (statement == null) {
+	        	return null;
+	        }
+		}
+		
+        try {
+            if (values != null) {
+                statement.setString(1, getUserId());
+                statement.setString(2, getUserName());
+                statement.setString(3, getPassword());
+                statement.setString(4, getPin());
+                statement.setString(5, getFirstName());
+                statement.setString(6, getLastName());
+                statement.setString(7, getTitle());
+                statement.setString(8, getClearance());
+                
+            } else {
+                statement.setString(1, getUserName());
+                statement.setString(2, getPassword());
+                statement.setString(3, getPin());
+                statement.setString(4, getFirstName());
+                statement.setString(5, getLastName());
+                statement.setString(6, getTitle());
+                statement.setString(7, getClearance());
+                statement.setString(8, getUserId());
+            }
+        }
+        
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+		
+		return statement;
+	}//end setStatementValues method
+
+	@Override
+	public int getPrimaryKeyIndex() {
+		return 0;
+	}
+	
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", userName=" + userName + ", password=" + password + ", pin=" + pin
+				+ ", firstName=" + firstName + ", lastName=" + lastName + ", title=" + title + ", clearance="
+				+ clearance + "]";
+	}
+	
+	public static void main(String[] args) {
+		new User();
+	}//end main method   
+}// end public class User 

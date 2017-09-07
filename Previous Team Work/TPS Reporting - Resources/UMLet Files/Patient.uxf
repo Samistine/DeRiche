@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.1.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>170</x>
+      <y>140</y>
+      <w>330</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes>Patient
+--
+-firstName: String
+-insurance: String
+-lastName: String
+-medicaidNumber: String
+-patientId: String
+--
++deleteDB(): void
++display(): void
++getFirstName(): String
++getInsurance(): String
++getLastName(): String
++getMedicaidNumber(): String
++getPatientId(): String
++insertDB(String, String, String, String, String): void
++selectDB(String): void
++setFirstName(String): void
++setInsurance(String): void
++setLastName(String): void
++setMedicaidNumber(String): void
++setPatientId(String): void
++updateDB(): void
++updateDBAdmin(): void
++main(String[]): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

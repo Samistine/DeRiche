@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.1.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>170</x>
+      <y>160</y>
+      <w>280</w>
+      <h>440</h>
+    </coordinates>
+    <panel_attributes>User
+--
+-userID: int
+-userName: String
+-password: String
+-firstName: String
+-lastName: String
+-title: String
+-clearance: char
+-pin: int
+-dbConnect: UserDBConnect
+--
++setUserID(int userID): void
++setUserName(String userName): void
++setPassword(String password): void
++setFirstName(String firstName): void
++setLastName(String firstName): void
++setTitle(String title): void
++setClearance(char clearance): void
++setPint(int pin): void
++getUserID(): int
++getUserName(): String
++getPassword(): String
++getFirstName(): String
++getLastName(): String
++getTitle(): String
++getClearance(): String
++getPin(): int</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

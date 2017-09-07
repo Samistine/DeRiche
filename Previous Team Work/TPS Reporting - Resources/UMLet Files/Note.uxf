@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.1.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>10</y>
+      <w>600</w>
+      <h>710</h>
+    </coordinates>
+    <panel_attributes>Note
+--
+-Comment: String
+-Last_Updated: String
+-noteID: String
+-NoteReviewer_Accepted: String
+-notes: String
+-patientID: String
+-Submitted: String
+-Time_Accepted: String
+-Time_Started: String
+-Time_Submitted: String
+-TimeReviewer_Accepted: String
+-UserID: String
+--
++deleteDB(): void
++display(): void
++getComment(): String
++getLast_Updated(): String
++getNoteID(): String
++getNoteReviewer_Accepted(): String
++getNotes(): String
++getPatientID(): String
++getSubmitted(): String
++getTime_Accepted(): String
++getTime_Started(): String
++getTime_Submitted(): String
++getTimeReviewer_Accepted(): String
++getUserID(): String
++insertDB(String, String, String, String, String, String, String, String, String, String, String): void
++selectDB(String): void
++setComment(String): void
++setLast_Updated(String): void
++setNoteID(String): void
++setNoteReviewer_Accepted(String): void
++setNotes(String): void
++setPatientID(String): void
++setSubmitted(String): void
++setTime_Accepted(String): void
++setTime_Started(String): void
++setTime_Submitted(String): void
++setTimeReviewer_Accepted(String): void
++setUserID(String): void
++updateDBAdmin(): void
++main(String[]): void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

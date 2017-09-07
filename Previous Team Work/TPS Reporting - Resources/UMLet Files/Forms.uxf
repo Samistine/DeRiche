@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.1.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>100</x>
+      <y>120</y>
+      <w>480</w>
+      <h>470</h>
+    </coordinates>
+    <panel_attributes>Forms
+--
+-formID : String
+-userID : String
+-patientID : String
+-formType : String
+-formInfo : String
+-date : String
+-revision1 : String
+--
++deleteDB(): void
++display(): void
++getDate(): String
++getFormID(): String
++getFormInfo(): String
++getFormType(): String
++getPatientID(): String
++getRevision1(): String
++getUserID(): String
++insertDB(String uid, String pid, String ft, String fi, String dt, String r1): void
++selectDB(String fid): void
++setDate(String date): void
++setFormID(String formID): void
++setFormInfo(String formInfo): void
++setFormType(String formType): void
++setPatientID(String patientID): void
++setRevision1(String revision1): void
++setUserID(String userID): void
++updateDBAdmin(): void
++main(String[] args): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
