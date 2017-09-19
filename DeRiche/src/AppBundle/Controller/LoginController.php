@@ -6,14 +6,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class DevController extends Controller
+class LoginController extends Controller
 {
     /**
-     * @Route("/dev", name="dev page")
+     * @Route("/login", name="dev page")
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('patient.html.twig');
+        return $this->render('login.html.twig');
     }
 }

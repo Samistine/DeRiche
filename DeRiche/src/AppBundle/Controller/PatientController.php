@@ -51,6 +51,6 @@ class PatientController extends Controller
             );
         }
 
-        return $this->render('patient/view.html.twig', array('patient' => $patient));
+        return $this->render('patient.html.twig', array('patient' => $patient));
     }
 }
