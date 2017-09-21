@@ -9,6 +9,7 @@
             <th>First Name</th>
             <th>Last Name</th>
             <th>Insurance</th>
+            <th>Manage</th>
         </tr>
         </thead>
         <tfoot>
@@ -17,6 +18,7 @@
             <th>First Name</th>
             <th>Last Name</th>
             <th>Insurance</th>
+            <th>Manage</th>
         </tr>
         </tfoot>
         <tbody>
@@ -26,6 +28,26 @@
                 <td>{{ patient.firstName }}</td>
                 <td>{{ patient.lastName }}</td>
                 <td>{{ patient.insurance }}</td>
+                <td>
+                    <!-- Example split danger button -->
+                    <div class="btn-group">
+                        <a role="button" class="btn btn-primary" href="{{ patient.id }}">View</a>
+                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <h6 class="dropdown-header">Create</h6>
+                            <a class="dropdown-item" href="#">Internal Incident</a>
+                            <a class="dropdown-item" href="#">Body Check</a>
+                            <a class="dropdown-item" href="#">Bowl Movement</a>
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">Manage Data</h6>
+                            <a class="dropdown-item" href="#">Archive</a>
+                        </div>
+                    </div>
+
+                </td>
             </tr>
         {% endfor %}
         </tbody>
@@ -33,8 +55,8 @@
 {% endblock %}
 
 {% block javascripts %}
-
     <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#patients').DataTable();
