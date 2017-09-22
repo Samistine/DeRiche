@@ -13,7 +13,7 @@ function init() {
     w = canvas.width;
     h = canvas.height;
     img = new Image();
-    img.src = 'internal.PNG';
+    img.src = 'internal.png';
     img.onload = function () {
         canvas2 = document.getElementById('layer2');
         ctx2 = canvas2.getContext("2d");
@@ -93,7 +93,7 @@ function savePic() {
     document.bodyForm.picURL.value = "" + canvas2.toDataURL();
     document.bodyForm.firstName.value = document.bodyForm.picURL.value;
     img = new Image();
-    img.src = 'internal.PNG';
+    img.src = 'internal.png';
     img.onload = function () {
         canvas2 = document.getElementById('layer2');
         ctx2 = canvas2.getContext("2d");

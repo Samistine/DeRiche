@@ -11,27 +11,50 @@
     <link href="{{ asset('style.css') }}" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 </head>
-<body onload="init()">
-<div id="wrapper" onload="speak()">
+<body>
+<div class="container-fluid" id="wrapper">
     <header>
         <h1>DeRiche Agency, Inc.</h1>
     </header>
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/patients/">Patients</a></li>
-            <li><a href="/bodycheck">Create Form</a></li>
-            <ul class="nav-dropdown">
-                <li><a href="/bodycheck">Body Check</a></li>
-                <li><a href="/internal_incident">Internal Incident</a></li>
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="nav flex-column nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/patients">Patients</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="true" aria-expanded="false">Create Form</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/bodycheck">Body Check</a>
+                        <a class="dropdown-item" href="/internal_incident">Internal Incident</a>
+                        <a class="dropdown-item" href="#">Bowel Movement Daily Check List</a>
+                        <a class="dropdown-item" href="#">Community Connection Activity Sheet</a>
+                        <a class="dropdown-item" href="#">Goal Tracking Sheet</a>
+                        <a class="dropdown-item" href="#">Multiple Absences</a>
+                        <a class="dropdown-item" href="#">Repositioning Log</a>
+                        <a class="dropdown-item" href="#">Seizure Activity Checklist</a>
+                        <a class="dropdown-item" href="#">Single Absence</a>
+                        <a class="dropdown-item" href="#">Weight & BP Chart</a>
+
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/formretrieval">Retrieve Form</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Contact Us</a>
+                </li>
             </ul>
-            <li><a href="/formretrieval">Retrieve Form</a></li>
-            <li><a href="/contact">Contact US</a></li>
-        </ul>
-    </nav>
-    <main>
-        {% block body %}{% endblock %}
-    </main>
+        </div>
+        <div class="col-md-9
+">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
             integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
             crossorigin="anonymous"></script>
@@ -41,6 +64,16 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
             integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
             crossorigin="anonymous"></script>
+    <script>
+        // Used for navigation menu.
+        $(function () {
+            if ((location.pathname.split("/")[1]) === "") {
+                $("a.nav-link:contains('Home')").addClass('active');
+            } else {
+                $('ul.nav a[href^="/' + location.pathname.split("/")[1] + '"]').addClass('active');
+            }
+        });
+    </script>
     {% block javascripts %}{% endblock %}
     <footer>
         Copyright &copy; 2017 2017 DeRiche Agency Inc.

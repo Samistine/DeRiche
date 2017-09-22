@@ -1,4 +1,4 @@
-header, nav, main, footer, aside { display: block; }
+header, main, footer, aside { display: block; }
 body { background-color: #330000;
        font-family: Verdana, Arial, sans-serif;
 }
@@ -19,21 +19,6 @@ h1 {
 	 text-shadow: 3px 3px 3px #90745D;
 	 margin-bottom: 0;
 }
-nav { padding-top: 10px;
-      float: left;
-      width: 200px; 
-}
-nav ul { list-style-type: none; 
-       padding-left: 20px;
-	 }
-nav li { padding-bottom: 5px;
-       font-weight: bold;
-}
-nav a { text-decoration: none; }
-nav a:link { color: #330000; }
-nav a:visited{ color: #90745D; }
-nav a:hover { color: #3F4632; }
-
 
 main { background-color: #FFFFCC;
           margin-left: 200px;

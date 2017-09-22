@@ -21,19 +21,14 @@
         <textarea name="firstAid" rows="4" cols="50"></textarea><br>
         Recommendations for follow up: (Admin Only)<br>
         <textarea name="recommend" rows="4" cols="50"></textarea><br>
-        <div id="sigDiv" style="position: relative; width: 710px; height: 300px;">
-            <canvas id="sigLayer2" width="710" height="149"
-                    style="position:absolute; top:20px; left:0px; border:2px solid;"></canvas>
-            <canvas id="sigLayer1" width="710" height="149"
-                    style="position:absolute; top:20px; left:0px; border:2px solid;"></canvas>
-            <input type="button" value="Clear Signature"
-                   style="position:absolute; top:180px; left:0px; background:white; border:2px solid;"
-                   onclick="Sclear()">
-        </div>
+
+        <canvas id="signature" width="710" height="149" style="margin-top: 5px; border:2px solid;"></canvas>
+        <input type="button" value="Clear Signature" style="top:180px; background:white; border:2px solid;" onclick="Sclear()">
+
         <br><br>
         <input type="submit" onClick="save()" value="Submit"/> <input type="reset" value="Clear"/>
-        <input type="hidden" id="picURL" value="">
-        <input type="hidden" name="sigURL" id="sigURL" value=""><br>
+        <input type="hidden" name="bodyData" id="bodyData" value="">
+        <input type="hidden" name="sigData" id="sigData" value="">
     </form><br>
     <button onclick="myFunction()">Help</button>
 {% endblock %}
@@ -44,22 +39,22 @@
     <script>
         $(document).ready(function () {
             $("#bodycheck").jqScribble();
-            $("#bodycheck").data("jqScribble").update({backgroundImage: "static/check.png"});
+            $("#bodycheck").data("jqScribble").update({backgroundImage: "{{  asset('check.png') }}"});
             // Need to edit jqscribble to fix this issue. TODO: Troubleshoot and remove the timeout.
             setTimeout(function () {
                 $("#signature").jqScribble();
-                $("#signature").data("jqScribble").update({backgroundImage: "static/sigImg.png"});
+                $("#signature").data("jqScribble").update({backgroundImage: "{{  asset('sigImg.png') }}"});
             }, 10);
         });
 
         function bodyclear() {
             $("#bodycheck").data("jqScribble").clear();
-            $("#bodycheck").data("jqScribble").update({backgroundImage: "static/check.png"});
+            $("#bodycheck").data("jqScribble").update({backgroundImage: "{{  asset('check.png') }}"});
         }
 
         function Sclear() {
             $("#signature").data("jqScribble").clear();
-            $("#signature").data("jqScribble").update({backgroundImage: "static/sigImg.png"});
+            $("#signature").data("jqScribble").update({backgroundImage: "{{  asset('sigImg.png') }}"});
         }
 
         //  This is the actual way to save the canvas (base64) - can save this to a variable and POST it.

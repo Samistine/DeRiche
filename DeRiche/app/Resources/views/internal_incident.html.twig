@@ -107,20 +107,9 @@
         <input type="checkbox" name="major" value="Major">Major<br>
         <h3>Location of Injury</h3>
         <p>Mark on the figures the general area of any cuts, scratches, marks or bruises possibly relating to the incident/accident.</p>
-        <!-- <img src="image.jpg" alt="Sedon" width="450" height="200">  -->
-        <div id="canvasDiv" style="position: relative; width: 673px; height: 614px;">
-            <canvas id="layer2" width="673" height="514" style="position: absolute; top: 18px; left: 0px; border:2px solid;"></canvas>
-            <canvas id="layer1" width="673" height="514" style="position: absolute; top: 18px; left: 0px; border:2px solid;"></canvas>
-            <div style="position: absolute; top: 540px; left: 0px; width: 150px; height: 50px; border:2px solid;">
-                <div style="position:absolute;top:4px;left:10px;">Color</div>
-                <div style="position:absolute;top:24px;left:10px;width:15px;height:15px;background:black;" id="black" onclick="color(this)"></div>
-                <div style="position:absolute;top:24px;left:25px;width:15px;height:15px;background:blue;" id="blue" onclick="color(this)"></div>
-                <div style="position:absolute;top:4px;left:90px;">Eraser</div>
-                <div style="position:absolute;top:24px;left:90px;width:15px;height:15px;background:white;border:1px solid;" id="white" onclick="color(this)"></div>
-                <input type="button" value="Clear Picture" style="position:absolute; top:12px; left:150px; background:white; border:2px solid;" onclick="Pclear()">
-            </div>
-        </div>
-        <p>Other Person(s) Involved Participant, Staff, Visitor, please use first name or initials only:</p>
+        <canvas id="intinc" width="545" height="481" style="margin-top: 10px;"></canvas>
+        <br/><button href="#" onclick='intclear()'>Clear</button>
+        <p style="margin-top: 8px;">Other Person(s) Involved Participant, Staff, Visitor, please use first name or initials only:</p>
         <textarea name="otherinvolved" rows="2" cols="50"></textarea><br><br>
         <h3>Description of Incident</h3>
         <p>Was anyone injured? Was first aid needed? Who? Describe.</p>
@@ -145,24 +134,49 @@
         <p>Printed Name Person Reviewing Report:</p>
         <input type="text" name="reviewing">
 
-        <div id="sigDiv" style="position: relative; width: 710px; height: 300px;">
-            <canvas id="sigLayer2" width="710" height="149" style="position:absolute; top:20px; left:0px; border:2px solid;"></canvas>
-            <canvas id="sigLayer1" width="710" height="149" style="position:absolute; top:20px; left:0px; border:2px solid;"></canvas>
-            <input type="button" value="Clear Signature" style="position:absolute; top:180px; left:0px; background:white; border:2px solid;" onclick="Sclear()">
-        </div><br>
+        <canvas id="signature" width="710" height="149" style="margin-top: 5px; border:2px solid;"></canvas>
+        <input type="button" value="Clear Signature" style="top:180px; background:white; border:2px solid;" onclick="Sclear()">
+
         <input type="submit" onClick="save()" value="Submit"/>  <input type="reset" value="Clear"/>
-        <input type="hidden" id="picURL" value="">
-        <input type="hidden" name="sigURL" id="sigURL" value=""><br>
+        <input type="hidden" name="intData" id="intData" value="">
+        <input type="hidden" name="sigData" id="sigData" value=""><br><br>
+
     </form><br>
     <button onclick="myFunction()">Help</button>
 {% endblock %}
 
-{% block javscripts %}
+{% block javascripts %}
+    <script src="{{ asset('jquery.jqscribble.js') }}"></script>
     <script>
+        $(document).ready(function () {
+            $("#intinc").jqScribble();
+            $("#intinc").data("jqScribble").update({backgroundImage: "{{  asset('internal.png') }}"});
+            // Need to edit jqscribble to fix this issue. TODO: Troubleshoot and remove the timeout.
+            setTimeout(function () {
+                $("#signature").jqScribble();
+                $("#signature").data("jqScribble").update({backgroundImage: "{{  asset('sigImg.png') }}"});
+            }, 10);
+        });
+
+        function intclear() {
+            $("#intinc").data("jqScribble").clear();
+            $("#intinc").data("jqScribble").update({backgroundImage: "{{  asset('internal.png') }}"});
+        }
+
+        function Sclear() {
+            $("#signature").data("jqScribble").clear();
+            $("#signature").data("jqScribble").update({backgroundImage: "{{  asset('sigImg.png') }}"});
+        }
+
+        //  This is the actual way to save the canvas (base64) - can save this to a variable and POST it.
+        //  var bodycanv = document.getElementById('bodycheck');
+        //  console.log(bodycanv.toDataURL())
+
+        // TODO: Replace this.
         function myFunction() {
             alert(
                 "1.Enter Participant?s name in the field provided (First name and last name)\n2.Enter Date and Time of Incident in the fields provided (Date of Incident and Time of Incident)\n3.Enter Location of Incident in the field provided\n4.Enter name of supervisor that was notified in the field provided\n5.Enter your name in the field provided (Staff Name)\n6.Enter date and time in the fields provided (Date and Time)\n7.If someone was injured, select the type of person injured in the drop-down provided (Click-box under Injury)\n8.If damage occurred, select the type of damaged in the drop-down provided (Click-box under Damage)\n9.If an infectious/contagious disease was involved, check the box in the space provided (Check-box under Infectious/Contagious Disease)\n10.If there was a medication issue, select the type of issue in the drop-down provided (Click-box under Medication Issue)\n11.If ?Other? was selected in any of the previous drop-down lists, please specify (Other)\n12.Mark on the chart below any location of injuries\n13.If more than one person was involved, please specify first name of person (initials will also work)\n14.If anyone was injured, please specify what kind of first aid, who was aided, and whether or not first aid was needed, and what was done after the incident\n15.What happened before the incident took place\n16.What happened during the incident\n17.What happened after the incident took place\n18.Why did the incident occur\n19.What did you do\n20.Type your name in the field provided (Under name of person completing form)\n21.Select the date in the from the date picker provided (Under name of person completing form)\n22.In the Recommendations for follow up section,  only if Admin, please type in any recommendations you have for the participant\n23.Enter the name of the reviewer in the field provided\n24.Sign the signature box with the mouse\n25.Click the submit button to finish\n");
         }
     </script>
-    <script src="{{ asset('internal_incident.js') }}"></script>
+    {#<script src="{{ asset('internal_incident.js') }}"></script>#}
 {% endblock %}
