@@ -13,12 +13,19 @@ use Doctrine\ORM\Mapping as ORM;
 class Patient
 {
     /**
-     * @var int
-     *
      * @ORM\Id
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="uuid", type="guid")
+     * @ORM\GeneratedValue(strategy="UUID")
      */
     private $id;
+
+    /**
+     * TODO: Rename id in database to medicalId
+     * @var integer
+     *
+     * @ORM\Column(name="medicalId", type="integer", unique=true)
+     */
+    private $medicalId;
 
     /**
      * @var string
@@ -42,27 +49,45 @@ class Patient
     private $insurance;
 
     /**
-     * Set id
+     * @var boolean
      *
-     * @param string $id
+     * @ORM\Column(name="active", type="boolean", nullable=false)
+     */
+    private $active = true;
+
+
+    /**
+     * Get id
+     *
+     * @return guid
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set medicalId
+     *
+     * @param integer $medicalId
      *
      * @return Patient
      */
-    public function setId($id)
+    public function setMedicalId($medicalId)
     {
-        $this->id = $id;
+        $this->medicalId = $medicalId;
 
         return $this;
     }
 
     /**
-     * Get id
+     * Get medicalId
      *
-     * @return int
+     * @return integer
      */
-    public function getId()
+    public function getMedicalId()
     {
-        return $this->id;
+        return $this->medicalId;
     }
 
     /**
@@ -136,5 +161,28 @@ class Patient
     {
         return $this->insurance;
     }
-}
 
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return Patient
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+}
