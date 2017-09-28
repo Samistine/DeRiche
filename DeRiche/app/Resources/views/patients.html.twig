@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block title %}Patients Page{% endblock %}
 {% block body %}
-    <br/>
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
@@ -16,9 +15,7 @@
         </li>
     </ul>
 
-
     <br/>
-
 
     <!-- Tab panes -->
     <div class="tab-content">
@@ -161,8 +158,8 @@
         });
     </script>
 
-    //Modal
     <script>
+        //Modal
         $('#archivePatientConfirmationModal').on('shown.bs.modal', function () {
             var link = $(this).data('link');
             var patientName = $(this).data('patient-name');

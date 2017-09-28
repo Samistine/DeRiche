@@ -2,10 +2,6 @@
 {% block title %}Internal Incident Form{% endblock %}
 {% block stylesheets %}
     <style>
-        table#t01 {
-            width: 50%;
-            text-align: center;
-        }
         table, th, td {
             border: 1px solid black;
         }
@@ -128,20 +124,19 @@
         <p>**Report must be completed by employee within 24 hours of incident. If incident involves more than one participant, fill out separate report for each.**</p>
         <p>Name of person completing this Incident/Accident Form & Date:</p>
         <input type="text" name="person" placeholder="Name"> <input type="date" name="date1">
-        <br>
-        <h3>Review: Recommendations for Follow-Up (Admin Only)</h3>
+        <br/><br/>
+        <h4>Review: Recommendations for Follow-Up (Admin Only)</h4>
         <textarea name="recommend" rows="4" cols="50"></textarea><br>
-        <p>Printed Name Person Reviewing Report:</p>
-        <input type="text" name="reviewing">
+        <p style="margin-bottom:0">Printed Name Person Reviewing Report:</p>
+        <input type="text" name="reviewing"><br/>
 
-        <canvas id="signature" width="710" height="149" style="margin-top: 5px; border:2px solid;"></canvas>
+        <canvas id="signature"></canvas><br>
         <input type="button" value="Clear Signature" style="top:180px; background:white; border:2px solid;" onclick="Sclear()">
-
+        <br><br>
         <input type="submit" onClick="save()" value="Submit"/>  <input type="reset" value="Clear"/>
         <input type="hidden" name="intData" id="intData" value="">
-        <input type="hidden" name="sigData" id="sigData" value=""><br><br>
-
-    </form><br>
+        <input type="hidden" name="sigData" id="sigData" value="">
+    </form><br/>
     <button onclick="myFunction()">Help</button>
 {% endblock %}
 
@@ -155,7 +150,7 @@
             setTimeout(function () {
                 $("#signature").jqScribble();
                 $("#signature").data("jqScribble").update({backgroundImage: "{{  asset('sigImg.png') }}"});
-            }, 10);
+            }, 50);
         });
 
         function intclear() {

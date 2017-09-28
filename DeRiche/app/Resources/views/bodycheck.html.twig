@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 {% block title %}Body Check Form{% endblock %}
 {% block body %}
-    <!-- <img src="image.jpg" alt="Sedon" width="450" height="200">  -->
+    <h3 style="margin-bottom:0">Body Check Report</h3>
     <canvas id="bodycheck" width="673" height="514" style="margin-top: 10px;"></canvas>
-    <button href="#" onclick='bodyclear()'>Clear</button>
-    <form id="bodyForm" name="bodyForm" action="BodyCheckServlet" method="post" style="padding-top: 40px;">
+    <br/><button href="#" onclick='bodyclear()'>Clear</button>
+    <form id="bodyForm" name="bodyForm" action="BodyCheckServlet" method="post" style="padding-top: 10px;">
         Patient First Name:<br>
         <input type="text" name="firstName"><br>
         Patient Last Name:<br>
@@ -20,9 +20,9 @@
         What did you do? Describe First Aid administered and follow up:<br>
         <textarea name="firstAid" rows="4" cols="50"></textarea><br>
         Recommendations for follow up: (Admin Only)<br>
-        <textarea name="recommend" rows="4" cols="50"></textarea><br>
+        <textarea name="recommend" rows="4" cols="50"></textarea>
 
-        <canvas id="signature" width="710" height="149" style="margin-top: 5px; border:2px solid;"></canvas>
+        <canvas id="signature"></canvas><br/>
         <input type="button" value="Clear Signature" style="top:180px; background:white; border:2px solid;" onclick="Sclear()">
 
         <br><br>
@@ -44,7 +44,7 @@
             setTimeout(function () {
                 $("#signature").jqScribble();
                 $("#signature").data("jqScribble").update({backgroundImage: "{{  asset('sigImg.png') }}"});
-            }, 10);
+            }, 50);
         });
 
         function bodyclear() {
