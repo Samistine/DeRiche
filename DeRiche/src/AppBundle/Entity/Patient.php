@@ -20,7 +20,8 @@ class Patient
     private $id;
 
     /**
-     * TODO: Rename id in database to medicalId
+     * Protected field, don't show to unauthorized users.
+     *
      * @var integer
      *
      * @ORM\Column(name="medicalId", type="integer", unique=true)
@@ -42,19 +43,11 @@ class Patient
     private $lastName;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="insurance", type="string", length=255, nullable=false)
-     */
-    private $insurance;
-
-    /**
      * @var boolean
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active = true;
-
 
     /**
      * Get id
@@ -136,30 +129,6 @@ class Patient
     public function getLastName()
     {
         return $this->lastName;
-    }
-
-    /**
-     * Set insurance
-     *
-     * @param string $insurance
-     *
-     * @return Patient
-     */
-    public function setInsurance($insurance)
-    {
-        $this->insurance = $insurance;
-
-        return $this;
-    }
-
-    /**
-     * Get insurance
-     *
-     * @return string
-     */
-    public function getInsurance()
-    {
-        return $this->insurance;
     }
 
     /**

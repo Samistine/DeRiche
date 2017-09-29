@@ -30,7 +30,7 @@ main img { float: right;
 }
 
 footer { background-color: #FFFFCC;
-       margin-left: 200px;
+	   /*margin-left: 200px;*/
        padding: 20px;
        text-align: center;
 	   font-size: small;

@@ -64,28 +64,27 @@ class PatientsController extends Controller
     {
         $first_name = $request->get('first_name');
         $last_name = $request->get('last_name');
-        $insurance = $request->get('insurance');
         $medical_id = $request->get('medical_id');
 
         $patient = new Patient();
         $patient
             ->setFirstName($first_name)
             ->setLastName($last_name)
-            ->setInsurance($insurance)
             ->setMedicalId($medical_id);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($patient);
         $em->flush();
 
-        $referer = $request
-            ->headers
-            ->get('referer');
+        //Get the page the browser was on before coming here
+        $referer = $request->headers->get('referer');
+
+        //Send them back
         return $this->redirect($referer);
     }
 
     /**
-     * @Route("createTestData", name="Create Test Patients")
+     * @Route("/createTestData", name="Create Test Patients")
      */
     public function createTestDate()
     {
@@ -94,8 +93,7 @@ class PatientsController extends Controller
             $patient
                 ->setMedicalId(random_int(0, 999999999999999))
                 ->setFirstName(uniqid())
-                ->setLastName(uniqid())
-                ->setInsurance("No Insurance");
+                ->setLastName(uniqid());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($patient);

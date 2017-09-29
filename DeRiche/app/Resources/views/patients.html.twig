@@ -30,7 +30,7 @@
                     {#<th>ID</th>#}
                     <th>First Name</th>
                     <th>Last Name</th>
-                    <th>Insurance</th>
+                    <th>Medical ID</th>
                     <th>Manage</th>
                 </tr>
                 </thead>
@@ -39,7 +39,7 @@
                     {#<th>ID</th>#}
                     <th>First Name</th>
                     <th>Last Name</th>
-                    <th>Insurance</th>
+                    <th>Medical ID</th>
                     <th>Manage</th>
                 </tr>
                 </tfoot>
@@ -49,7 +49,7 @@
                         {#<td>{{ patient.id }}</td>#}
                         <td>{{ patient.firstName }}</td>
                         <td>{{ patient.lastName }}</td>
-                        <td>{{ patient.insurance }}</td>
+                        <td>{{ patient.medicalId }}</td>
                         <td>
                             <!-- Example split danger button -->
                             <div class="btn-group">
@@ -92,11 +92,6 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-6">
-                        <label for="insurace" class="col-form-label">Insurace</label>
-                        <input id="insurance" name="insurance" class="form-control" placeholder="Cigna Health Care"
-                               required>
-                    </div>
-                    <div class="form-group col-sm-6">
                         <label for="insurace" class="col-form-label">Medical ID</label>
                         <input id="medical_id" name="medical_id" class="form-control" placeholder="555111222" required
                                type="number">
@@ -108,7 +103,7 @@
                         <input id="nick" name="nick"
                                data-toggle="tooltip" data-placement="top"
                                title="Make it easier to identify the patient if two patients share the same name."
-                               id="insurance"
+                               id="nickname"
                                class="form-control" placeholder="Johnny Family">
                     </div>
                 </div>
@@ -161,7 +156,7 @@
         });
     </script>
 
-    //Modal
+    <!--Modal-->
     <script>
         $('#archivePatientConfirmationModal').on('shown.bs.modal', function () {
             var link = $(this).data('link');
