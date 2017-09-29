@@ -2,22 +2,25 @@ header, main, footer, aside { display: block; }
 body { background-color: #330000;
        font-family: Verdana, Arial, sans-serif;
 }
-#wrapper { width: 960px;
+#wrapper { width: 1200px;
            margin: auto;
 		   background-color: #F4E8BC;
 		   color: #330000;
 		   box-shadow: 5px 5px 5px #000000;
 }
-h1 {
-     background-repeat: no-repeat;
-     background-color: #F4E8BC;
-	 height: 110px;
-	 font-family: Georgia, "Times New Roman", serif;
-	 font-size: 3.5em;
-     padding-left: 220px;
-	 padding-top: 20px;
-	 text-shadow: 3px 3px 3px #90745D;
-	 margin-bottom: 0;
+h1#logo {
+	color: #7f6916;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 75px;
+    font-weight: bold;
+    letter-spacing: -1px;
+    line-height: 1;
+    text-align: center;
+    padding-bottom: 25px;
+    padding-top: 25px;
+    box-shadow: 0 1px 0 rgba(12,13,14,0.1), 0 1px 3px rgba(12,13,14,0.1), 0 4px 20px rgba(12,13,14,0.035), 0 1px 1px rgba(12,13,14,0.025);
+    margin-top: 15px;
+    margin-bottom: 25px;
 }
 
 main { background-color: #FFFFCC;
@@ -30,9 +33,16 @@ main img { float: right;
 }
 
 footer { background-color: #FFFFCC;
-	   /*margin-left: 200px;*/
-       padding: 20px;
-       text-align: center;
-	   font-size: small;
-	   font-style: italic;
-}  
+	margin-left: 200px;
+	padding: 20px;
+	text-align: center;
+	font-size: small;
+	font-style: italic;
+}
+
+canvas#signature {
+	width: 635px;
+	height: 149px;
+	margin-top: 8px;
+	border: 2px solid;
+}

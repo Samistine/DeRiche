@@ -14,7 +14,7 @@
 <body>
 <div class="container-fluid" id="wrapper">
     <header>
-        <h1>DeRiche Agency, Inc.</h1>
+        <h1 id="logo" class="logo">DeRiche Agency, Inc.</h1>
     </header>
     <div class="row">
         <div class="col-md-3">
@@ -27,8 +27,8 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-                       aria-haspopup="true" aria-expanded="false">Create Form</a>
-                    <div class="dropdown-menu">
+                       aria-haspopup="true" aria-expanded="false" id="createform">Create Form</a>
+                    <div class="dropdown-menu" id ="formsdropdown">
                         <a class="dropdown-item" href="/bodycheck">Body Check</a>
                         <a class="dropdown-item" href="/internal_incident">Internal Incident</a>
                         <a class="dropdown-item" href="#">Bowel Movement Daily Check List</a>
@@ -39,7 +39,6 @@
                         <a class="dropdown-item" href="#">Seizure Activity Checklist</a>
                         <a class="dropdown-item" href="#">Single Absence</a>
                         <a class="dropdown-item" href="#">Weight & BP Chart</a>
-
                     </div>
                 </li>
                 <li class="nav-item">
@@ -71,7 +70,11 @@
             if ((location.pathname.split("/")[1]) === "") {
                 $("a.nav-link:contains('Home')").addClass('active');
             } else {
-                $('ul.nav a[href^="/' + location.pathname.split("/")[1] + '"]').addClass('active');
+                var activenav = $('ul.nav a[href^="/' + location.pathname.split("/")[1] + '"]');
+                activenav.addClass('active');
+                // If we're on a form page then we set the "Create Form" element to active as well.
+                if(activenav.parent().attr('id') == "formsdropdown")
+                    $("#createform").addClass('active');
             }
         });
     </script>
