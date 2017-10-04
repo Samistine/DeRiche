@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="patient")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PatientRepository")
  */
-class Patient
+class Patient implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -48,6 +48,12 @@ class Patient
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active = true;
+
+    /**
+     * One Patient has many Notes.
+     * @ORM\OneToMany(targetEntity="Note", mappedBy="notes")
+     */
+    private $notes;
 
     /**
      * Get id
@@ -153,5 +159,70 @@ class Patient
     public function getActive()
     {
         return $this->active;
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->notes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add note
+     *
+     * @param \AppBundle\Entity\Note $note
+     *
+     * @return Patient
+     */
+    public function addNote(\AppBundle\Entity\Note $note)
+    {
+        $this->notes[] = $note;
+
+        return $this;
+    }
+
+    /**
+     * Remove note
+     *
+     * @param \AppBundle\Entity\Note $note
+     */
+    public function removeNote(\AppBundle\Entity\Note $note)
+    {
+        $this->notes->removeElement($note);
+    }
+
+    /**
+     * Get notes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
+            'medicalId' => $this->getMedicalId(),
+            'notes' => $this->getNotes()
+        ];
+    }
+
+    public function __toString()
+    {
+        return json_encode($this->jsonSerialize(), JSON_PRETTY_PRINT);
     }
 }
