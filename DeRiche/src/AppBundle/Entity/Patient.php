@@ -17,7 +17,7 @@ class Patient implements \JsonSerializable
      * @ORM\Column(name="uuid", type="guid")
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    private $id;
+    private $uuid;
 
     /**
      * Protected field, don't show to unauthorized users.
@@ -56,13 +56,44 @@ class Patient implements \JsonSerializable
     private $notes;
 
     /**
-     * Get id
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    function jsonSerialize()
+    {
+        return [
+            'uuid' => $this->getUuid(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
+            'medicalId' => $this->getMedicalId(),
+            'notes' => $this->getNotes()->toArray()
+        ];
+    }
+
+    public function __toString()
+    {
+        return json_encode($this, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->notes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get uuid
      *
      * @return guid
      */
-    public function getId()
+    public function getUuid()
     {
-        return $this->id;
+        return $this->uuid;
     }
 
     /**
@@ -162,14 +193,6 @@ class Patient implements \JsonSerializable
     }
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->notes = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
      * Add note
      *
      * @param \AppBundle\Entity\Note $note
@@ -201,28 +224,5 @@ class Patient implements \JsonSerializable
     public function getNotes()
     {
         return $this->notes;
-    }
-
-    /**
-     * Specify data which should be serialized to JSON
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
-     */
-    function jsonSerialize()
-    {
-        return [
-            'id' => $this->getId(),
-            'firstName' => $this->getFirstName(),
-            'lastName' => $this->getLastName(),
-            'medicalId' => $this->getMedicalId(),
-            'notes' => $this->getNotes()
-        ];
-    }
-
-    public function __toString()
-    {
-        return json_encode($this->jsonSerialize(), JSON_PRETTY_PRINT);
     }
 }

@@ -12,16 +12,21 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\NoteRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Note
+class Note implements \JsonSerializable
 {
+    const DRAFT = 10;
+    const AWAITING_APPROVAL = 20;
+    const KICKED_BACK = 30;
+    const ACCEPTED = 40;
+
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="uuid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private $uuid;
 
     /**
      * @var \DateTime
@@ -56,7 +61,7 @@ class Note
     /**
      * Many Notes have one Patient.
      * @ORM\ManyToOne(targetEntity="Patient", inversedBy="notes")
-     * @ORM\JoinColumn(name="patient_id", referencedColumnName="uuid")
+     * @ORM\JoinColumn(name="patient_uuid", referencedColumnName="uuid")
      */
     private $patient;
 
@@ -65,8 +70,8 @@ class Note
      *
      * Many Notes have one Staff.
      *
-     * @ORM\ManyToOne(targetEntity="Staff", inversedBy="notes")
-     * @ORM\JoinColumn(name="staff_id", referencedColumnName="uuid")
+     * @ORM\ManyToOne(targetEntity="Staff", inversedBy="authoredNotes")
+     * @ORM\JoinColumn(name="staff_uuid", referencedColumnName="uuid", nullable=false)
      */
     private $staff;
 
@@ -76,8 +81,8 @@ class Note
      *
      * Many Notes have one or no Reviewer.
      *
-     * @ORM\ManyToOne(targetEntity="Staff", inversedBy="notes")
-     * @ORM\JoinColumn(name="reviewer_id", referencedColumnName="uuid", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Staff", inversedBy="reviewedNotes")
+     * @ORM\JoinColumn(name="reviewer_uuid", referencedColumnName="uuid", nullable=true)
      */
     private $reviewer;
 
@@ -126,54 +131,52 @@ class Note
     }
 
     /**
-     * Get id
-     *
-     * @return int
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
      */
-    public function getId()
+    function jsonSerialize()
     {
-        return $this->id;
+        return [
+            'uuid' => $this->getUuid(),
+            'createdAt' => $this->getCreatedAt(),
+            'modifiedAt' => $this->getModifiedAt(),
+            'submittedAt' => $this->getSubmittedAt(),
+            'acceptedAt' => $this->getAcceptedAt(),
+            'patient' => $this->getPatient()->getUuid(),
+            'staff' => $this->getStaff()->getUuid(),
+            'reviewer' => is_object($this->getReviewer()) ? $this->getReviewer()->getUuid() : null,
+            'content' => $this->getContent(),
+            'comments' => $this->getComments(),
+            'state' => $this->getState()
+            //'' => $this->get
+        ];
     }
 
+    public function __toString()
+    {
+        return json_encode($this, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->comments = new ArrayCollection();
+        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Add comment
+     * Get uuid
      *
-     * @param \AppBundle\Entity\Comment $comment
-     *
-     * @return Note
+     * @return integer
      */
-    public function addComment(\AppBundle\Entity\Comment $comment)
+    public function getUuid()
     {
-        $this->comments[] = $comment;
-
-        return $this;
+        return $this->uuid;
     }
-
-    /**
-     * Remove comment
-     *
-     * @param \AppBundle\Entity\Comment $comment
-     */
-    public function removeComment(\AppBundle\Entity\Comment $comment)
-    {
-        $this->comments->removeElement($comment);
-    }
-
-    /**
-     * Get comments
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getComments()
-    {
-        return $this->comments;
-    }
-
 
     /**
      * Set createdAt
@@ -197,30 +200,6 @@ class Note
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    /**
-     * Set content
-     *
-     * @param string $content
-     *
-     * @return Note
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    /**
-     * Get content
-     *
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
     }
 
     /**
@@ -296,6 +275,54 @@ class Note
     }
 
     /**
+     * Set content
+     *
+     * @param string $content
+     *
+     * @return Note
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * Set state
+     *
+     * @param integer $state
+     *
+     * @return Note
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return integer
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
      * Set patient
      *
      * @param \AppBundle\Entity\Patient $patient
@@ -317,5 +344,87 @@ class Note
     public function getPatient()
     {
         return $this->patient;
+    }
+
+    /**
+     * Set staff
+     *
+     * @param \AppBundle\Entity\Staff $staff
+     *
+     * @return Note
+     */
+    public function setStaff(\AppBundle\Entity\Staff $staff = null)
+    {
+        $this->staff = $staff;
+
+        return $this;
+    }
+
+    /**
+     * Get staff
+     *
+     * @return \AppBundle\Entity\Staff
+     */
+    public function getStaff()
+    {
+        return $this->staff;
+    }
+
+    /**
+     * Set reviewer
+     *
+     * @param \AppBundle\Entity\Staff $reviewer
+     *
+     * @return Note
+     */
+    public function setReviewer(\AppBundle\Entity\Staff $reviewer = null)
+    {
+        $this->reviewer = $reviewer;
+
+        return $this;
+    }
+
+    /**
+     * Get reviewer
+     *
+     * @return \AppBundle\Entity\Staff
+     */
+    public function getReviewer()
+    {
+        return $this->reviewer;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \AppBundle\Entity\Comment $comment
+     *
+     * @return Note
+     */
+    public function addComment(\AppBundle\Entity\Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \AppBundle\Entity\Comment $comment
+     */
+    public function removeComment(\AppBundle\Entity\Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 }

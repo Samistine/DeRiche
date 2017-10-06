@@ -39,6 +39,9 @@ twig:
     strict_variables: '%kernel.debug%'
     paths:
       '%kernel.project_dir%/app/Resources/views': App
+#    form_themes:
+#      - 'bootstrap_3_horizontal_layout.html.twig'
+      # resources: ['bootstrap_3_horizontal_layout.html.twig']
 # Doctrine Configuration
 doctrine:
     dbal:

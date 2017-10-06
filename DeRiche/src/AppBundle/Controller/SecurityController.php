@@ -8,6 +8,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Staff;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -32,21 +33,14 @@ class SecurityController extends Controller
 
         return $this->render('login.html.twig', array(
             'last_username' => $lastUsername,
-            'error'         => $error,
+            'error' => $error,
         ));
     }
+
     /**
      * @Route("/admin", name="Admin Panel")
      */
-    public function adminAction()
-    {
-        return $this->render('admin/admin.html.twig', array(
-        ));
-    }
-    /**
-     * @Route("/admin/create", name="Create Account")
-     */
-    public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function adminAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         // 1) build the form
         $user = new User();
@@ -68,12 +62,14 @@ class SecurityController extends Controller
             // ... do any other work - like sending them an email, etc
             // maybe set a "flash" success message for the user
 
-            return $this->redirectToRoute('Admin Panel');
+            //return $this->redirectToRoute('Admin Panel');
         }
 
-        return $this->render(
-            'admin/create.html.twig',
-            array('form' => $form->createView())
-        );
+        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+
+        return $this->render('admin/admin.html.twig', array(
+            'users' => $users,
+            'form' => $form->createView()
+        ));
     }
 }

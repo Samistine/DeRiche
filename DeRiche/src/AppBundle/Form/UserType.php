@@ -28,14 +28,15 @@ class UserType extends AbstractType
             ->add('username', TextType::class)
             ->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
-                'first_options'  => array('label' => 'Password'),
+                'first_options' => array('label' => 'Password'),
                 'second_options' => array('label' => 'Repeat Password'),
             ))
             ->add('roles', CollectionType::class, array(
-                'entry_type'   => ChoiceType::class,
-                'label' => 'Roles',
-                'entry_options'  => array(
-                    'choices'  => array(
+                'entry_type' => ChoiceType::class,
+                //'label' => 'r',
+                'entry_options' => array(
+                    'label' => false,
+                    'choices' => array(
                         'Writer' => 'ROLE_WRITER',
                         'Reviewer' => 'ROLE_REVIEWER',
                         'SC Auditor' => 'ROLE_SC_AUDITOR',
@@ -43,8 +44,7 @@ class UserType extends AbstractType
                         'Administrator' => 'ROLE_ADMIN'
                     ),
                 ),
-            ))
-        ;
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

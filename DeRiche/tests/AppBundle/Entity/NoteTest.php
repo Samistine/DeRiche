@@ -54,9 +54,13 @@ class NoteTest extends KernelTestCase
 
         $note = new Note();
         $note->setContent("This is a note for Today");
+        $note->setModifiedAt(time());
+        $note->setState(Note::DRAFT);
         $note->setPatient($patient);
+        $patient->addNote($note);//Attach the note to patient
 
-        $comment = new Comment("This is a comment on today's note");
+        $comment = new Comment();
+        $comment->setContent("This is a comment on today's note");
         $comment->setNote($note);
         $note->addComment($comment);//Attach the comment to the note
 
@@ -64,7 +68,7 @@ class NoteTest extends KernelTestCase
         $this->em->persist($note);
         $this->em->flush();
 
-        $note = $this->em->getRepository(Note::class)->find($note->getId());
+        $note = $this->em->getRepository(Note::class)->find($note->getUuid());
         $this->em->refresh($note);
 
         print count($note->getComments());

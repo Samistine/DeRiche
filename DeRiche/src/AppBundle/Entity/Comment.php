@@ -15,16 +15,16 @@ class Comment
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="uuid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private $uuid;
 
     /**
      * Many Notes have one Comment.
      * @ORM\ManyToOne(targetEntity="Note", inversedBy="comments")
-     * @ORM\JoinColumn(name="note_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="note_id", referencedColumnName="uuid")
      */
     private $note;
 
@@ -38,13 +38,13 @@ class Comment
     private $content;
 
     /**
-     * Get id
+     * Get uuid
      *
      * @return integer
      */
-    public function getId()
+    public function getUuid()
     {
-        return $this->id;
+        return $this->uuid;
     }
 
     /**
@@ -93,10 +93,5 @@ class Comment
     public function getNote()
     {
         return $this->note;
-    }
-
-    public function __construct($content)
-    {
-        $this->setContent($content);
     }
 }
