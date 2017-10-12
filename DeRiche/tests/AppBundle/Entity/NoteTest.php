@@ -11,6 +11,7 @@ namespace Tests\AppBundle\Entity;
 use AppBundle\Entity\Comment;
 use AppBundle\Entity\Note;
 use AppBundle\Entity\Patient;
+use AppBundle\Entity\Staff;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class NoteTest extends KernelTestCase
@@ -52,11 +53,18 @@ class NoteTest extends KernelTestCase
         $patient->setLastName('Adams');
         $patient->setMedicalId(random_int(1, 9000000));
 
+        $staff = new Staff();
+        // $patient->setFirstName('John');
+        // $patient->setLastName('Adams');
+        // $patient->setMedicalId(random_int(1, 9000000));
+
         $note = new Note();
         $note->setContent("This is a note for Today");
-        $note->setModifiedAt(time());
-        $note->setState(Note::DRAFT);
+        $note->setModifiedAt(new \DateTime());
+        $note->setSubmittedAt(new \DateTime());
+        $note->setState(Note::AWAITING_APPROVAL);
         $note->setPatient($patient);
+        $note->setStaff($staff);
         $patient->addNote($note);//Attach the note to patient
 
         $comment = new Comment();
@@ -64,6 +72,7 @@ class NoteTest extends KernelTestCase
         $comment->setNote($note);
         $note->addComment($comment);//Attach the comment to the note
 
+        $this->em->persist($staff);
         $this->em->persist($patient);
         $this->em->persist($note);
         $this->em->flush();

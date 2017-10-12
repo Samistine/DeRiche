@@ -27,7 +27,7 @@ class PatientsController extends Controller
 
         foreach ($allPatients as $patient) {
             if ($patient->getActive()) array_push($activePatients, $patient);
-            else                      array_push($inactivePatients, $patient);
+            else                       array_push($inactivePatients, $patient);
         }
 
         $patientsQuery = new \stdClass();

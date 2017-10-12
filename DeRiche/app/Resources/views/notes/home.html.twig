@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2><p>Individual Notes</p></h2>
+
+    <section id="UserSelectPatient">
+        <!-- Add Patient Form -->
+        <h2>Type in Individual</h2>
+        <form class="container form" action="findpatient/" type="POST">
+            <div class="row">
+                <div class="form-group col-sm-8">
+                    <label for="name" class="col-form-label">Individual Name</label>
+                    <input id="name" name="name" class="form-control" placeholder="John Oliver" required>
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit" class="btn btn-warning btn-block">Submit</button>
+            </div>
+        </form>
+    </section>
+{% endblock %}

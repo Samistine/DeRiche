@@ -51,9 +51,15 @@ class Patient implements \JsonSerializable
 
     /**
      * One Patient has many Notes.
-     * @ORM\OneToMany(targetEntity="Note", mappedBy="notes")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Note", mappedBy="patient")
      */
     private $notes;
+
+    /**
+     * One Patient has many Objectives.
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Objective", mappedBy="patient")
+     */
+    private $objectives;
 
     /**
      * Specify data which should be serialized to JSON
@@ -224,5 +230,39 @@ class Patient implements \JsonSerializable
     public function getNotes()
     {
         return $this->notes;
+    }
+
+    /**
+     * Add objective
+     *
+     * @param \AppBundle\Entity\Objective $objective
+     *
+     * @return Patient
+     */
+    public function addObjective(\AppBundle\Entity\Objective $objective)
+    {
+        $this->objectives[] = $objective;
+
+        return $this;
+    }
+
+    /**
+     * Remove objective
+     *
+     * @param \AppBundle\Entity\Objective $objective
+     */
+    public function removeObjective(\AppBundle\Entity\Objective $objective)
+    {
+        $this->objectives->removeElement($objective);
+    }
+
+    /**
+     * Get objectives
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getObjectives()
+    {
+        return $this->objectives;
     }
 }
