@@ -12,24 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Staff
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(name="uuid", type="guid")
-     * @ORM\GeneratedValue(strategy="UUID")
-     */
-    private $uuid;
 
-    /**
-     * One Staff has many Notes.
-     * @ORM\OneToMany(targetEntity="Note", mappedBy="staff")
-     */
-    private $authoredNotes;
-
-    /**
-     * One Staff has many Notes.
-     * @ORM\OneToMany(targetEntity="Note", mappedBy="reviewer")
-     */
-    private $reviewedNotes;
 
     /**
      * Constructor

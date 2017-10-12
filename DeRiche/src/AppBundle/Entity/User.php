@@ -19,11 +19,23 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface, \Serializable
 {
     /**
-     * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="uuid", type="guid")
+     * @ORM\GeneratedValue(strategy="UUID")
      */
-    private $id;
+    private $uuid;
+
+    /**
+     * One Staff has many Notes.
+     * @ORM\OneToMany(targetEntity="Note", mappedBy="staff")
+     */
+    private $authoredNotes;
+
+    /**
+     * One Staff has many Notes.
+     * @ORM\OneToMany(targetEntity="Note", mappedBy="reviewer")
+     */
+    private $reviewedNotes;
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)

@@ -60,7 +60,7 @@ class Note implements \JsonSerializable
 
     /**
      * Many Notes have one Patient.
-     * @ORM\ManyToOne(targetEntity="Patient", inversedBy="notes")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Patient", inversedBy="notes")
      * @ORM\JoinColumn(name="patient_uuid", referencedColumnName="uuid")
      */
     private $patient;
@@ -70,7 +70,7 @@ class Note implements \JsonSerializable
      *
      * Many Notes have one Staff.
      *
-     * @ORM\ManyToOne(targetEntity="Staff", inversedBy="authoredNotes")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="authoredNotes")
      * @ORM\JoinColumn(name="staff_uuid", referencedColumnName="uuid", nullable=false)
      */
     private $staff;
@@ -81,7 +81,7 @@ class Note implements \JsonSerializable
      *
      * Many Notes have one or no Reviewer.
      *
-     * @ORM\ManyToOne(targetEntity="Staff", inversedBy="reviewedNotes")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="reviewedNotes")
      * @ORM\JoinColumn(name="reviewer_uuid", referencedColumnName="uuid", nullable=true)
      */
     private $reviewer;
@@ -96,7 +96,7 @@ class Note implements \JsonSerializable
 
     /**
      * One Note has many Comments.
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="note", cascade={"persist",})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="note", cascade={"persist",})
      */
     private $comments;
 
