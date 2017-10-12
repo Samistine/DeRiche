@@ -43,6 +43,20 @@ class User implements UserInterface, \Serializable
     private $username;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="firstName", type="string", length=255, nullable=false)
+     */
+    private $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lastName", type="string", length=255, nullable=false)
+     */
+    private $lastName;
+
+    /**
      * @Assert\NotBlank()
      * @Assert\Length(max=4096)
      */
@@ -230,5 +244,131 @@ class User implements UserInterface, \Serializable
         $this->roles = $roles;
 
         return $this;
+    }
+
+    /**
+     * Get uuid
+     *
+     * @return guid
+     */
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * Set firstName
+     *
+     * @param string $firstName
+     *
+     * @return User
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    /**
+     * Get firstName
+     *
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * Set lastName
+     *
+     * @param string $lastName
+     *
+     * @return User
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Get lastName
+     *
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * Add authoredNote
+     *
+     * @param \AppBundle\Entity\Note $authoredNote
+     *
+     * @return User
+     */
+    public function addAuthoredNote(\AppBundle\Entity\Note $authoredNote)
+    {
+        $this->authoredNotes[] = $authoredNote;
+
+        return $this;
+    }
+
+    /**
+     * Remove authoredNote
+     *
+     * @param \AppBundle\Entity\Note $authoredNote
+     */
+    public function removeAuthoredNote(\AppBundle\Entity\Note $authoredNote)
+    {
+        $this->authoredNotes->removeElement($authoredNote);
+    }
+
+    /**
+     * Get authoredNotes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAuthoredNotes()
+    {
+        return $this->authoredNotes;
+    }
+
+    /**
+     * Add reviewedNote
+     *
+     * @param \AppBundle\Entity\Note $reviewedNote
+     *
+     * @return User
+     */
+    public function addReviewedNote(\AppBundle\Entity\Note $reviewedNote)
+    {
+        $this->reviewedNotes[] = $reviewedNote;
+
+        return $this;
+    }
+
+    /**
+     * Remove reviewedNote
+     *
+     * @param \AppBundle\Entity\Note $reviewedNote
+     */
+    public function removeReviewedNote(\AppBundle\Entity\Note $reviewedNote)
+    {
+        $this->reviewedNotes->removeElement($reviewedNote);
+    }
+
+    /**
+     * Get reviewedNotes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReviewedNotes()
+    {
+        return $this->reviewedNotes;
     }
 }
