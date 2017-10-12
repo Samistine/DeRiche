@@ -29,7 +29,7 @@
                 {% for note in notes %}
                     <tr>
                         <td>{{ note.patient.firstName }} {{ note.patient.lastName }}</td>
-                        <td>{#{{ note.staff.firstName }} {{ note.staff.lastName }}#}</td>
+                        <td>{{ note.staff.firstName }} {{ note.staff.lastName }}</td>
                         <td>{{ note.submittedAt|default(date('0'))|date() }}</td>
                         <td>
                             <!-- Example split danger button -->

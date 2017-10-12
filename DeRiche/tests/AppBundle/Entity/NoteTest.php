@@ -12,6 +12,7 @@ use AppBundle\Entity\Comment;
 use AppBundle\Entity\Note;
 use AppBundle\Entity\Patient;
 use AppBundle\Entity\Staff;
+use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class NoteTest extends KernelTestCase
@@ -53,7 +54,28 @@ class NoteTest extends KernelTestCase
         $patient->setLastName('Adams');
         $patient->setMedicalId(random_int(1, 9000000));
 
-        $staff = new Staff();
+        $staff = $note = $this->em->getRepository(User::class)->findOneBy(['username' => 'admin']);
+        if ($staff === null) {
+            $staff = new User();
+            $staff->setFirstName('John');
+            $staff->setLastName('Oliver');
+            $staff->setEmail('john@oliver.com');
+            $staff->setIsActive(true);
+            $staff->setRoles(['ROLE_ADMIN']);
+
+            $this->em->get
+            // 3) Encode the password (you could also do this via Doctrine listener)
+            $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+
+            // 4) save the User!
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+        }
+
+        Passw
+
         // $patient->setFirstName('John');
         // $patient->setLastName('Adams');
         // $patient->setMedicalId(random_int(1, 9000000));

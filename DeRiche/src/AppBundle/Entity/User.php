@@ -68,24 +68,14 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=60, unique=true)
-     */
-    private $email;
-
-    /**
      * @ORM\Column(name="is_active", type="boolean")
      */
-    private $isActive;
+    private $isActive = true;
 
     /**
      * @ORM\Column(type="json_array")
      */
     private $roles = [];
-
-    public function __construct()
-    {
-        $this->isActive = true;
-    }
 
     public function getPlainPassword()
     {
@@ -130,7 +120,7 @@ class User implements UserInterface, \Serializable
     public function serialize()
     {
         return serialize(array(
-            $this->id,
+            $this->uuid,
             $this->username,
             $this->password,
         ));
@@ -140,7 +130,7 @@ class User implements UserInterface, \Serializable
     public function unserialize($serialized)
     {
         list (
-            $this->id,
+            $this->uuid,
             $this->username,
             $this->password,
             ) = unserialize($serialized);
@@ -182,30 +172,6 @@ class User implements UserInterface, \Serializable
         $this->password = $password;
 
         return $this;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
     }
 
     /**
@@ -371,4 +337,14 @@ class User implements UserInterface, \Serializable
     {
         return $this->reviewedNotes;
     }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->authoredNotes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reviewedNotes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 }
