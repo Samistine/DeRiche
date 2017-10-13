@@ -1,5 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<p>This page should be modified and show the appropriate tools per role.</p>
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        <h2>Welcome <b>{{ app.user.firstName }}</b></h2>
+        <hr/>
+    {% endif %}
+
+
+    <p>This page should be modified and show the appropriate tools per role.</p>
 {% endblock %}
