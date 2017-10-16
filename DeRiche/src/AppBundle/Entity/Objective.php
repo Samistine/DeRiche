@@ -53,6 +53,13 @@ class Objective
     private $objectiveText;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="guidance_notes", type="text")
+     */
+    private $guidanceNotes;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="freq_amount", type="integer")
@@ -218,5 +225,29 @@ class Objective
     public function getPatient()
     {
         return $this->patient;
+    }
+
+    /**
+     * Set guidanceNotes
+     *
+     * @param string $guidanceNotes
+     *
+     * @return Objective
+     */
+    public function setGuidanceNotes($guidanceNotes)
+    {
+        $this->guidanceNotes = $guidanceNotes;
+
+        return $this;
+    }
+
+    /**
+     * Get guidanceNotes
+     *
+     * @return string
+     */
+    public function getGuidanceNotes()
+    {
+        return $this->guidanceNotes;
     }
 }

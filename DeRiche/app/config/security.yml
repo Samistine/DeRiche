@@ -35,7 +35,7 @@ security:
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 #        - { path: ^/admin, roles: ROLE_ADMIN }
-#        - { path: ^/patients, roles: ROLE_ADMIN }
+        - { path: ^/patients, roles: ROLE_ADMIN }
 #        - { path: ^/, role: ROLE_USER }
 
     role_hierarchy:

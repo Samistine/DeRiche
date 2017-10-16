@@ -72,6 +72,10 @@ class PatientsController extends Controller
             ->setLastName($last_name)
             ->setMedicalId($medical_id);
 
+        // Handle objectives - Syed A.
+        // TODO: Add something similar for editing patients.
+
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($patient);
         $em->flush();
@@ -86,6 +90,7 @@ class PatientsController extends Controller
     /**
      * @Route("/createTestData", name="Create Test Patients")
      */
+    // TODO: Move this to a test file, it shouldn't be here.
     public function createTestDate()
     {
         for ($i = 0; $i < 100; $i++) {
