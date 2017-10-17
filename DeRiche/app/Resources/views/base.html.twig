@@ -22,9 +22,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/patients">Patients</a>
-                </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin">Admin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/patients">Patients</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                        aria-haspopup="true" aria-expanded="false" id="createform">Create Form</a>
@@ -48,14 +53,13 @@
                     <a class="nav-link" href="/contact">Contact Us</a>
                 </li>
                 {% if app.user %}
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">Log Out</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Log Out</a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
-        <div class="col-md-9
-">
+        <div class="col-md-9">
             {% block body %}{% endblock %}
         </div>
     </div>
@@ -85,7 +89,7 @@
     </script>
     {% block javascripts %}{% endblock %}
     <footer>
-        Copyright &copy; 2017  DeRiche Agency Inc.
+        Copyright &copy; 2017 DeRiche Agency Inc.
         <a href="mailto:example@example.com">example@example.com</a>
     </footer>
 </div>
