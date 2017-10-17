@@ -349,11 +349,11 @@ class Note implements \JsonSerializable
     /**
      * Set staff
      *
-     * @param \AppBundle\Entity\Staff $staff
+     * @param \AppBundle\Entity\User $staff
      *
      * @return Note
      */
-    public function setStaff(\AppBundle\Entity\Staff $staff = null)
+    public function setStaff(\AppBundle\Entity\User $staff = null)
     {
         $this->staff = $staff;
 
@@ -363,7 +363,7 @@ class Note implements \JsonSerializable
     /**
      * Get staff
      *
-     * @return \AppBundle\Entity\Staff
+     * @return \AppBundle\Entity\User
      */
     public function getStaff()
     {
@@ -373,11 +373,11 @@ class Note implements \JsonSerializable
     /**
      * Set reviewer
      *
-     * @param \AppBundle\Entity\Staff $reviewer
+     * @param \AppBundle\Entity\User $reviewer
      *
      * @return Note
      */
-    public function setReviewer(\AppBundle\Entity\Staff $reviewer = null)
+    public function setReviewer(\AppBundle\Entity\User $reviewer = null)
     {
         $this->reviewer = $reviewer;
 
@@ -387,7 +387,7 @@ class Note implements \JsonSerializable
     /**
      * Get reviewer
      *
-     * @return \AppBundle\Entity\Staff
+     * @return \AppBundle\Entity\User
      */
     public function getReviewer()
     {

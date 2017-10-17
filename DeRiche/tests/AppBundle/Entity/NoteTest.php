@@ -1,85 +1,41 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: samuel
- * Date: 10/3/17
- * Time: 6:35 PM
+ * User: sahmed6
+ * Date: 10/17/2017
+ * Time: 6:38 PM
  */
 
 namespace Tests\AppBundle\Entity;
 
-use AppBundle\Entity\Comment;
-use AppBundle\Entity\Note;
 use AppBundle\Entity\Patient;
-use AppBundle\Entity\Staff;
 use AppBundle\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use AppBundle\Entity\Note;
+use AppBundle\Entity\Comment;
+use AppBundle\Salary\SalaryCalculator;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
+use PHPUnit\Framework\TestCase;
 
-class NoteTest extends KernelTestCase
-//TODO: Don't use KernelTestCase see here: https://symfony.com/doc/current/testing/doctrine.html
-{
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $em;
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function setUp()
-    {
-        self::bootKernel();
-
-        $this->em = static::$kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        $this->em->close();
-        $this->em = null; // avoid memory leaks
-    }
-
-
-    public function testAddPatientWithNote()
-    {
+class NoteTest extends TestCase {
+    public function createPatient() {
         $patient = new Patient();
         $patient->setFirstName('John');
         $patient->setLastName('Adams');
         $patient->setMedicalId(random_int(1, 9000000));
+        return $patient;
+    }
 
-        $staff = $note = $this->em->getRepository(User::class)->findOneBy(['username' => 'admin']);
-        if ($staff === null) {
-            $staff = new User();
-            $staff->setFirstName('John');
-            $staff->setLastName('Oliver');
-            $staff->setEmail('john@oliver.com');
-            $staff->setIsActive(true);
-            $staff->setRoles(['ROLE_ADMIN']);
+    public function createStaff() {
+        $staff = new User();
+        $staff->setFirstName('John');
+        $staff->setLastName('Oliver');
+        $staff->setIsActive(true);
+        $staff->setRoles(['ROLE_ADMIN']);
+        return $staff;
+    }
 
-            $this->em->get
-            // 3) Encode the password (you could also do this via Doctrine listener)
-            $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
-
-            // 4) save the User!
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-        }
-
-        Passw
-
-        // $patient->setFirstName('John');
-        // $patient->setLastName('Adams');
-        // $patient->setMedicalId(random_int(1, 9000000));
-
+    public function createNote($patient, $staff) {
         $note = new Note();
         $note->setContent("This is a note for Today");
         $note->setModifiedAt(new \DateTime());
@@ -87,22 +43,36 @@ class NoteTest extends KernelTestCase
         $note->setState(Note::AWAITING_APPROVAL);
         $note->setPatient($patient);
         $note->setStaff($staff);
-        $patient->addNote($note);//Attach the note to patient
+        $patient->addNote($note); // Attach the note to patient
+        $staff->addAuthoredNote($note); // Attach the note to staff.
 
+        // While this is it's own entity, we'll keep it in this function since it's only used for notes.
         $comment = new Comment();
-        $comment->setContent("This is a comment on today's note");
+        $comment->setContent("Test Comment - Assert Later");
         $comment->setNote($note);
-        $note->addComment($comment);//Attach the comment to the note
+        $note->addComment($comment); // Attach the comment to the note
+        return $note;
+    }
 
-        $this->em->persist($staff);
-        $this->em->persist($patient);
-        $this->em->persist($note);
-        $this->em->flush();
+    public function testNote() {
+        // Create the patient and assign it to a variable.
+        $patient = $this->createPatient();
+        // Create the staff member and assign it to a variable.
+        $staff = $this->createStaff();
+        // Create the note and assign it to a variable.
+        $note = $this->createNote($patient, $staff);
 
-        $note = $this->em->getRepository(Note::class)->find($note->getUuid());
-        $this->em->refresh($note);
-
-        print count($note->getComments());
-        print $patient;
+        // Now that we've created all the variables we need, let's actually test.
+        
+        // Make sure the note has the same staff member.
+        $this->assertEquals($staff, $note->getStaff());
+        // Make sure the note has the same patient.
+        $this->assertEquals($patient, $note->getPatient());
+        // Make sure the patient has the note.
+        $this->assertEquals($note, $patient->getNotes()[0]);
+        // Make sure the staff member has the note.
+        $this->assertEquals($note, $staff->getAuthoredNotes()[0]);
+        // Make sure the note has the comment.
+        $this->assertEquals("Test Comment - Assert Later", $note->getComments()[0]->getContent());
     }
 }
