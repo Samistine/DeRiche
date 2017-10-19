@@ -154,7 +154,7 @@
                 e.preventDefault();
                 // Add the actual objective field to the form..
                 $(add_button).after('' +
-                    '<div class="form-group row card" style="margin-top:5px;padding: 10px;">' +
+                    '<div class="form-group row card" style="margin-top:5px;margin-left:0px;padding: 10px;width:90%">' +
                         '<label for="example-text-input" class="col-form-label">Objective Name</label>' +
                         '<input class="form-control" type="text" id="objectiveName'+x+'" name="objectiveName'+x+'">' +
                         '<label for="example-text-input" class="col-form-label">Goal Text</label>' +
@@ -171,7 +171,7 @@
                     '</div>');
                 // Now let's move the add button under what we just added and adjust the margins a tad.
                 $(add_button).insertAfter($(add_button).next());
-                $(add_button).css('margin-top', '-8px').css('margin-left', '-12px');
+                $(add_button).css('margin-top', '-8px');
                 x++; //Increment the objective number.
             });
 
