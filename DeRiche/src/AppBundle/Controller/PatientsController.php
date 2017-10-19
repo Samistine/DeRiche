@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Objective;
 use AppBundle\Entity\Patient;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -72,13 +73,43 @@ class PatientsController extends Controller
             ->setLastName($last_name)
             ->setMedicalId($medical_id);
 
-        // Handle objectives - Syed A.
-        // TODO: Add something similar for editing patients.
-
-
+        // Submit the patient
         $em = $this->getDoctrine()->getManager();
         $em->persist($patient);
         $em->flush();
+
+        // Handle objectives - Syed A. ~ May be a little complicated.
+        // TODO: Add something similar for editing patients.
+        // Let's iterate through the ParameterBag for the request.
+        $objectives = [];
+        $objwords = ['objectiveName', 'goalText', 'objectiveText', 'guidanceNotes', 'freqAmount', 'freqKind'];
+        foreach($request->request->all() as $k => $o) {
+            $objword = substr($k, 0, -1);
+            $objnum = intval(substr($k, -1));
+            // Let's check if the first part of the key is what we want and the second part is an integer.
+            if(in_array($objword, $objwords) && is_numeric(substr($k, -1))) {
+                // Add to the objectives table that we'll iterate through and persist.
+                $objectives[$objnum][$objword] = $o;
+            }
+        }
+
+        // Iterate through the objective array we just created and persist them in the database.
+        foreach($objectives as $obj) {
+            // Create
+            $objective = new Objective();
+            $objective
+                ->setPatient($patient)
+                ->setName($obj['objectiveName'])
+                ->setGoalText($obj['goalText'])
+                ->setObjectiveText($obj['objectiveText'])
+                ->setGuidanceNotes($obj['guidanceNotes'])
+                ->setFreqAmount($obj['freqAmount'])
+                ->setFreqKind($obj['freqKind']);
+            // Persist
+            $patient->addObjective($objective);
+            $em->persist($objective);
+            $em->flush();
+        }
 
         //Get the page the browser was on before coming here
         $referer = $request->headers->get('referer');

@@ -1,7 +1,34 @@
 {% extends 'base.html.twig' %}
 {% block title %}Patient Page{% endblock %}
 {% block body %}
-    <b>Medical ID: {{ patient.medicalId }}</b><br/>
-    First Name: {{ patient.firstName }}<br/>
-    Last Name: {{ patient.lastName }}<br/>
+    <b>Medical ID:</b> {{ patient.medicalId }}<br/>
+    <b>First Name:</b> {{ patient.firstName }}<br/>
+    <b>Last Name:</b> {{ patient.lastName }}<br/>
+    <b>Objectives:</b>
+    {# TODO: Still needs work, particularly in actually updating and ability to remove. #}
+    {% for objective in patient.objectives %}
+        <div class="form-group row card" style="margin-top:5px;margin-left:5px;padding: 10px;width:90%;">
+            <input type="hidden" value="{{ objective.uuid }}">
+            <label for="example-text-input" class="col-form-label">Objective Name</label>
+            <input class="form-control" type="text" id="objectiveName" name="objectiveName" value="{{ objective.name }}">
+            <label for="example-text-input" class="col-form-label">Goal Text</label>
+            <textarea class="form-control" type="text" id="goalText" name="goalText">{{ objective.goalText }}</textarea>
+            <label for="example-text-input" class="col-form-label">Objective Text</label>
+            <textarea class="form-control" type="text" id="objectiveText" name="objectiveText">{{ objective.objectiveText }}</textarea>
+            <label for="example-text-input" class="col-form-label">Guidance Notes</label>
+            <textarea class="form-control" type="text" id="guidanceNotes" name="guidanceNotes">{{ objective.guidanceNotes }}</textarea>
+            <label for="example-text-input" class="col-form-label">Frequency</label>
+            <div class="row" style="padding-left: 15px;">
+                <input class="form-control col-2" type="number" id="freqAmount" name="freqAmount" value="{{ objective.freqAmount }}">
+                <select class="form-control col-5" id="freqKind" name="freqKind">
+                    <option {% if objective.freqKind == "/Day" %}selected="selected"{% endif %}>/Day</option>
+                    <option {% if objective.freqKind == "/Week" %}selected="selected"{% endif %}>/Week</option>
+                    <option {% if objective.freqKind == "/Month" %}selected="selected"{% endif %}>/Month</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-success" style="margin-top: 8px;">Update Objective</button>
+            <button type="button" class="btn btn-danger" style="margin-top: 8px;">Remove Objective</button>
+        </div>
+    {% endfor %}
+    <br/>
 {% endblock %}

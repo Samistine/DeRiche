@@ -76,7 +76,7 @@
 
         <div class="tab-pane fade" id="create" role="tabpanel">
             <!-- Add Patient Form -->
-            <form class="container form" id="patients_form" action="create/" type="POST">
+            <form class="container form" id="patients_form" action="create/" method="POST">
                 <div class="row">
                     <div class="form-group col-sm-6">
                         <label for="first_name" class="col-form-label">First Name</label>
@@ -158,17 +158,20 @@
                         '<label for="example-text-input" class="col-form-label">Objective Name</label>' +
                         '<input class="form-control" type="text" id="objectiveName'+x+'" name="objectiveName'+x+'">' +
                         '<label for="example-text-input" class="col-form-label">Goal Text</label>' +
-                        '<input class="form-control" type="text" id="goalText'+x+'" name="goalText'+x+'">' +
+                        '<textarea class="form-control" type="text" id="goalText'+x+'" name="goalText'+x+'"></textarea>' +
                         '<label for="example-text-input" class="col-form-label">Objective Text</label>' +
-                        '<input class="form-control" type="text" id="objectiveText'+x+'" name="objectiveText'+x+'">' +
+                        '<textarea class="form-control" type="text" id="objectiveText'+x+'" name="objectiveText'+x+'"></textarea>' +
                         '<label for="example-text-input" class="col-form-label">Guidance Notes</label>' +
-                        '<input class="form-control" type="text" id="guidanceNotes'+x+'" name="guidanceNotes'+x+'">' +
+                        '<textarea class="form-control" type="text" id="guidanceNotes'+x+'" name="guidanceNotes'+x+'"></textarea>' +
                         '<label for="example-text-input" class="col-form-label">Frequency</label>' +
                         '<div class="row" style="padding-left: 15px;"><input class="form-control col-2" type="number" id="freqAmount'+x+'" name="freqAmount'+x+'">' +
                         '<select class="form-control col-5" id="freqKind'+x+'" name="freqKind'+x+'">' +
                         '<option>/Day</option><option>/Week</option><option>/Month</option></select></div>' +
                         '<button type="button" class="btn btn-danger remove_field" style="margin-top: 8px;">Remove Objective</button>' +
                     '</div>');
+                // Now let's move the add button under what we just added and adjust the margins a tad.
+                $(add_button).insertAfter($(add_button).next());
+                $(add_button).css('margin-top', '-8px').css('margin-left', '-12px');
                 x++; //Increment the objective number.
             });
 
