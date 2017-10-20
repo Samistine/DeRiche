@@ -1,34 +1,136 @@
 {% extends 'base.html.twig' %}
 {% block title %}Patient Page{% endblock %}
 {% block body %}
-    <b>Medical ID:</b> {{ patient.medicalId }}<br/>
-    <b>First Name:</b> {{ patient.firstName }}<br/>
-    <b>Last Name:</b> {{ patient.lastName }}<br/>
-    <b>Objectives:</b>
-    {# TODO: Still needs work, particularly in actually updating and ability to remove. #}
-    {% for objective in patient.objectives %}
-        <div class="form-group row card" style="margin-top:5px;margin-left:5px;padding: 10px;width:90%;">
-            <input type="hidden" value="{{ objective.uuid }}">
-            <label for="example-text-input" class="col-form-label">Objective Name</label>
-            <input class="form-control" type="text" id="objectiveName" name="objectiveName" value="{{ objective.name }}">
-            <label for="example-text-input" class="col-form-label">Goal Text</label>
-            <textarea class="form-control" type="text" id="goalText" name="goalText">{{ objective.goalText }}</textarea>
-            <label for="example-text-input" class="col-form-label">Objective Text</label>
-            <textarea class="form-control" type="text" id="objectiveText" name="objectiveText">{{ objective.objectiveText }}</textarea>
-            <label for="example-text-input" class="col-form-label">Guidance Notes</label>
-            <textarea class="form-control" type="text" id="guidanceNotes" name="guidanceNotes">{{ objective.guidanceNotes }}</textarea>
-            <label for="example-text-input" class="col-form-label">Frequency</label>
-            <div class="row" style="padding-left: 15px;">
-                <input class="form-control col-2" type="number" id="freqAmount" name="freqAmount" value="{{ objective.freqAmount }}">
-                <select class="form-control col-5" id="freqKind" name="freqKind">
-                    <option {% if objective.freqKind == "/Day" %}selected="selected"{% endif %}>/Day</option>
-                    <option {% if objective.freqKind == "/Week" %}selected="selected"{% endif %}>/Week</option>
-                    <option {% if objective.freqKind == "/Month" %}selected="selected"{% endif %}>/Month</option>
-                </select>
-            </div>
-            <button type="button" class="btn btn-success" style="margin-top: 8px;">Update Objective</button>
-            <button type="button" class="btn btn-danger" style="margin-top: 8px;">Remove Objective</button>
+    <div class="patient">
+        <div class="text-center text-info">
+            <h2><b>{{ patient.firstName }} {{ patient.lastName }}</b></h2>
+            {{ patient.medicalId }}
         </div>
-    {% endfor %}
-    <br/>
+
+        <div class="rcorners">
+            <h2><span class="badge badge-info">Objectives</span></h2>
+            <hr/>
+
+            {# TODO: Still needs work, particularly in actually updating and ability to remove. #}
+            {% for objective in patient.objectives %}
+                <form action="objective/{{ objective.uuid }}/patch" class="form-group row card"
+                      style="padding: 10px;">
+                    <input type="hidden" value="{{ objective.uuid }}">
+                    <label for="example-text-input" class="col-form-label">Objective Name</label>
+                    <input class="form-control" type="text" id="objectiveName" name="objectiveName"
+                           value="{{ objective.name }}">
+                    <label for="example-text-input" class="col-form-label">Goal Text</label>
+                    <textarea class="form-control" type="text" id="goalText"
+                              name="goalText">{{ objective.goalText }}</textarea>
+                    <label for="example-text-input" class="col-form-label">Objective Text</label>
+                    <textarea class="form-control" type="text" id="objectiveText"
+                              name="objectiveText">{{ objective.objectiveText }}</textarea>
+                    <label for="example-text-input" class="col-form-label">Guidance Notes</label>
+                    <textarea class="form-control" type="text" id="guidanceNotes"
+                              name="guidanceNotes">{{ objective.guidanceNotes }}</textarea>
+                    <label for="example-text-input" class="col-form-label">Frequency</label>
+                    <div class="row">
+                        <div class="col-2" style="padding-right: 2px">
+                            <input class="form-control" type="number" id="freqAmount" name="freqAmount"
+                                   value="{{ objective.freqAmount }}">
+                        </div>
+                        <div class="col-6" style="padding-left: 2px">
+                            <select class="form-control col-5" id="freqKind" name="freqKind">
+                                <option {% if objective.freqKind == "/Day" %}selected="selected"{% endif %}>/Day
+                                </option>
+                                <option {% if objective.freqKind == "/Week" %}selected="selected"{% endif %}>/Week
+                                </option>
+                                <option {% if objective.freqKind == "/Month" %}selected="selected"{% endif %}>/Month
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 8px;">
+                        <div class="col-sm-6" style="padding-right: 2px">
+                            <button type="submit" class="btn btn-block btn-success">Update Objective</button>
+                        </div>
+                        <div class="col-sm-6" style="padding-left: 2px">
+                            <button type="button" class="btn btn-block btn-danger confirm-link"
+                                    data-confirm-title="Delete Objective"
+                                    data-confirm-message="Are you sure you wish to do that?"
+                                    data-bootstrap-color="danger"
+                                    data-link="objective/{{ objective.uuid }}/delete">Remove Objective
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            {% endfor %}
+        </div>
+
+        <hr/>
+
+        <form class="container form" id="objectives_form" action="objective/" method="POST">
+            <button type="button" class="btn btn-default" id="addobjective">Add Objective</button>
+            <div class="text-center">
+                <button type="submit" class="btn btn-success btn-lg">Submit</button>
+            </div>
+        </form>
+
+
+        <br/>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {#Script for handling objective addition. - Syed A#}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var wrapper = $("#patients_form");
+            var add_button = $("#addobjective");
+
+            var x = 1; // First objective field.
+            $(add_button).click(function (e) { // When they click "add objective"
+                e.preventDefault();
+                // Add the actual objective field to the form..
+                $(add_button).after('' +
+                    '<div class="form-group row card" style="margin-top:5px;margin-left:0px;padding: 10px;width:90%">' +
+                    '<label for="example-text-input" class="col-form-label">Objective Name</label>' +
+                    '<input class="form-control" type="text" id="objectiveName' + x + '" name="objectiveName' + x + '">' +
+                    '<label for="example-text-input" class="col-form-label">Goal Text</label>' +
+                    '<textarea class="form-control" type="text" id="goalText' + x + '" name="goalText' + x + '"></textarea>' +
+                    '<label for="example-text-input" class="col-form-label">Objective Text</label>' +
+                    '<textarea class="form-control" type="text" id="objectiveText' + x + '" name="objectiveText' + x + '"></textarea>' +
+                    '<label for="example-text-input" class="col-form-label">Guidance Notes</label>' +
+                    '<textarea class="form-control" type="text" id="guidanceNotes' + x + '" name="guidanceNotes' + x + '"></textarea>' +
+                    '<label for="example-text-input" class="col-form-label">Frequency</label>' +
+                    '<div class="row" style="padding-left: 15px;"><input class="form-control col-2" type="number" id="freqAmount' + x + '" name="freqAmount' + x + '">' +
+                    '<select class="form-control col-5" id="freqKind' + x + '" name="freqKind' + x + '">' +
+                    '<option>/Day</option><option>/Week</option><option>/Month</option></select></div>' +
+                    '<button type="button" class="btn btn-danger remove_field" style="margin-top: 8px;">Remove Objective</button>' +
+                    '</div>');
+                // Now let's move the add button under what we just added and adjust the margins a tad.
+                $(add_button).insertAfter($(add_button).next());
+                $(add_button).css('margin-top', '-8px');
+                x++; //Increment the objective number.
+            });
+
+            $(wrapper).on("click", ".remove_field", function (e) { // when they click "remove objective"
+                e.preventDefault();
+                $(this).parent('div').remove();
+            })
+        });
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .rcorners {
+            border-radius: 25px;
+            background-color: cornsilk;
+            padding: 40px;
+            margin: auto;
+            width: 90%;
+        }
+
+        .patient {
+            /*border-radius: 25px;*/
+            /*background-color: #ffe8a1;*/
+        }
+    </style>
 {% endblock %}

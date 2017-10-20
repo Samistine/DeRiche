@@ -56,7 +56,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Log Out</a>
                     </li>
-                {% else%}
+                {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="/login">Log In</a>
                     </li>
@@ -67,8 +67,38 @@
             {% block body %}{% endblock %}
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+
+
+    <!-- Modals -->
+    <div class="modal fade" id="confirmModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation Dialog</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <br/>
+                    <div class="alert alert-warning" role="alert">
+                        {#<strong>Confirmation: </strong>#}
+                        <span class="warning-message">
+                            Are you sure you wish to do that?
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-warning confirm">Confirm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.js"
+            integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
             integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
@@ -90,6 +120,48 @@
                     $("#createform").addClass('active');
             }
         });
+    </script>
+    <script><!--Modal-->
+        //When clicked
+        $('.confirm-link').on('click', function (e) {
+            //e.preventDefault();
+
+            //Pass data to shown handler
+            var link = $(this).data('link');
+            var confirmTitle = $(this).data('confirm-title');
+            var confirmMessage = $(this).data('confirm-message');
+            var bootstrapColor = $(this).data('bootstrap-color');
+
+            var modal = $('#confirmModal');
+
+            modal.find('.modal-title').html(confirmTitle);
+            modal.find('.warning-message').html(confirmMessage);
+            modal.find('.confirm').attr('class', 'btn confirm  btn-' + bootstrapColor).html(confirmTitle);
+            modal.find('.alert.alert-warning').attr('class', 'alert alert-' + bootstrapColor);
+
+            modal.data({
+                'type': 'link',
+                'link': link
+            }).modal('show');
+        });
+
+        $('#confirmModal .confirm').click(function () {
+            var type = $('#confirmModal').data('type');
+
+            switch (type) {
+                // handle redirect here
+                case 'link': {
+                    var
+                        link = $('#confirmModal').data('link');
+                    location.href = link;
+                    $('#confirmModal').modal('hide');
+                }
+                case 'delete': {
+
+                }
+            }
+        });
+
     </script>
     {% block javascripts %}{% endblock %}
     <footer>

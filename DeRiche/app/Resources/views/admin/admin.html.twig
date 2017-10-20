@@ -134,34 +134,8 @@
             <!-- End Add Patient Form -->
         </div>
     </div>
-
-
-    <!-- Modals -->
-    <div class="modal fade" id="confirmModal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirmation Dialog</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <br/>
-                    <div class="alert alert-warning" role="alert">
-                        {#<strong>Confirmation: </strong>#}
-                        <span class="warning-message">
-                            Are you sure you wish to do that?
-                        </span>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-warning confirm">Archive Patient</a>
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}
+
 
 {% block javascripts %}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
@@ -174,36 +148,7 @@
         });
     </script>
 
-    <!--Modal-->
     <script>
-
-        //When clicked
-        $('.confirm-link').on('click', function (e) {
-            //e.preventDefault();
-
-            //Pass data to shown handler
-            var link = $(this).data('link');
-            var confirmTitle = $(this).data('confirm-title');
-            var confirmMessage = $(this).data('confirm-message');
-            var bootstrapColor = $(this).data('bootstrap-color');
-
-            var modal = $('#confirmModal');
-
-            modal.find('.modal-title').html(confirmTitle);
-            modal.find('.warning-message').html(confirmMessage);
-            modal.find('.confirm').attr('class', 'btn confirm  btn-' + bootstrapColor);
-            modal.find('.alert.alert-warning').attr('class', 'alert alert-' + bootstrapColor);
-            modal.data({
-                'link': link
-            }).modal('show');
-        });
-
-        $('#confirmModal .confirm').click(function () {
-            // handle redirect here
-            var link = $('#confirmModal').data('link');
-            location.href = link;
-            $('#confirmModal').modal('hide');
-        });
 
         // Javascript to enable link to tab
         var url = document.location.toString();
