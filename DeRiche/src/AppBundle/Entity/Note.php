@@ -95,6 +95,14 @@ class Note implements \JsonSerializable
     private $content;
 
     /**
+     * Writer's signature base64
+     *
+     * @var string
+     * @ORM\Column(name="signature", type="text")
+     */
+    private $signature;
+
+    /**
      * One Note has many Comments.
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="note", cascade={"persist",})
      */
@@ -165,6 +173,7 @@ class Note implements \JsonSerializable
      */
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -426,5 +435,29 @@ class Note implements \JsonSerializable
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * Set signature
+     *
+     * @param string $signature
+     *
+     * @return Note
+     */
+    public function setSignature($signature)
+    {
+        $this->signature = $signature;
+
+        return $this;
+    }
+
+    /**
+     * Get signature
+     *
+     * @return string
+     */
+    public function getSignature()
+    {
+        return $this->signature;
     }
 }

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h4>Review Note:</h4>
+    <hr/>
+    <h5>Patient Name:</h5> <p>{{ note.patient.firstName }} {{ note.patient.lastName }}</p>
+    <h5>Note Creation Date:</h5> <p>{{ note.createdAt|date("m/d/Y") }}</p>
+    <h5>Submitted By:</h5> <p>{{ note.staff.firstName }} {{ note.staff.lastName }}</p>
+    <h5>Content:</h5> <p>{{ note.content }}</p>
+    <h5>Signature on Note:</h5> <p><img src="{{ note.signature }}" alt="Note signature"/> </p>
+{% endblock %}

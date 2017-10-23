@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row" style="margin-bottom: -15px;">
+        <div class="form-group col-sm-10">
+            <strong>Participant Name</strong><br/>
+            {{ patient.firstname }} {{ patient.lastname }}<br/>
+        </div>
+        <div class="col-sm-2">
+            <strong>Month/Year</strong>
+            {{ note.createdAt|date("m/Y") }}
+        </div>
+    </div>
+    <hr/>
+    {{ form_start(form, { 'attr': {'class': 'container form', 'id': 'noteform'} }) }}
+    <div class="row">
+        <div class="form-group col-sm-8">
+            <label for="form_content" class="required">Progress notes are to include any daily activities, behavior
+                issues, appointments and progress toward goals.</label>
+            {{ form_errors(form.content) }}
+            {{ form_widget(form.content, { 'attr': {'class': 'form-control'},
+                'value': note.createdAt|date("(m/d/Y)") ~ " " ~ patient.firstname ~ " "}) }}
+            {{ form_widget(form.signature) }}
+        </div>
+        <div class="col-sm-4">
+            <p>Objectives:</p>
+            {% for objective in objectives %}
+                <p>{{ objective.name }} - {{ objective.goaltext }}</p>
+                <button type="button" onclick="addObjective('{{ objective.name }}', '{{ objective.objectiveText }}')">Add to Note</button>
+            {% endfor %}
+        </div>
+        <div class="form-group col-sm-12">
+            <canvas id="signature"></canvas>
+            <br>
+            <input type="button" value="Clear Signature" style="top:180px; background:white; border:2px solid;"
+                   onclick="Sclear()">
+        </div>
+    </div>
+    <button type="submit" id="submit">Submit for Review!</button>
+    {{ form_end(form) }}
+    <div class="modal fade" id="sigModal" tabindex="-1" role="dialog" aria-labelledby="sigModallabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sigModallabel">Signature Missing</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Please hit "Close" and then add your signature to the note, thanks!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        function addObjective(oname, otext) {
+            var box = $("#form_content");
+            box.val(box.val() + '(' + oname + ') ' + otext + ' ');
+        }
+    </script>
+    <script src="{{ asset('jquery.jqscribble.js') }}"></script>
+    <script type="text/javascript">
+        var blanksig = "";
+        $(document).ready(function () {
+            $("canvas#signature").jqScribble();
+            $("canvas#signature").data("jqScribble").update({backgroundImage: "{{ asset('sigImg.png') }}"});
+            // Save the default value of the signature image to know whether the user signed it or not.
+            getBase64FromImageUrl("{{ asset('sigImg.png') }}");
+        });
+
+        function Sclear() {
+            $("#signature").data("jqScribble").clear();
+            $("#signature").data("jqScribble").update({backgroundImage: "{{ asset('sigImg.png') }}"});
+        }
+
+        $("#noteform").submit(function (event) {
+            // Get current signature and compare to verify that a signature was added.
+            currentsig = document.getElementById('signature').toDataURL();
+            if (currentsig == blanksig) {
+                $('#sigModal').modal('show');
+                event.preventDefault();
+            } else {
+                $('#form_signature').val(currentsig);
+            }
+        });
+
+        function getBase64FromImageUrl(url) {
+            var img = new Image();
+            img.setAttribute('crossOrigin', 'anonymous');
+            img.onload = function () {
+                var canvas = document.createElement("canvas");
+                canvas.width = this.width;
+                canvas.height = 145; // doesn't get proper height.
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(this, 0, 0);
+                dataURL = canvas.toDataURL();
+                blanksig = dataURL;
+            };
+            img.src = url;
+        }
+    </script>
+{% endblock %}

@@ -3,17 +3,21 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Patient;
+use AppBundle\Entity\Note;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 /**
- * @Route("/notes", name="Submitter Subsystem")
+ * @Route("/note", name="Note Creating Subsystem")
  */
 class SubmitterController extends Controller
 {
     /**
-     * @Route("/", name="Reviewer Main Page")
+     * @Route("/", name="Note Creation Main Page")
      */
     public function indexAction()
     {
@@ -21,7 +25,7 @@ class SubmitterController extends Controller
     }
 
     /**
-     * @Route("/findpatient/", name="Reviewer Find Patient")
+     * @Route("/findpatient/", name="Writer Find Patient")
      */
     public function findPatient(Request $request)
     {
@@ -47,19 +51,49 @@ class SubmitterController extends Controller
         }
 
         if ($count === 1) {
-            return $this->redirect('../patient/' . $patients[0]->getUuid());
+            // TODO: Check if there's already a note submitted today, offer to edit or say wait for "review"
+            return $this->redirect('../create/' . $patients[0]->getUuid());
         }
 
         //return $this->render('notes/home.html.twig', array('name' => $patients));
     }
 
     /**
-     * @Route("/patient/{id}", name="Reviewer View Patient")
+     * @Route("/create/{id}", name="Writer Create Note")
      */
-    public function patient(Request $request, Patient $patient)
+    public function create(Request $request, Patient $patient)
     {
-        return $this->render('notes/patient.html.twig', array(
-            'patient' => $patient
+        // Create a Note - Add draft feature (maybe?)
+        $note = new Note();
+
+        // Set some default values
+        $note->setStaff($this->getUser());
+        $note->setPatient($patient);
+        $note->setState(20);
+
+        // Create the form we show the user.
+        $form = $this->createFormBuilder($note)
+            ->add('content', TextareaType::class, array(
+                'attr' => array('rows' => '25'),))
+            ->add('signature', HiddenType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+             $note = $form->getData();
+
+             $em = $this->getDoctrine()->getManager();
+             $em->persist($note);
+             $em->flush();
+            return $this->redirectToRoute('home page');
+        }
+
+        return $this->render('notes/create.html.twig', array(
+            'patient' => $patient,
+            'form' => $form->createView(),
+            'note' => $note,
+            'objectives' => $patient->getObjectives()->toArray()
         ));
     }
 
