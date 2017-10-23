@@ -198,11 +198,8 @@ class PatientsController extends Controller
             $em->flush();
         }
 
-        //Get the page the browser was on before coming here
-        $referer = $request->headers->get('referer');
-
-        //Send them back
-        return $this->redirect($referer);//TODO: Send user to the new patient's page
+        //Send them to the newly created patient's page
+        return $this->redirectToRoute('View Patient', array('id' => $patient->getUuid()));
     }
 
     /**
