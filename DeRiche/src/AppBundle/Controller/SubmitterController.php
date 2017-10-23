@@ -63,12 +63,17 @@ class SubmitterController extends Controller
      */
     public function create(Request $request, Patient $patient)
     {
-        // Create a Note - Add draft feature (maybe?)
+        // Create a Note
         $note = new Note();
 
         // Set some default values
         $note->setStaff($this->getUser());
         $note->setPatient($patient);
+
+        // This is because draft feature is not done. What we can do here is set this to 10.
+        // We can then continually submit the form through an Update Note route via JS.
+        // And then when he finally hits submit it will go through the if statement below.
+        // We then set the state to 20 there at which point reviewers will see it.
         $note->setState(20);
 
         // Create the form we show the user.
