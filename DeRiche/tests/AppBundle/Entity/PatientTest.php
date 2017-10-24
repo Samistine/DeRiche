@@ -16,7 +16,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use PHPUnit\Framework\TestCase;
 
-class NoteTest extends TestCase {
+class PatientTest extends TestCase {
     public function createPatient() {
         $patient = new Patient();
         $patient->setFirstName('John');
@@ -25,17 +25,8 @@ class NoteTest extends TestCase {
         return $patient;
     }
 
-    public function createStaff() {
-        $staff = new User();
-        $staff->setFirstName('John');
-        $staff->setLastName('Oliver');
-        $staff->setIsActive(true);
-        $staff->setRoles(['ROLE_ADMIN']);
-        return $staff;
-    }
-
-    public function createNote($patient, $staff) {
-        $note = new Note();
+    public function createObjective($patient, $staff) {
+        $note = new Objective();
         $note->setContent("This is a note for Today");
         $note->setModifiedAt(new \DateTime());
         $note->setSubmittedAt(new \DateTime());
@@ -44,16 +35,9 @@ class NoteTest extends TestCase {
         $note->setStaff($staff);
         $patient->addNote($note); // Attach the note to patient
         $staff->addAuthoredNote($note); // Attach the note to staff.
-
-        // While this is it's own entity, we'll keep it in this function since it's only used for notes.
-        $comment = new Comment();
-        $comment->setContent("Test Comment - Assert Later");
-        $comment->setNote($note);
-        $note->addComment($comment); // Attach the comment to the note
-        return $note;
     }
 
-    public function testNote() {
+    public function testPatient() {
         // Create the patient and assign it to a variable.
         $patient = $this->createPatient();
         // Create the staff member and assign it to a variable.
