@@ -184,6 +184,7 @@ class Objective
      *
      * @param string $freqKind
      *
+     * "/Day", "/Week", "/Month" (Exactly as stated)
      * @return Objective
      */
     public function setFreqKind($freqKind)

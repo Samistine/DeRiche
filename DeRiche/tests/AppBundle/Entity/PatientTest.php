@@ -9,9 +9,7 @@
 namespace Tests\AppBundle\Entity;
 
 use AppBundle\Entity\Patient;
-use AppBundle\Entity\User;
-use AppBundle\Entity\Note;
-use AppBundle\Entity\Comment;
+use AppBundle\Entity\Objective;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use PHPUnit\Framework\TestCase;
@@ -25,37 +23,37 @@ class PatientTest extends TestCase {
         return $patient;
     }
 
-    public function createObjective($patient, $staff) {
-        $note = new Objective();
-        $note->setContent("This is a note for Today");
-        $note->setModifiedAt(new \DateTime());
-        $note->setSubmittedAt(new \DateTime());
-        $note->setState(Note::AWAITING_APPROVAL);
-        $note->setPatient($patient);
-        $note->setStaff($staff);
-        $patient->addNote($note); // Attach the note to patient
-        $staff->addAuthoredNote($note); // Attach the note to staff.
+    public function createObjective($patient) {
+        $objective = new Objective();
+        $objective
+            ->setPatient($patient)
+            ->setName('O1')
+            ->setGoalText('GoalText')
+            ->setObjectiveText('ObjectiveText')
+            ->setGuidanceNotes('GuidanceNotes')
+            ->setFreqAmount(2)
+            ->setFreqKind('/Week');
+        return $objective;
     }
 
     public function testPatient() {
         // Create the patient and assign it to a variable.
         $patient = $this->createPatient();
-        // Create the staff member and assign it to a variable.
-        $staff = $this->createStaff();
-        // Create the note and assign it to a variable.
-        $note = $this->createNote($patient, $staff);
+        // Create the objectives and attach it to the patient.
+        $objective = $this->createObjective($patient);
+        $patient->addObjective($objective);
 
         // Now that we've created all the variables we need, let's actually test.
-        
-        // Make sure the note has the same staff member.
-        $this->assertEquals($staff, $note->getStaff());
-        // Make sure the note has the same patient.
-        $this->assertEquals($patient, $note->getPatient());
-        // Make sure the patient has the note.
-        $this->assertEquals($note, $patient->getNotes()[0]);
-        // Make sure the staff member has the note.
-        $this->assertEquals($note, $staff->getAuthoredNotes()[0]);
-        // Make sure the note has the comment.
-        $this->assertEquals("Test Comment - Assert Later", $note->getComments()[0]->getContent());
+
+        // Make sure the patient exists.
+        $this->assertEquals($patient->getFirstName(), 'John');
+        $this->assertEquals($patient->getLastName(), 'Adams');
+
+        // Make sure the patient has the objective.
+        $this->assertEquals($objective, $patient->getObjectives()[0]);
+        // Make sure the objective is assigned to the patient.
+        $this->assertEquals($objective->getPatient(), $patient);
+        // Make sure the objective has the right frequency.
+        $this->assertEquals("/Week", $objective->getFreqKind());
     }
 }
