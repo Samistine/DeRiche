@@ -23,10 +23,26 @@
             {{ form_widget(form.signature) }}
         </div>
         <div class="col-sm-4">
-            <p>Objectives:</p>
+            <p>Objectives:
+                <button type="button" style="margin-bottom: 10px;" onclick="showObjectives()">
+                    reload
+                </button>
+            </p>
+
             {% for objective in objectives %}
-                <p style="margin-bottom:2px;">{{ objective.name }} - {{ objective.goaltext }}</p>
-                <button type="button" style="margin-bottom: 3px;" onclick="addObjective('{{ objective.name }}', '{{ objective.objectiveText }}')">Add to Note</button>
+                <div>
+                    <p style="margin-bottom:2px;">{{ objective.name }} - {{ objective.goaltext }}</p>
+
+                    <button type="button" class="btn btn-primary"
+                            {#onclick="addObjective('{{ objective.name }}', '{{ objective.objectiveText }}')"#}
+                            data-toggle="modal"
+                            data-target="#addGoalModal"
+                            data-goal-name="{{ objective.name }}"
+                            data-goal-text="{{ objective.objectiveText }}"
+                            data-goal-guidance="{{ objective.guidanceNotes }}"
+                            data-goal-objective="{{ objective.objectiveText }}">Add to Note
+                    </button>
+                </div>
             {% endfor %}
         </div>
         <div class="form-group col-sm-12">
@@ -57,14 +73,112 @@
             </div>
         </div>
     </div>
+
+
+
+
+    <div class="modal fade" id="addGoalModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Insert Goal <span id="goal-name"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h6>Goal: </h6>
+                    <div class="card">
+                        <div class="card-block">
+                            <p class="card-text" style="margin:.75rem 1.25rem" id="goal-text"></p>
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <h6>Guidance Notes: </h6>
+                    <div class="card">
+                        <div class="card-block">
+                            <p class="card-text" style="margin:.75rem 1.25rem" id="goal-guidance"></p>
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <h6>Objective: </h6>
+                    <div class="card">
+                        <div class="card-block">
+                            <p class="card-text" style="margin:.75rem 1.25rem" id="goal-objective"></p>
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <form>
+                        <div class="form-group">
+                            <label for="message-text" class="form-control-label">Message:</label>
+                            <textarea class="form-control" id="message-text"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="addObjective" onclick="addObjective(this)" type="button" class="btn btn-primary">
+                        Insert Goal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 {% block javascripts %}
     <script type="text/javascript">
-        function addObjective(oname, otext) {
+        function addObjective(x) {
+            var modal = $(x).closest('.modal');
+            var oname = modal.find('#goal-name').text();
+            var otext = modal.find('#goal-objective').text();
+            var otextMessage = modal.find('#message-text').val();
+
             var box = $("#form_content");
-            box.val(box.val() + '(' + oname + ') ' + otext + ' ');
+            box.val(box.val() + '\n\n' + '(' + oname + ') ' + otext + ' ');//Add Objective
+            box.val(box.val() + '\n' + otextMessage);//Add Staff's custome message
+
+            $('#addGoalModal').modal('hide');
         }
+
+        //        function addObjective(oname, otext) {
+        //            var addObjectiveBtn = $('#addObjective' + oname);
+        //            addObjectiveBtn.css('color', 'red');
+        //            addObjectiveBtn.parent().hide();
+        //
+        //            var box = $("#form_content");
+        //            box.val(box.val() + '(' + oname + ') ' + otext + ' ');
+        //        }
+
+        function showObjectives() {
+            $('.addObjective').parent().show();
+        }
+
+        $('#addGoalModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var goalName = button.data('goal-name') // Extract info from data-* attributes
+            var goalText = button.data('goal-text') // Extract info from data-* attributes
+            var goalGuidance = button.data('goal-guidance') // Extract info from data-* attributes
+            var goalObjective = button.data('goal-objective') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+
+            //modal.find('.modal-title').text('Insert Goal ' + goalName);
+            modal.find('#goal-name').text(goalName);
+            modal.find('#goal-text').text(goalText);
+            modal.find('#goal-guidance').text(goalGuidance);
+            modal.find('#goal-objective').text(goalObjective)
+        })
     </script>
+
+
     <script src="{{ asset('jquery.jqscribble.js') }}"></script>
     <script type="text/javascript">
         var blanksig = "";
