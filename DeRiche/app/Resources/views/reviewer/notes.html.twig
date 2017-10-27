@@ -21,7 +21,7 @@
                     <tr>
                         <td>{{ note.patient.firstName }} {{ note.patient.lastName }}</td>
                         <td>{{ note.staff.firstName }} {{ note.staff.lastName }}</td>
-                        <td>{#TODO: Change this to modified at once we've added drafts.#}{{ note.createdAt|default(date('0'))|date() }}</td>
+                        <td>{#TODO: Change this to modified at once we've added drafts.#}{{ note.createdAt|default(date('0'))|date('F j, Y h:m A') }}</td>
                         <td><a href="review/{{ note.uuid }}"><button type="button" class="btn btn-primary">Manage</button></a></td>
                             <!-- Example split danger button -->
                             {#<div class="btn-group">#}
