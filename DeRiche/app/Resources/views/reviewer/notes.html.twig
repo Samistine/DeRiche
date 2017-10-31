@@ -12,7 +12,7 @@
                     {#<th>ID</th>#}
                     <th>Patient</th>
                     <th>Staff</th>
-                    <th>Date Submitted</th>
+                    <th>Date Modified</th>
                     <th>Manage</th>
                 </tr>
                 </thead>
@@ -21,7 +21,7 @@
                     <tr>
                         <td>{{ note.patient.firstName }} {{ note.patient.lastName }}</td>
                         <td>{{ note.staff.firstName }} {{ note.staff.lastName }}</td>
-                        <td>{{ note.submittedAt|default(date('0'))|date('F j, Y h:m A') }}</td>
+                        <td>{{ note.modifiedAt|default(date('0'))|date('F j, Y h:m A') }}</td>
                         <td><a href="review/{{ note.uuid }}"><button type="button" class="btn btn-primary">Manage</button></a></td>
                         </td>
                     </tr>
@@ -37,7 +37,7 @@
                     {#<th>ID</th>#}
                     <th>Patient</th>
                     <th>Staff</th>
-                    <th>Date Submitted</th>
+                    <th>Date Approved</th>
                     <th>Manage</th>
                 </tr>
                 </thead>
@@ -62,7 +62,7 @@
                     {#<th>ID</th>#}
                     <th>Patient</th>
                     <th>Staff</th>
-                    <th>Date Submitted</th>
+                    <th>Date Sent Back</th>
                     <th>Manage</th>
                 </tr>
                 </thead>
@@ -71,7 +71,7 @@
                     <tr>
                         <td>{{ note.patient.firstName }} {{ note.patient.lastName }}</td>
                         <td>{{ note.staff.firstName }} {{ note.staff.lastName }}</td>
-                        <td>{{ note.submittedAt|default(date('0'))|date('F j, Y h:m A') }}</td>
+                        <td>{{ note.modifiedAt|default(date('0'))|date('F j, Y h:m A') }}</td>
                         <td><a href="review/{{ note.uuid }}"><button type="button" class="btn btn-primary">View</button></a></td>
                         </td>
                     </tr>

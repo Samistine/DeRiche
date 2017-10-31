@@ -87,8 +87,6 @@ class SubmitterController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
              $note = $form->getData();
-             $note->setSubmittedAt(new \DateTime());
-
              $em = $this->getDoctrine()->getManager();
              $em->persist($note);
              $em->flush();

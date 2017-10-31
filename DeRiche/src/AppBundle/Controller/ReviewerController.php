@@ -44,6 +44,7 @@ class ReviewerController extends Controller
         // Approve and submit to database.
         $em = $this->getDoctrine()->getManager();
         $note->setState($note::ACCEPTED);
+        $note->setSubmittedAt(new \DateTime());
         $em->persist($note);
         $em->flush();
         return $this->render('reviewer/view.html.twig', array(
@@ -60,6 +61,7 @@ class ReviewerController extends Controller
         $em = $this->getDoctrine()->getManager();
         $note->setContent($request->get('content'));
         $note->setState($note::ACCEPTED);
+        $note->setSubmittedAt(new \DateTime());
         $em->persist($note);
         $em->flush();
         return $this->render('reviewer/view.html.twig', array(
