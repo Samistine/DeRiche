@@ -17,31 +17,62 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for note in notes %}
+                {% for note in notes if note.state != constant('ACCEPTED', note) %}
                     <tr>
                         <td>{{ note.patient.firstName }} {{ note.patient.lastName }}</td>
                         <td>{{ note.staff.firstName }} {{ note.staff.lastName }}</td>
-                        <td>{#TODO: Change this to modified at once we've added drafts.#}{{ note.createdAt|default(date('0'))|date('F j, Y h:m A') }}</td>
+                        <td>{{ note.submittedAt|default(date('0'))|date('F j, Y h:m A') }}</td>
                         <td><a href="review/{{ note.uuid }}"><button type="button" class="btn btn-primary">Manage</button></a></td>
-                            <!-- Example split danger button -->
-                            {#<div class="btn-group">#}
-                            {#<a role="button" class="btn btn-primary" href="patient/{{ patient.uuid }}">View</a>#}
-                            {#<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"#}
-                            {#data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-                            {#<span class="sr-only">Toggle Dropdown</span>#}
-                            {#</button>#}
-                            {#<div class="dropdown-menu">#}
-                            {#<h6 class="dropdown-header">Create</h6>#}
-                            {#<a class="dropdown-item" href="#">Internal Incident</a>#}
-                            {#<a class="dropdown-item" href="#">Body Check</a>#}
-                            {#<a class="dropdown-item" href="#">Bowl Movement</a>#}
-                            {#<div class="dropdown-divider"></div>#}
-                            {#<h6 class="dropdown-header">Manage Data</h6>#}
-                            {#<a class="dropdown-item confirm-link"#}
-                            {#data-patient-name="{{ patient.firstName }} {{ patient.lastName }}"#}
-                            {#data-link="{{ patient.uuid }}/archive">Archive</a>#}
-                            {#</div>#}
-                            {#</div>#}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <h2 class="text-primary">Approved/Submitted Notes</h2>
+            <hr/>
+            <table id="ReviewerNotesCompleted" class="table table-striped table-bordered" cellspacing="0">
+                <thead>
+                <tr>
+                    {#<th>ID</th>#}
+                    <th>Patient</th>
+                    <th>Staff</th>
+                    <th>Date Submitted</th>
+                    <th>Manage</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for note in notes if note.state == constant('ACCEPTED', note) %}
+                    <tr>
+                        <td>{{ note.patient.firstName }} {{ note.patient.lastName }}</td>
+                        <td>{{ note.staff.firstName }} {{ note.staff.lastName }}</td>
+                        <td>{{ note.submittedAt|default(date('0'))|date('F j, Y h:m A') }}</td>
+                        <td><a href="review/{{ note.uuid }}"><button type="button" class="btn btn-primary">View</button></a></td>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <h2 class="text-primary">Notes pending correction.</h2>
+            <hr/>
+            <table id="ReviewerNotesCompleted" class="table table-striped table-bordered" cellspacing="0">
+                <thead>
+                <tr>
+                    {#<th>ID</th>#}
+                    <th>Patient</th>
+                    <th>Staff</th>
+                    <th>Date Submitted</th>
+                    <th>Manage</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for note in notes if note.state == constant('KICKED_BACK', note) %}
+                    <tr>
+                        <td>{{ note.patient.firstName }} {{ note.patient.lastName }}</td>
+                        <td>{{ note.staff.firstName }} {{ note.staff.lastName }}</td>
+                        <td>{{ note.submittedAt|default(date('0'))|date('F j, Y h:m A') }}</td>
+                        <td><a href="review/{{ note.uuid }}"><button type="button" class="btn btn-primary">View</button></a></td>
                         </td>
                     </tr>
                 {% endfor %}

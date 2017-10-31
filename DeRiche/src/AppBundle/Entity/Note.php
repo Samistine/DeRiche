@@ -173,7 +173,6 @@ class Note implements \JsonSerializable
      */
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
