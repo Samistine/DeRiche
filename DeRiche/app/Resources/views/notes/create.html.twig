@@ -74,9 +74,6 @@
         </div>
     </div>
 
-
-
-
     <div class="modal fade" id="addGoalModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -141,20 +138,12 @@
             var otextMessage = modal.find('#message-text').val();
 
             var box = $("#form_content");
-            box.val(box.val() + '\n\n' + '(' + oname + ') ' + otext + ' ');//Add Objective
-            box.val(box.val() + '\n' + otextMessage);//Add Staff's custome message
+            box.val(box.val() + ' ' + '(' + oname + ') ' + otext); // Add Objective
+            box.val(box.val() + ' ' + otextMessage + ' '); // Add Staff's custom message
 
             $('#addGoalModal').modal('hide');
+            modal.find('#message-text').val(''); // Clear the message so it's not on next note.
         }
-
-        //        function addObjective(oname, otext) {
-        //            var addObjectiveBtn = $('#addObjective' + oname);
-        //            addObjectiveBtn.css('color', 'red');
-        //            addObjectiveBtn.parent().hide();
-        //
-        //            var box = $("#form_content");
-        //            box.val(box.val() + '(' + oname + ') ' + otext + ' ');
-        //        }
 
         function showObjectives() {
             $('.addObjective').parent().show();
