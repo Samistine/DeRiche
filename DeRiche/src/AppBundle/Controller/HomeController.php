@@ -15,4 +15,12 @@ class HomeController extends Controller
     {
         return $this->render('home.html.twig');
     }
+
+    /**
+     * @Route("/test/bowel")
+     */
+    public function bowelMovment(Request $request)
+    {
+        return $this->render('notes/forms/bowel_movement.html.twig');
+    }
 }
