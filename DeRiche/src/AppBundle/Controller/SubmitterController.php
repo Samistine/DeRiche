@@ -4,12 +4,14 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Patient;
 use AppBundle\Entity\Note;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Route("/note", name="Note Creating Subsystem")
@@ -63,18 +65,13 @@ class SubmitterController extends Controller
      */
     public function create(Request $request, Patient $patient)
     {
-        // Create a Note
+        // Create a Note (later we verify if there's no note)
         $note = new Note();
 
         // Set some default values
         $note->setStaff($this->getUser());
         $note->setPatient($patient);
-
-        // This is because draft feature is not done. What we can do here is set this to 10.
-        // We can then continually submit the form through an Update Note route via JS.
-        // And then when he finally hits submit it will go through the if statement below.
-        // We then set the state to 20 there at which point reviewers will see it.
-        $note->setState(20);
+        $note->setState(10); // Draft.
 
         // Create the form we show the user.
         $form = $this->createFormBuilder($note)
@@ -86,13 +83,48 @@ class SubmitterController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-             $note = $form->getData();
-             $em = $this->getDoctrine()->getManager();
-             $em->persist($note);
-             $em->flush();
+            $note = $form->getData();
+            $note->setState(20); // Send to reviewer.
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($note);
+            $em->flush();
             return $this->redirectToRoute('home page');
         }
 
+        // Check if there's a note for this patient done today and whether it's a draft.
+        $update = false;
+        $donetoday = false;
+        foreach ($patient->getNotes() as $n) {
+            $ts = $n->getCreatedAt()->getTimeStamp();
+            if (date('Y-m-d', strtotime("today")) == date('Y-m-d', $ts)) {
+                if ($n->getState() == $n::DRAFT) { // Verify that it's a draft.
+                    $note = $n;
+                    $update = true;
+                } else { // If it's not a draft then we don't allow multisubmits in a single day.
+                    $donetoday = true;
+                }
+            }
+        }
+
+        // Submit the draft so we can update it later.
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($note);
+        $em->flush();
+
+        if ($update) {
+            return $this->render('notes/create.html.twig', array(
+                'patient' => $patient,
+                'form' => $form->createView(),
+                'note' => $note,
+                'content' => $note->getContent(),
+                'objectives' => $patient->getObjectives()->toArray()
+            ));
+        }
+        if ($donetoday) {
+            return $this->render('notes/error.html.twig', array(
+                'todayerror' => true
+            ));
+        }
         return $this->render('notes/create.html.twig', array(
             'patient' => $patient,
             'form' => $form->createView(),
@@ -101,4 +133,17 @@ class SubmitterController extends Controller
         ));
     }
 
+    /**
+     * @Route("/updatedraft/{id}", name="Writer Update Draft")
+     */
+    public function updateDraft(Request $request, Note $note)
+    {
+        // This only handles the inbound request via JS, the state remains 10 until it's submitted.
+        $content = $request->get('content');
+        $note->setContent($content);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($note);
+        $em->flush();
+        return new Response(); // Empty response.
+    }
 }

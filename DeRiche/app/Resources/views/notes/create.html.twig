@@ -12,15 +12,21 @@
         </div>
     </div>
     <hr/>
+    <input id="note_id" value="{{ note.uuid }}" style="display: none;"/>
     {{ form_start(form, { 'attr': {'class': 'container form', 'id': 'noteform'} }) }}
     <div class="row">
         <div class="form-group col-sm-8">
             <label for="form_content" class="required">Progress notes are to include any daily activities, behavior
                 issues, appointments and progress toward goals.</label>
             {{ form_errors(form.content) }}
-            {{ form_widget(form.content, { 'attr': {'class': 'form-control'},
-                'value': note.createdAt|date("(m/d/Y)") ~ " " ~ patient.firstname ~ " "}) }}
-            {{ form_widget(form.signature) }}
+            {% if note.content is defined %}
+                {{ form_widget(form.content, { 'attr': {'class': 'form-control'},
+                    'value': note.content}) }}
+            {% else %}
+                {{ form_widget(form.content, { 'attr': {'class': 'form-control'},
+                    'value': note.createdAt|date("(m/d/Y)") ~ " " ~ patient.firstname ~ " "}) }}
+                {{ form_widget(form.signature) }}
+            {% endif %}
         </div>
         <div class="col-sm-4">
             <p>Objectives:
@@ -130,6 +136,16 @@
     </div>
 {% endblock %}
 {% block javascripts %}
+    <script type="text/javascript">
+        $(function () {
+            // get the ID of the note and submit a draft every 5 seconds.
+            uuid = $("#note_id").val();
+            setInterval(function () {
+                console.log($("form").serialize());
+                $.post("../updatedraft/" + uuid, $("form").serialize());
+            }, 5000);
+        });
+    </script>
     <script type="text/javascript">
         function addObjective(x) {
             var modal = $(x).closest('.modal');

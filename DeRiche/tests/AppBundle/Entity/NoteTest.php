@@ -44,12 +44,7 @@ class NoteTest extends TestCase {
         $note->setStaff($staff);
         $patient->addNote($note); // Attach the note to patient
         $staff->addAuthoredNote($note); // Attach the note to staff.
-
-        // While this is it's own entity, we'll keep it in this function since it's only used for notes.
-        $comment = new Comment();
-        $comment->setContent("Test Comment - Assert Later");
-        $comment->setNote($note);
-        $note->addComment($comment); // Attach the comment to the note
+        $note->setComment("Test Comment - Assert Later");
         return $note;
     }
 
@@ -72,6 +67,6 @@ class NoteTest extends TestCase {
         // Make sure the staff member has the note.
         $this->assertEquals($note, $staff->getAuthoredNotes()[0]);
         // Make sure the note has the comment.
-        $this->assertEquals("Test Comment - Assert Later", $note->getComments()[0]->getContent());
+        $this->assertEquals("Test Comment - Assert Later", $note->getComment());
     }
 }

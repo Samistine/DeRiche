@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
     <section id="UserSelectPatient">
-        <!-- Add Patient Form -->
-        <h3>Type in Individual's Name</h3>
+        <h1>Create Note</h1>
+        <!-- Look up user to create note -->
+        <h5>Type in Individual's Name</h5>
         <form class="container form" action="findpatient/" type="POST">
             <div class="row">
                 <div class="form-group col-sm-8">

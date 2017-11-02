@@ -90,7 +90,7 @@ class Note implements \JsonSerializable
      * Writer's content for this note.
      *
      * @var string
-     * @ORM\Column(name="content", type="text")
+     * @ORM\Column(name="content", type="text", nullable=true)
      */
     private $content;
 
@@ -98,15 +98,17 @@ class Note implements \JsonSerializable
      * Writer's signature base64
      *
      * @var string
-     * @ORM\Column(name="signature", type="text")
+     * @ORM\Column(name="signature", type="text", nullable=true)
      */
     private $signature;
 
     /**
-     * One Note has many Comments.
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="note", cascade={"persist",})
+     * Reviewer's comment for this note.
+     *
+     * @var string
+     * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    private $comments;
+    private $comment;
 
     /**
      * The state the note is in.
@@ -157,7 +159,7 @@ class Note implements \JsonSerializable
             'staff' => $this->getStaff()->getUuid(),
             'reviewer' => is_object($this->getReviewer()) ? $this->getReviewer()->getUuid() : null,
             'content' => $this->getContent(),
-            'comments' => $this->getComments(),
+            'comment' => $this->getComment(),
             'state' => $this->getState()
             //'' => $this->get
         ];
@@ -173,7 +175,6 @@ class Note implements \JsonSerializable
      */
     public function __construct()
     {
-        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -403,40 +404,6 @@ class Note implements \JsonSerializable
     }
 
     /**
-     * Add comment
-     *
-     * @param \AppBundle\Entity\Comment $comment
-     *
-     * @return Note
-     */
-    public function addComment(\AppBundle\Entity\Comment $comment)
-    {
-        $this->comments[] = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Remove comment
-     *
-     * @param \AppBundle\Entity\Comment $comment
-     */
-    public function removeComment(\AppBundle\Entity\Comment $comment)
-    {
-        $this->comments->removeElement($comment);
-    }
-
-    /**
-     * Get comments
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getComments()
-    {
-        return $this->comments;
-    }
-
-    /**
      * Set signature
      *
      * @param string $signature
@@ -458,5 +425,29 @@ class Note implements \JsonSerializable
     public function getSignature()
     {
         return $this->signature;
+    }
+
+    /**
+     * Set comment
+     *
+     * @param string $comment
+     *
+     * @return Note
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 }

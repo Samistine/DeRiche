@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <section id="Error">
+    <h1>We've experienced an error.</h1>
+        {% if todayerror is defined %}
+            <div class="alert alert-success" role="alert">
+                <strong>Error!</strong> You've already submitted a note for this patient today. Contact the reviewer or admin if you'd like to make changes.
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}
