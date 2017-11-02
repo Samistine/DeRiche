@@ -21,6 +21,7 @@ use AppBundle\Form\UserType;
 class SecurityController extends Controller
 {
     /**
+     * Symfony handles the log in, this function just redirects the user after symfony authenticates them.
      * @Route("/login", name="Login Form")
      */
     public function loginAction(Request $request, AuthenticationUtils $authUtils)

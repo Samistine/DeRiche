@@ -23,7 +23,17 @@ class SubmitterController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('notes/home.html.twig', array('name' => ''));
+        // Show the draft and kicked back notes.
+        $draftnotes = $backnotes = [];
+        foreach ($this->getUser()->getAuthoredNotes() as $n) {
+            if ($n->getState() == $n::DRAFT){
+                $draftnotes[] = $n;
+            } elseif ($n->getState() == $n::KICKED_BACK) {
+                $backnotes[] = $n;
+            }
+       }
+        return $this->render('notes/home.html.twig', array('draftnotes' => $draftnotes,
+                                                            'backnotes' => $backnotes));
     }
 
     /**
@@ -53,11 +63,8 @@ class SubmitterController extends Controller
         }
 
         if ($count === 1) {
-            // TODO: Check if there's already a note submitted today, offer to edit or say wait for "review"
             return $this->redirect('../create/' . $patients[0]->getUuid());
         }
-
-        //return $this->render('notes/home.html.twig', array('name' => $patients));
     }
 
     /**
@@ -65,13 +72,25 @@ class SubmitterController extends Controller
      */
     public function create(Request $request, Patient $patient)
     {
-        // Create a Note (later we verify if there's no note)
-        $note = new Note();
-
-        // Set some default values
-        $note->setStaff($this->getUser());
-        $note->setPatient($patient);
-        $note->setState(10); // Draft.
+        // Check if there's a note for this patient done today and whether it's a draft.
+        $update = false;
+        foreach ($patient->getNotes() as $n) {
+            $ts = $n->getCreatedAt()->getTimeStamp();
+            if (date('Y-m-d', strtotime("today")) == date('Y-m-d', $ts)) {
+                // Verify that it's a draft before using it as the base.
+                if ($n->getState() == $n::DRAFT || $n->getState() == $n::KICKED_BACK) {
+                    $note = $n;
+                    $update = true;
+                }
+            }
+        }
+        // Create a new Note if this is not a draft.
+        if (!isset($note)) {
+            $note = new Note();
+            // Set some default values
+            $note->setStaff($this->getUser());
+            $note->setPatient($patient);
+        }
 
         // Create the form we show the user.
         $form = $this->createFormBuilder($note)
@@ -91,24 +110,11 @@ class SubmitterController extends Controller
             return $this->redirectToRoute('home page');
         }
 
-        // Check if there's a note for this patient done today and whether it's a draft.
-        $update = false;
-        $donetoday = false;
-//        foreach ($patient->getNotes() as $n) {
-//            $ts = $n->getCreatedAt()->getTimeStamp();
-//            if (date('Y-m-d', strtotime("today")) == date('Y-m-d', $ts)) {
-//                if ($n->getState() == $n::DRAFT) { // Verify that it's a draft.
-//                    $note = $n;
-//                    $update = true;
-        // Submit the draft so we can update it later.
-//        $em = $this->getDoctrine()->getManager();
-//        $em->persist($note);
-//        $em->flush();
-//                } else { // If it's not a draft then we don't allow multisubmits in a single day.
-//                    $donetoday = true;
-//                }
-//            }
-//        }
+
+        // Submit the draft so we can update it later
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($note);
+        $em->flush();
 
         if ($update) {
             return $this->render('notes/create.html.twig', array(
@@ -117,11 +123,6 @@ class SubmitterController extends Controller
                 'note' => $note,
                 'content' => $note->getContent(),
                 'objectives' => $patient->getObjectives()->toArray()
-            ));
-        }
-        if ($donetoday) {
-            return $this->render('notes/error.html.twig', array(
-                'todayerror' => true
             ));
         }
         return $this->render('notes/create.html.twig', array(
@@ -138,11 +139,11 @@ class SubmitterController extends Controller
     public function updateDraft(Request $request, Note $note)
     {
         // This only handles the inbound request via JS, the state remains 10 until it's submitted.
-//        $content = $request->get('content');
-//        $note->setContent($content);
-//        $em = $this->getDoctrine()->getManager();
-//        $em->persist($note);
-//        $em->flush();
+        $content = $request->get('content');
+        $note->setContent($content);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($note);
+        $em->flush();
         return new Response(); // Empty response.
     }
 }

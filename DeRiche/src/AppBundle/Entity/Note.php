@@ -113,15 +113,15 @@ class Note implements \JsonSerializable
     /**
      * The state the note is in.
      *
-     * 0 = Draft
-     * 10 = Submitted for Review (Awaiting Review)
-     * 20 = Kicked back for errors (Awaiting resubmission)
-     * 30 = Accepted into Database (Accepted)
+     * 10 = Draft
+     * 20 = Submitted for Review (Awaiting Review)
+     * 30 = Kicked back for errors (Awaiting resubmission)
+     * 40 = Accepted into Database (Accepted)
      *
      * @var integer
      * @ORM\Column(name="state", type="integer")
      */
-    private $state;
+    private $state = 10;
 
     /**
      * @ORM\PrePersist
