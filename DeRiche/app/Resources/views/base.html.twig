@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8"/>
     <title>{% block title %}Home | Dashboard{% endblock %}</title>
+
     {% block stylesheets %}{% endblock %}
-    <link rel="stylesheet"
-          href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.css"></link>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
-          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{{ asset('static/bootstrap-4.0.0-beta/css/bootstrap.min.css') }}"></link>
     <link href="{{ asset('style.css') }}" rel="stylesheet">
+
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
     <link rel="preload" href="{{ asset('static/jquery/jquery-3.2.1.min.js') }}" as="script">
@@ -27,6 +27,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
+
                 {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item">
                         <a class="nav-link" href="/admin">Admin</a>
@@ -35,6 +36,7 @@
                         <a class="nav-link" href="/patients/">Patients</a>
                     </li>
                 {% endif %}
+
                 {% if is_granted('ROLE_WRITER') %}
                     <li class="nav-item">
                         <a class="nav-link" href="/note/">Create Note</a>
@@ -56,11 +58,13 @@
                         </div>
                     </li>
                 {% endif %}
+
                 {% if is_granted('ROLE_REVIEWER') %}
                     <li class="nav-item">
                         <a class="nav-link" href="/reviewer/">Review Notes</a>
                     </li>
                 {% endif %}
+
                 {#<li class="nav-item">#}
                 {#<a class="nav-link" href="/formretrieval">Retrieve Form</a>#}
                 {#</li>#}
