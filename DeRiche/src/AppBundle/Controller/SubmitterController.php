@@ -94,22 +94,21 @@ class SubmitterController extends Controller
         // Check if there's a note for this patient done today and whether it's a draft.
         $update = false;
         $donetoday = false;
-        foreach ($patient->getNotes() as $n) {
-            $ts = $n->getCreatedAt()->getTimeStamp();
-            if (date('Y-m-d', strtotime("today")) == date('Y-m-d', $ts)) {
-                if ($n->getState() == $n::DRAFT) { // Verify that it's a draft.
-                    $note = $n;
-                    $update = true;
-                } else { // If it's not a draft then we don't allow multisubmits in a single day.
-                    $donetoday = true;
-                }
-            }
-        }
-
+//        foreach ($patient->getNotes() as $n) {
+//            $ts = $n->getCreatedAt()->getTimeStamp();
+//            if (date('Y-m-d', strtotime("today")) == date('Y-m-d', $ts)) {
+//                if ($n->getState() == $n::DRAFT) { // Verify that it's a draft.
+//                    $note = $n;
+//                    $update = true;
         // Submit the draft so we can update it later.
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($note);
-        $em->flush();
+//        $em = $this->getDoctrine()->getManager();
+//        $em->persist($note);
+//        $em->flush();
+//                } else { // If it's not a draft then we don't allow multisubmits in a single day.
+//                    $donetoday = true;
+//                }
+//            }
+//        }
 
         if ($update) {
             return $this->render('notes/create.html.twig', array(
@@ -139,11 +138,11 @@ class SubmitterController extends Controller
     public function updateDraft(Request $request, Note $note)
     {
         // This only handles the inbound request via JS, the state remains 10 until it's submitted.
-        $content = $request->get('content');
-        $note->setContent($content);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($note);
-        $em->flush();
+//        $content = $request->get('content');
+//        $note->setContent($content);
+//        $em = $this->getDoctrine()->getManager();
+//        $em->persist($note);
+//        $em->flush();
         return new Response(); // Empty response.
     }
 }

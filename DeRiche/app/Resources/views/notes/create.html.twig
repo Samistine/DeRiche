@@ -19,7 +19,7 @@
             <label for="form_content" class="required">Progress notes are to include any daily activities, behavior
                 issues, appointments and progress toward goals.</label>
             {{ form_errors(form.content) }}
-            {% if note.content is defined %}
+            {% if note.content is not null %}
                 {{ form_widget(form.content, { 'attr': {'class': 'form-control'},
                     'value': note.content}) }}
             {% else %}
