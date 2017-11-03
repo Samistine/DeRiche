@@ -2,6 +2,28 @@
 
 {% block body %}
     <form>
-
+        <input name="time"/>
     </form>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://unpkg.com/flatpickr"></script>
+
+    <script type="text/javascript">
+        $("input[name=time]").flatpickr({
+            enableTime: true,
+            noCalendar: true,
+
+            // default format
+            dateFormat: "h:i K",
+
+
+            // Preload time with defaultDate instead:
+            defaultDate: new Date().setMinutes(0)
+        });
+    </script>
 {% endblock %}
