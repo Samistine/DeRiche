@@ -26,14 +26,14 @@ class SubmitterController extends Controller
         // Show the draft and kicked back notes.
         $draftnotes = $backnotes = [];
         foreach ($this->getUser()->getAuthoredNotes() as $n) {
-            if ($n->getState() == $n::DRAFT){
+            if ($n->getState() == $n::DRAFT) {
                 $draftnotes[] = $n;
             } elseif ($n->getState() == $n::KICKED_BACK) {
                 $backnotes[] = $n;
             }
-       }
+        }
         return $this->render('notes/home.html.twig', array('draftnotes' => $draftnotes,
-                                                            'backnotes' => $backnotes));
+            'backnotes' => $backnotes));
     }
 
     /**
@@ -84,12 +84,18 @@ class SubmitterController extends Controller
                 }
             }
         }
+
         // Create a new Note if this is not a draft.
         if (!isset($note)) {
             $note = new Note();
             // Set some default values
             $note->setStaff($this->getUser());
             $note->setPatient($patient);
+
+            // Submit the draft so we can update it later
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($note);
+            $em->flush();
         }
 
         // Create the form we show the user.
@@ -104,17 +110,15 @@ class SubmitterController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $note = $form->getData();
             $note->setState(20); // Send to reviewer.
+
+            //Save
             $em = $this->getDoctrine()->getManager();
             $em->persist($note);
             $em->flush();
+
             return $this->redirectToRoute('home page');
         }
 
-
-        // Submit the draft so we can update it later
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($note);
-        $em->flush();
 
         if ($update) {
             return $this->render('notes/create.html.twig', array(
@@ -124,13 +128,14 @@ class SubmitterController extends Controller
                 'content' => $note->getContent(),
                 'objectives' => $patient->getObjectives()->toArray()
             ));
+        } else {
+            return $this->render('notes/create.html.twig', array(
+                'patient' => $patient,
+                'form' => $form->createView(),
+                'note' => $note,
+                'objectives' => $patient->getObjectives()->toArray()
+            ));
         }
-        return $this->render('notes/create.html.twig', array(
-            'patient' => $patient,
-            'form' => $form->createView(),
-            'note' => $note,
-            'objectives' => $patient->getObjectives()->toArray()
-        ));
     }
 
     /**
@@ -141,9 +146,11 @@ class SubmitterController extends Controller
         // This only handles the inbound request via JS, the state remains 10 until it's submitted.
         $content = $request->get('content');
         $note->setContent($content);
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($note);
         $em->flush();
+
         return new Response(); // Empty response.
     }
 }
