@@ -81,39 +81,47 @@
     {#Script for handling objective addition. - Syed A#}
     <script type="text/javascript">
         $(document).ready(function () {
-            var wrapper = $("#patients_form");
+            //var wrapper = $("#patients_form");
             var add_button = $("#addobjective");
 
             var x = 1; // First objective field.
             $(add_button).click(function (e) { // When they click "add objective"
                 e.preventDefault();
+
                 // Add the actual objective field to the form..
                 $(add_button).after('' +
-                    '<div class="form-group row card" style="margin-top:5px;margin-left:0px;padding: 10px;width:90%">' +
-                    '<label for="example-text-input" class="col-form-label">Objective Name</label>' +
-                    '<input class="form-control" type="text" id="objectiveName' + x + '" name="objectiveName' + x + '">' +
-                    '<label for="example-text-input" class="col-form-label">Goal Text</label>' +
-                    '<textarea class="form-control" type="text" id="goalText' + x + '" name="goalText' + x + '"></textarea>' +
-                    '<label for="example-text-input" class="col-form-label">Objective Text</label>' +
-                    '<textarea class="form-control" type="text" id="objectiveText' + x + '" name="objectiveText' + x + '"></textarea>' +
-                    '<label for="example-text-input" class="col-form-label">Guidance Notes</label>' +
-                    '<textarea class="form-control" type="text" id="guidanceNotes' + x + '" name="guidanceNotes' + x + '"></textarea>' +
-                    '<label for="example-text-input" class="col-form-label">Frequency</label>' +
-                    '<div class="row" style="padding-left: 15px;"><input class="form-control col-2" type="number" id="freqAmount' + x + '" name="freqAmount' + x + '">' +
-                    '<select class="form-control col-5" id="freqKind' + x + '" name="freqKind' + x + '">' +
-                    '<option>/Day</option><option>/Week</option><option>/Month</option></select></div>' +
-                    '<button type="button" class="btn btn-danger remove_field" style="margin-top: 8px;">Remove Objective</button>' +
+                    '<div class="form-group row card objective">' +
+                    '   <label for="example-text-input" class="col-form-label">Objective Name</label>' +
+                    '   <input class="form-control" type="text" id="objectiveName' + x + '" name="objectiveName' + x + '">' +
+                    '   <label for="example-text-input" class="col-form-label">Goal Text</label>' +
+                    '   <textarea class="form-control" type="text" id="goalText' + x + '" name="goalText' + x + '"></textarea>' +
+                    '   <label for="example-text-input" class="col-form-label">Objective Text</label>' +
+                    '   <textarea class="form-control" type="text" id="objectiveText' + x + '" name="objectiveText' + x + '"></textarea>' +
+                    '   <label for="example-text-input" class="col-form-label">Guidance Notes</label>' +
+                    '   <textarea class="form-control" type="text" id="guidanceNotes' + x + '" name="guidanceNotes' + x + '"></textarea>' +
+                    '   <label for="example-text-input" class="col-form-label">Frequency</label>' +
+                    '   <div class="row" style="padding-left: 15px;"><input class="form-control col-2" type="number" id="freqAmount' + x + '" name="freqAmount' + x + '">' +
+                    '       <select class="form-control col-5" id="freqKind' + x + '" name="freqKind' + x + '">' +
+                    '           <option>/Day</option>' +
+                    '           <option>/Week</option>' +
+                    '           <option>/Month</option>' +
+                    '       </select>' +
+                    '   </div>' +
+                    '   <button type="button" class="btn btn-danger remove_field">Remove Objective</button>' +
                     '</div>');
+
                 // Now let's move the add button under what we just added and adjust the margins a tad.
                 $(add_button).insertAfter($(add_button).next());
                 $(add_button).css('margin-top', '-8px');
+
+                // when they click "remove objective"
+                $('.objective .remove_field').click(function (e) {
+                    $(this).closest('.objective').remove();
+                });
+
                 x++; //Increment the objective number.
             });
 
-            $(wrapper).on("click", ".remove_field", function (e) { // when they click "remove objective"
-                e.preventDefault();
-                $(this).parent('div').remove();
-            })
         });
     </script>
 {% endblock %}
@@ -127,10 +135,18 @@
             margin: auto;
             width: 90%;
         }
-
         .patient {
             /*border-radius: 25px;*/
             /*background-color: #ffe8a1;*/
+        }
+        .objective {
+            margin-top: 5px;
+            margin-left: 0px;
+            padding: 10px;
+            width: 90%
+        }
+        .objective .remove_field {
+            margin-top: 8px;
         }
     </style>
 {% endblock %}
