@@ -15,6 +15,7 @@
     <link rel="preload" href="{{ asset('static/popper.js') }}" as="script">
     <link rel="preload" href="{{ asset('static/bootstrap-4.0.0-beta/js/bootstrap.min.js') }}" as="script">
     <link rel="preload" href="{{ asset('static/tether.min.js') }}" as="script">
+    <link rel="preload" href="{{ asset('static/underscore/underscore-min.js') }}" as="script">
 </head>
 <body>
 <div class="container-fluid" id="wrapper">
@@ -115,6 +116,7 @@
     <script src="{{ asset('static/popper.js') }}"></script>
     <script src="{{ asset('static/bootstrap-4.0.0-beta/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('static/tether.min.js') }}"></script>
+    <script src="{{ asset('static/underscore/underscore-min.js') }}"></script>
 
     <script>
         // Used for navigation menu.
@@ -160,8 +162,7 @@
             switch (type) {
                 // handle redirect here
                 case 'link': {
-                    var
-                        link = $('#confirmModal').data('link');
+                    var link = $('#confirmModal').data('link');
                     location.href = link;
                     $('#confirmModal').modal('hide');
                 }

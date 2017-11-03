@@ -142,15 +142,25 @@
 {% endblock %}
 {% block javascripts %}
     <script type="text/javascript">
-        $(function () {
-            // get the ID of the note and submit a draft every 5 seconds.
+
+        function updatedraft() {
             uuid = $("#note_id").val();
-            setInterval(function () {
-                postval = $("#form_content").val();
-                console.log(postval);
-                $.post("../updatedraft/" + uuid, {content: postval});
-            }, 1000);
-        });
+
+            postval = $("#form_content").val();
+            console.log(postval);
+            $.post("../updatedraft/" + uuid, {content: postval});
+        }
+
+
+        $('#noteform :input').on('input', _.throttle(function () {
+            // Do expensive things
+            updatedraft();
+        }, 1000));//Limit to once a second
+
+        //        $(function () {
+        //            // get the ID of the note and submit a draft every 1 seconds.
+        //            setInterval(updatedraft, 1000);
+        //        });
     </script>
     <script type="text/javascript">
         function addObjective(x) {
