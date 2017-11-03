@@ -17,7 +17,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for note in notes if note.state != constant('ACCEPTED', note) %}
+                {% for note in notes if note.state == constant('AWAITING_APPROVAL', note) %}
                     <tr>
                         <td>{{ note.patient.firstName }} {{ note.patient.lastName }}</td>
                         <td>{{ note.staff.firstName }} {{ note.staff.lastName }}</td>

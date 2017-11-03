@@ -3,10 +3,10 @@
 {% block body %}
 
     <section id="Error">
-    <h1>We've experienced an error.</h1>
+    <h3>You can not submit a note for this Individual.</h3>
         {% if todayerror is defined %}
-            <div class="alert alert-success" role="alert">
-                <strong>Error!</strong> You've already submitted a note for this patient today. Contact the reviewer or admin if you'd like to make changes.
+            <div class="alert alert-danger" role="alert">
+                <strong>Error!</strong> <p>You've already submitted a note for this patient today. </p>Contact the reviewer or admin if you'd like to make changes.
             </div>
         {% endif %}
     </section>

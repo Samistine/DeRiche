@@ -68,4 +68,21 @@ class ReviewerController extends Controller
             'note' => $note
         ));
     }
+
+    /**
+     * @Route("/review/comment/{id}", name="Reviewer comments on a note.")
+     */
+    public function comment(Request $request, Note $note)
+    {
+        // Get the comment from the page.
+        $em = $this->getDoctrine()->getManager();
+        $note->setComment($request->get('comment'));
+        // Figure out whether it's a comment submission or just a comment.
+        if($request->get('correctsubmit') !== null) {
+            $note->setState($note::KICKED_BACK);
+        }
+        $em->persist($note);
+        $em->flush();
+        return $this->redirect('../' . $note->getUuid());
+    }
 }

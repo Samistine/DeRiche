@@ -13,6 +13,11 @@
     </div>
     <hr/>
     <input id="note_id" value="{{ note.uuid }}" style="display: none;"/>
+    {% if note.comment %}
+        <div class="alert alert-warning" role="alert">
+            <strong>Comment:</strong> {{ note.comment }}
+        </div>
+    {% endif %}
     {{ form_start(form, { 'attr': {'class': 'container form', 'id': 'noteform'} }) }}
     <div class="row">
         <div class="form-group col-sm-8">
@@ -141,9 +146,10 @@
             // get the ID of the note and submit a draft every 5 seconds.
             uuid = $("#note_id").val();
             setInterval(function () {
-                console.log($("form").serialize());
-                $.post("../updatedraft/" + uuid, $("form").serialize());
-            }, 5000);
+                postval = $("#form_content").val();
+                console.log(postval);
+                $.post("../updatedraft/" + uuid, {content: postval});
+            }, 1000);
         });
     </script>
     <script type="text/javascript">
