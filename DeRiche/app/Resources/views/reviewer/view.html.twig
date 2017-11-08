@@ -34,7 +34,7 @@
         <h5>Signature on Note:</h5>
         <p><img src="{{ note.signature }}" alt="Note signature"/></p>
     </form>
-    {% if note.state != constant('ACCEPTED', note) %}
+    {% if note.state == constant('AWAITING_APPROVAL', note) %}
         <a href="approve/{{ note.uuid }}">
             <button id="submitdb" type="button" class="btn btn-success">Submit to Database</button>
         </a>

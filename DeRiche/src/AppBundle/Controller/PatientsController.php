@@ -203,23 +203,26 @@ class PatientsController extends Controller
     }
 
     /**
-     * @Route("/createTestData", name="Create Test Patients")
+     * @Route("/patient/{id}/update", name="Update Patient")
      */
-    // TODO: Move this to a test file, it shouldn't be here.
-    public function createTestDate()
+    public function updatePatient(Request $request, Patient $patient)
     {
-        for ($i = 0; $i < 100; $i++) {
-            $patient = new Patient();
-            $patient
-                ->setMedicalId(random_int(0, 999999999999999))
-                ->setFirstName(uniqid())
-                ->setLastName(uniqid());
+            $first_name = $request->get('first_name');
+            $last_name = $request->get('last_name');
+            $medical_id = $request->get('medical_id');
 
+        // Only update if we got all three fields.
+        if($first_name && $last_name && $medical_id) {
+            $patient
+                ->setFirstName($first_name)
+                ->setLastName($last_name)
+                ->setMedicalId($medical_id);
+
+            // Submit the patient
             $em = $this->getDoctrine()->getManager();
             $em->persist($patient);
             $em->flush();
         }
-
-        return new Response("Test patients have been created");
+        return $this->render('patient.html.twig', array('patient' => $patient));
     }
 }

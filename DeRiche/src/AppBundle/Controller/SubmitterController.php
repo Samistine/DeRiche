@@ -81,6 +81,8 @@ class SubmitterController extends Controller
                 if ($n->getState() == $n::DRAFT || $n->getState() == $n::KICKED_BACK) {
                     $note = $n;
                     $update = true;
+                } else {
+                    return $this->render('notes/error.html.twig', array('todayerror' => true));
                 }
             }
         }
