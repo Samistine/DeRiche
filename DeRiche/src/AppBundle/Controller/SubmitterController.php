@@ -25,11 +25,13 @@ class SubmitterController extends Controller
     {
         // Show the draft and kicked back notes.
         $draftnotes = $backnotes = [];
-        foreach ($this->getUser()->getAuthoredNotes() as $n) {
-            if ($n->getState() == $n::DRAFT) {
-                $draftnotes[] = $n;
-            } elseif ($n->getState() == $n::KICKED_BACK) {
-                $backnotes[] = $n;
+        if($this->getUser()) {
+            foreach ($this->getUser()->getAuthoredNotes() as $n) {
+                if ($n->getState() == $n::DRAFT) {
+                    $draftnotes[] = $n;
+                } elseif ($n->getState() == $n::KICKED_BACK) {
+                    $backnotes[] = $n;
+                }
             }
         }
         return $this->render('notes/home.html.twig', array('draftnotes' => $draftnotes,

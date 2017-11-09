@@ -12,7 +12,7 @@
                 <tr>
                     {#<th>ID</th>#}
                     <th>Patient</th>
-                    <th>Last Modification Date</th>
+                    <th>Creation Date</th>
                     <th>Manage</th>
                 </tr>
                 </thead>
@@ -20,7 +20,7 @@
                 {% for note in backnotes %}
                     <tr>
                         <td>{{ note.patient.firstName }} {{ note.patient.lastName }}</td>
-                        <td>{{ note.modifiedAt|default(date('0'))|date('F j, Y h:m A') }}</td>
+                        <td>{{ note.createdAt|default(date('0'))|date('F j, Y h:m A') }}</td>
                         <td><a href="create/{{ note.patient.uuid }}">
                                 <button type="button" class="btn btn-primary">Edit</button>
                             </a></td>
