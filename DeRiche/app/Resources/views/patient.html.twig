@@ -34,10 +34,30 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-6">
-                                    <label for="insurace" class="col-form-label">Medical ID</label>
+                                    <label for="medical_id" class="col-form-label">Medical ID</label>
                                     <input id="medical_id" name="medical_id" class="form-control"
                                            value="{{ patient.medicalid }}" required
                                            type="number">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6">
+                                    <div class="form-check">
+                                        <label for="seizure" class="form-check-label">
+                                            <input name="seizure" class="form-check-input" type="checkbox" value="seizure" {% if patient.seizure %} checked {% endif %}>
+                                            Does Patient have Seizures?
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6">
+                                    <div class="form-check">
+                                        <label for="bowel" class="form-check-label">
+                                            <input name="bowel" class="form-check-input" type="checkbox" value="bowel" {% if patient.bowel %} checked {% endif %}>
+                                            Monitor Patient's Bowel Movements?
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="text-center">

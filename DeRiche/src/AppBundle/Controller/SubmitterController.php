@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -83,8 +84,6 @@ class SubmitterController extends Controller
                 if ($n->getState() == $n::DRAFT || $n->getState() == $n::KICKED_BACK) {
                     $note = $n;
                     $update = true;
-                } else {
-                    return $this->render('notes/error.html.twig', array('todayerror' => true));
                 }
             }
         }
@@ -107,6 +106,12 @@ class SubmitterController extends Controller
             ->add('content', TextareaType::class, array(
                 'attr' => array('rows' => '25'),))
             ->add('signature', HiddenType::class)
+            ->add('bowel', CheckboxType::class, array(
+                'label'    => 'Any cool bowel movements?',
+                'required' => false))
+            ->add('seizure', CheckboxType::class, array(
+                'label'    => 'Seizure Information',
+                'required' => false))
             ->getForm();
 
         $form->handleRequest($request);

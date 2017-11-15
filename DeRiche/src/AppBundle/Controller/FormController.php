@@ -5,6 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Note;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
+
 
 /**
  * @Route("/form", name="Form Creating Subsystem")
@@ -21,9 +23,9 @@ class FormController extends Controller
 //
 //
     /**
-     * @Route("/{id}", name="Create Form")
+     * @Route("/{uuid}", name="Create Form")
      */
-    public function formCreate(Note $note)
+    public function formCreate(Request $request, Note $note)
     {
 
     }

@@ -154,12 +154,16 @@ class PatientsController extends Controller
         $first_name = $request->get('first_name');
         $last_name = $request->get('last_name');
         $medical_id = $request->get('medical_id');
+        $seizure_status = empty($request->get('seizure')) ? false : true;
+        $bowel_status = empty($request->get('bowel')) ? false : true;
 
         $patient = new Patient();
         $patient
             ->setFirstName($first_name)
             ->setLastName($last_name)
-            ->setMedicalId($medical_id);
+            ->setMedicalId($medical_id)
+            ->setSeizure($seizure_status)
+            ->setBowel($bowel_status);
 
         // Submit the patient
         $em = $this->getDoctrine()->getManager();
@@ -207,17 +211,20 @@ class PatientsController extends Controller
      */
     public function updatePatient(Request $request, Patient $patient)
     {
-            $first_name = $request->get('first_name');
-            $last_name = $request->get('last_name');
-            $medical_id = $request->get('medical_id');
+        $first_name = $request->get('first_name');
+        $last_name = $request->get('last_name');
+        $medical_id = $request->get('medical_id');
+        $seizure_status = empty($request->get('seizure')) ? false : true;
+        $bowel_status = empty($request->get('bowel')) ? false : true;
 
         // Only update if we got all three fields.
-        if($first_name && $last_name && $medical_id) {
+        if ($first_name && $last_name && $medical_id) {
             $patient
                 ->setFirstName($first_name)
                 ->setLastName($last_name)
-                ->setMedicalId($medical_id);
-
+                ->setMedicalId($medical_id)
+                ->setSeizure($seizure_status)
+                ->setBowel($bowel_status);
             // Submit the patient
             $em = $this->getDoctrine()->getManager();
             $em->persist($patient);
