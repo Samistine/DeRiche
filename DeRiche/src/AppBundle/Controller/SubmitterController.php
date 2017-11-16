@@ -107,7 +107,7 @@ class SubmitterController extends Controller
                 'attr' => array('rows' => '25'),))
             ->add('signature', HiddenType::class)
             ->add('bowel', CheckboxType::class, array(
-                'label'    => 'Any cool bowel movements?',
+                'label'    => 'Abnormal Bowel Movement?',
                 'required' => false))
             ->add('seizure', CheckboxType::class, array(
                 'label'    => 'Seizure Information',
