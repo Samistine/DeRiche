@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * @Route("/admin")
+ * @Route("/admin/")
  */
 class AdminController extends Controller
 {
@@ -40,11 +40,6 @@ class AdminController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
-
-            // ... do any other work - like sending them an email, etc
-            // maybe set a "flash" success message for the user
-
-            //return $this->redirectToRoute('Admin Panel');
         }
 
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
@@ -56,7 +51,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/archive/{username}", name="Archive User")
+     * @Route("archive/{username}", name="Archive User")
      */
     public function archiveUser(User $user, EntityManagerInterface $em, Request $request)
     {
@@ -76,7 +71,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/delete/{username}", name="Delete User")
+     * @Route("delete/{username}", name="Delete User")
      */
     public function deleteUser(User $user, EntityManagerInterface $em, Request $request)
     {
@@ -94,6 +89,31 @@ class AdminController extends Controller
 
 
         $em->remove($user);
+        $em->flush();
+
+        //Get the page the browser was on before coming here
+        $referer = $request->headers->get('referer');
+
+        //Send them back
+        return $this->redirect($referer);
+    }
+
+    /**
+     * @Route("secondaryrole/{username}", name="Update Secondary Role for User")
+     */
+    public function secondaryRole(User $user, EntityManagerInterface $em, Request $request)
+    {
+        // Get the role and add it as third value (After ROLE_USER)
+        $role = $request->get('role');
+
+        $roles = $user->getRoles();
+        $roles[2] = $role;
+        // Ignore the above if it's none and just remove it from the array.
+        if ($role == "None") {
+            unset($roles[2]);
+        }
+        $user->setRoles($roles);
+        $em->persist($user);
         $em->flush();
 
         //Get the page the browser was on before coming here
