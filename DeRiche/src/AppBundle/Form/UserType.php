@@ -40,8 +40,6 @@ class UserType extends AbstractType
                     'choices' => array(
                         'Writer' => 'ROLE_WRITER',
                         'Reviewer' => 'ROLE_REVIEWER',
-                        'SC Auditor' => 'ROLE_SC_AUDITOR',
-                        'Auditor' => 'ROLE_AUDITOR',
                         'Administrator' => 'ROLE_ADMIN'
                     ),
                 ),

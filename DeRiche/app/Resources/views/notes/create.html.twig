@@ -30,7 +30,13 @@
             {% else %}
                 {{ form_widget(form.content, { 'attr': {'class': 'form-control'},
                     'value': note.createdAt|date("(m/d/Y)") ~ " " ~ patient.firstname ~ " "}) }}
-                {{ form_widget(form.signature) }}
+            {% endif %}
+            {{ form_widget(form.signature) }}
+            {% if note.patient.seizure %}
+                {{ form_row(form.seizure) }}
+            {% endif %}
+            {% if note.patient.bowel %}
+                {{ form_row(form.bowel) }}
             {% endif %}
         </div>
         <div class="col-sm-4">

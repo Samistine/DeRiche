@@ -50,6 +50,20 @@ class Patient implements \JsonSerializable
     private $active = true;
 
     /**
+     * @var boolean
+     * Does this patient have seizures?
+     * @ORM\Column(name="seizure", type="boolean", nullable=true)
+     */
+    private $seizure = true;
+
+    /**
+     * @var boolean
+     * Does this patient need their bowel movements tracked?
+     * @ORM\Column(name="bowel", type="boolean", nullable=true)
+     */
+    private $bowel = true;
+
+    /**
      * One Patient has many Notes.
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Note", mappedBy="patient")
      */
@@ -264,5 +278,53 @@ class Patient implements \JsonSerializable
     public function getObjectives()
     {
         return $this->objectives;
+    }
+
+    /**
+     * Set seizure status
+     *
+     * @param boolean $seizure
+     *
+     * @return Patient
+     */
+    public function setSeizure($seizure)
+    {
+        $this->seizure = $seizure;
+
+        return $this;
+    }
+
+    /**
+     * Get seizure status
+     *
+     * @return boolean
+     */
+    public function getSeizure()
+    {
+        return $this->seizure;
+    }
+
+    /**
+     * Set bowel status
+     *
+     * @param boolean $bowel
+     *
+     * @return Patient
+     */
+    public function setBowel($bowel)
+    {
+        $this->bowel = $bowel;
+
+        return $this;
+    }
+
+    /**
+     * Get bowel status
+     *
+     * @return boolean
+     */
+    public function getBowel()
+    {
+        return $this->bowel;
     }
 }

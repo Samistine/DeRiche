@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Note
@@ -85,6 +86,20 @@ class Note implements \JsonSerializable
      * @ORM\JoinColumn(name="reviewer_uuid", referencedColumnName="uuid", nullable=true)
      */
     private $reviewer;
+
+    /**
+     * Seizure - Yes, No, Possibly?
+     * @Assert\Choice({"Yes", "No", "Possibly"})
+     * @ORM\Column(name="seizure", type="text", nullable=true)
+     */
+    private $seizure;
+
+    /**
+     * @var boolean
+     * Bowel Movement - was one done?
+     * @ORM\Column(name="bowel", type="boolean", nullable=true)
+     */
+    private $bowel = true;
 
     /**
      * Writer's content for this note.
@@ -449,5 +464,48 @@ class Note implements \JsonSerializable
     public function getComment()
     {
         return $this->comment;
+    }
+
+    /**
+     * Set seizure status
+     */
+    public function setSeizure($seizure)
+    {
+        $this->seizure = $seizure;
+        return $this;
+    }
+
+    /**
+     * Get seizure status
+     *
+     * @return string
+     */
+    public function getSeizure()
+    {
+        return $this->seizure;
+    }
+
+    /**
+     * Set bowel status
+     *
+     * @param boolean $bowel
+     *
+     * @return Note
+     */
+    public function setBowel($bowel)
+    {
+        $this->bowel = $bowel;
+
+        return $this;
+    }
+
+    /**
+     * Get bowel status
+     *
+     * @return boolean
+     */
+    public function getBowel()
+    {
+        return $this->bowel;
     }
 }

@@ -20,36 +20,47 @@
     <div class="tab-content">
 
         <div class="tab-pane active" id="view" role="tabpanel">
-            <table id="patients" class="table table-striped table-bordered" cellspacing="0">
+            <table id="admins" class="table table-striped table-bordered" cellspacing="0">
                 <thead>
                 <tr>
                     {#<th>ID</th>#}
                     <th>Username</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
+                    <th>Name</th>
+                    <th>Primary Role</th>
+                    <th>Secondary Role</th>
                     <th>Manage</th>
                 </tr>
                 </thead>
-                <tfoot>
-                <tr>
-                    {#<th>ID</th>#}
-                    <th>Username</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Manage</th>
-                </tr>
-                </tfoot>
                 <tbody>
                 {% for user in users %}
                     <tr>
                         {#<td>{{ patient.id }}</td>#}
                         <td>{{ user.username }}</td>
-                        <td>{{ user.firstName }}</td>
-                        <td>{{ user.lastName }}</td>
+                        <td>{{ user.firstName }} {{ user.lastName }}</td>
+                        <td>{{ user.getroles()[0] }}</td>
+                        <td>
+                            {% if user.getroles()[2] is defined %}
+                                <input type="hidden" value="" name="secondrole"</input>
+                                <select id="editrole{{ user.username }}" name="editrole">
+                                    <option value="NONE" selected="selected">None</option>
+                                    <option value="ROLE_WRITER"{%if user.getroles[2]=="ROLE_WRITER"%} selected="selected"{%endif%}>Writer</option>
+                                    <option value="ROLE_REVIEWER"{%if user.getroles[2]=="ROLE_REVIEWER"%} selected="selected"{%endif%}>Reviewer</option>
+                                    <option value="ROLE_ADMIN"{%if user.getroles[2]=="ROLE_ADMIN"%} selected="selected"{%endif%}>Administrator</option>
+                                </select>
+                            {% else %}
+                                <select id="editrole{{ user.username }}" name="editrole">
+                                    <option value="NONE" selected="selected">None</option>
+                                    <option value="ROLE_WRITER">Writer</option>
+                                    <option value="ROLE_REVIEWER">Reviewer</option>
+                                    <option value="ROLE_ADMIN">Administrator</option>
+                                </select>
+                            {% endif %}
+                            <button class="saverole" value="{{ user.username }}">Update!</button>
+                        </td>
                         <td>
                             <!-- Example split danger button -->
                             <div class="btn-group">
-                                <a role="button" class="btn btn-primary" href="admin/user/{{ user.username }}">View</a>
+                                <a role="button" class="btn btn-primary" href="user/{{ user.username }}">View</a>
                                 <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="sr-only">Toggle Dropdown</span>
@@ -149,13 +160,11 @@
     </script>
 
     <script>
-
         // Javascript to enable link to tab
         var url = document.location.toString();
         if (url.match('#') && !url.match('#view')) {
             $('.tab-pane.active').removeClass('active');
             $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-            console.log("test");
         }
 
         // Change hash for page-reload
@@ -163,13 +172,11 @@
             window.location.hash = e.target.hash;
         })
 
-        //        $(document).ready(function (event) {
-        //            $('ul.nav.nav-tabs a:first').tab('show'); // Select first tab
-        //            $('ul.nav.nav-tabs a[href="' + window.location.hash + '"]').tab('show'); // Select tab by name if provided in location hash
-        //            $('ul.nav.nav-tabs a[data-toggle="tab"]').on('shown', function (event) {    // Update the location hash to current tab
-        //                window.location.hash = event.target.hash;
-        //            })
-        //        });
+        // Handle role editing.
+        $(".saverole").click(function () {
+            role = $('select[id^="editrole' + this.value + '"]').val();
+            $(location).attr('href', 'secondaryrole/' + this.value + '?role=' + role);
+        });
 
     </script>
 {% endblock %}
