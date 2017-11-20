@@ -51,9 +51,14 @@ footer {
     font-style: italic;
 }
 
-canvas#signature {
-    width: 635px;
+canvas#signature, .signature {
+    /*width: 635px;*/
+    width: 631px;
     height: 149px;
     margin-top: 8px;
     border: 2px solid;
+}
+
+.signature-clear {
+    top: 180px; background: white; border: 2px solid;
 }

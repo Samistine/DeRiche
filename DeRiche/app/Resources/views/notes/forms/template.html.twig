@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section id="form-template">
+        <h2 style="font-size:33px">{{ block('title') }}</h2>
+        <hr/>
+
+        <form>
+            {% block form %}{% endblock %}
+
+            <div>
+                <canvas id="signature"></canvas>
+                <input type="hidden" name="sigData" id="sigData"/>
+                <br/>
+                <input type="button" value="Clear Signature" class="signature-clear" onclick="clearSignatureCanvas()">
+            </div>
+
+            <br/>
+
+            <input type="submit" value="Submit">
+        </form>
+
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('jquery.jqscribble.js') }}"></script>
+    <script>
+        var signatureCanvas = $("#signature");
+
+        function clearSignatureCanvas() {
+            signatureCanvas.data("jqScribble").clear();
+            signatureCanvas.data("jqScribble").update({backgroundImage: "{{ asset('sigImg.png') }}"});
+        }
+
+        $(document).ready(function () {
+            signatureCanvas.jqScribble();
+            signatureCanvas.data("jqScribble").update({backgroundImage: "{{ asset('sigImg.png') }}"});
+        });
+    </script>
+{% endblock %}

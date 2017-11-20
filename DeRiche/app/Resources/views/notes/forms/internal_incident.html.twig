@@ -1,5 +1,7 @@
-{% extends 'base.html.twig' %}
+{% extends 'notes/forms/template.html.twig' %}
+
 {% block title %}Internal Incident Form{% endblock %}
+
 {% block stylesheets %}
     <style>
         table, th, td {
@@ -31,8 +33,7 @@
     </style>
 {% endblock %}
 
-{% block body %}
-    <h3>Internal Incident Report</h3>
+{% block form %}
     <form action="#" method="post" class="col-9">
         <table id="t01">
             <tr>

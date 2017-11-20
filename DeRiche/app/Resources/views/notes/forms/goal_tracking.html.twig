@@ -1,0 +1,39 @@
+{% extends 'notes/forms/template.html.twig' %}
+
+{% block title %}Goal Tracking Sheet{% endblock %}
+
+{% block form %}
+
+    <form>
+        <label>Med ID Number:<br></label>
+        <input type="text" name="date" pattern="[0-9]">
+        <br>
+        <label>Participant First Name:<br></label>
+        <input type="text" name="date" size="40">
+        <br>
+        <label>Participant Last Name:<br></label>
+        <input type="text" name="date" size="40">
+        <br>
+        <label>Month/Day/Year:<br></label>
+        <input type="datetime-local">
+        <br>
+        <label>Goal/Objective:<br></label>
+        <textarea style="width:200px; height:150px;"></textarea>
+        <br>
+        <label>Score of goal:<br></label>
+        <select>
+            <option value="1">1 = Independently</option>
+            <option value="2">2 = Verbal PROMPT</option>
+            <option value="3">3= Demonstartion PROMPT</option>
+            <option value="4">4 = Physical Assistance</option>
+            <option value="5">5 = REFUSED</option>
+            <option value="6">6 = Not Tracked</option>
+        </select>
+        <br>
+        <label>Community/Volunteer Activity:<br></label>
+        <input type="text" size="45">
+        <br>
+        <label>Staff Initials:<br></label>
+        <input type="text" name="initials">
+
+{% endblock %}
