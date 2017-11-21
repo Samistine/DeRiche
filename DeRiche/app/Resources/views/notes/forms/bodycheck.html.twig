@@ -4,31 +4,31 @@
     <h3 style="margin-bottom:0">Body Check Report</h3>
     <canvas id="bodycheck" width="673" height="514" style="margin-top: 10px;"></canvas>
     <br/><button href="#" onclick='bodyclear()'>Clear</button>
-    <form id="bodyForm" name="bodyForm" action="BodyCheckServlet" method="post" style="padding-top: 10px;">
+    <form id="bodyForm" name="bodyForm" action="/form/{{ note.uuid }}/submit/{{ type }}" method="post" style="padding-top: 10px;">
         Patient First Name:<br>
-        <input type="text" name="firstName"><br>
+        <input type="text" name="form_firstName"><br>
         Patient Last Name:<br>
-        <input type="text" name="lastName"><br>
+        <input type="text" name="form_lastName"><br>
         Explain what happened:<br>
-        <textarea name="what" rows="4" cols="50"></textarea><br>
+        <textarea name="form_what" rows="4" cols="50"></textarea><br>
         Where did it happen:<br>
-        <input type="text" name="where"><br>
+        <input type="text" name="form_where"><br>
         When did it happen:<br>
-        <input type="text" name="when"><br>
+        <input type="text" name="form_when"><br>
         Why did it happen:<br>
-        <textarea name="why" rows="4" cols="50"></textarea><br>
+        <textarea name="form_why" rows="4" cols="50"></textarea><br>
         What did you do? Describe First Aid administered and follow up:<br>
-        <textarea name="firstAid" rows="4" cols="50"></textarea><br>
+        <textarea name="form_firstAid" rows="4" cols="50"></textarea><br>
         Recommendations for follow up: (Admin Only)<br>
-        <textarea name="recommend" rows="4" cols="50"></textarea>
+        <textarea name="form_recommend" rows="4" cols="50"></textarea>
 
         <canvas id="signature"></canvas><br/>
         <input type="button" value="Clear Signature" style="top:180px; background:white; border:2px solid;" onclick="Sclear()">
 
         <br><br>
         <input type="submit" onClick="save()" value="Submit"/> <input type="reset" value="Clear"/>
-        <input type="hidden" name="bodyData" id="bodyData" value="">
-        <input type="hidden" name="sigData" id="sigData" value="">
+        <input type="hidden" name="form_bodyData" id="bodyData" value="">
+        <input type="hidden" name="form_sigData" id="sigData" value="">
     </form><br>
     <button onclick="myFunction()">Help</button>
 {% endblock %}

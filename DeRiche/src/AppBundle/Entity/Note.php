@@ -126,6 +126,12 @@ class Note implements \JsonSerializable
     private $comment;
 
     /**
+     * One Note has many Forms.
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Form", mappedBy="note")
+     */
+    private $forms;
+
+    /**
      * The state the note is in.
      *
      * 10 = Draft
@@ -507,5 +513,39 @@ class Note implements \JsonSerializable
     public function getBowel()
     {
         return $this->bowel;
+    }
+
+    /**
+     * Add form
+     *
+     * @param \AppBundle\Entity\Form $form
+     *
+     * @return Note
+     */
+    public function addForm(\AppBundle\Entity\Form $form)
+    {
+        $this->forms[] = $form;
+
+        return $this;
+    }
+
+    /**
+     * Remove form
+     *
+     * @param \AppBundle\Entity\Form $form
+     */
+    public function removeForm(\AppBundle\Entity\Form $form)
+    {
+        $this->forms->removeElement($form);
+    }
+
+    /**
+     * Get forms
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getForms()
+    {
+        return $this->forms;
     }
 }

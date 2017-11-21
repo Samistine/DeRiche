@@ -42,22 +42,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/note/">Create Note</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-                           aria-haspopup="true" aria-expanded="false" id="createform">Create Form</a>
-                        <div class="dropdown-menu" id="formsdropdown">
-                            <a class="dropdown-item" href="/bodycheck">Body Check</a>
-                            <a class="dropdown-item" href="/internal_incident">Internal Incident</a>
-                            <a class="dropdown-item" href="#">Bowel Movement Daily Check List</a>
-                            <a class="dropdown-item" href="#">Community Connection Activity Sheet</a>
-                            <a class="dropdown-item" href="#">Goal Tracking Sheet</a>
-                            <a class="dropdown-item" href="#">Multiple Absences</a>
-                            <a class="dropdown-item" href="#">Repositioning Log</a>
-                            <a class="dropdown-item" href="#">Seizure Activity Checklist</a>
-                            <a class="dropdown-item" href="#">Single Absence</a>
-                            <a class="dropdown-item" href="#">Weight & BP Chart</a>
-                        </div>
-                    </li>
                 {% endif %}
 
                 {% if is_granted('ROLE_REVIEWER') %}
