@@ -38,6 +38,7 @@ security:
         - { path: ^/patients, roles: ROLE_ADMIN }
         - { path: ^/note, roles: ROLE_WRITER }
         - { path: ^/reviewer, roles: ROLE_REVIEWER }
+        - { path: ^/form, roles: [ROLE_REVIEWER, ROLE_WRITER] }
 #        - { path: ^/, role: ROLE_USER }
 
     role_hierarchy:
