@@ -49,6 +49,20 @@
             </div>
         </form>
     {% endif %}
+    <div class="card" style="margin-top: 15px;">
+        <h3 class="card-header">Forms - Attached Forms Below</h3>
+        <div class="card-block row">
+            <div class="col-6 col-sm-3" style="margin: 20px">
+                {% for form in note.forms %}
+                    <div>
+                        <a href="/form/view/{{ form.id }}"><span>{{ form.type|readable_enum }}</span></a>
+                        <a href="/form/delete/{{ form.id }}" type="button" class="btn btn-danger">&times;</a>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
