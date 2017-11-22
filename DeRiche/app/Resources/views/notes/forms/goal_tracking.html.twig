@@ -3,37 +3,38 @@
 {% block title %}Goal Tracking Sheet{% endblock %}
 
 {% block form %}
+    <div class="form-group row">
+        <label for="activity" class="col-md-3 col-form-label">Activity</label>
+        <div class="col-md-8">
+            <textarea id="activity" name="form_activity" class="form-control" rows="4"></textarea>
+        </div>
+    </div>
 
     <form>
-        <label>Med ID Number:<br></label>
-        <input type="text" name="date" pattern="[0-9]">
+        <div class="form-group row">
+            <label>Goal/Objective</label>
+            <textarea id="goal" name="form_goal"></textarea>
+        </div>
+
         <br>
-        <label>Participant First Name:<br></label>
-        <input type="text" name="date" size="40">
-        <br>
-        <label>Participant Last Name:<br></label>
-        <input type="text" name="date" size="40">
-        <br>
-        <label>Month/Day/Year:<br></label>
-        <input type="datetime-local">
-        <br>
-        <label>Goal/Objective:<br></label>
-        <textarea style="width:200px; height:150px;"></textarea>
-        <br>
-        <label>Score of goal:<br></label>
-        <select>
-            <option value="1">1 = Independently</option>
-            <option value="2">2 = Verbal PROMPT</option>
-            <option value="3">3= Demonstartion PROMPT</option>
-            <option value="4">4 = Physical Assistance</option>
-            <option value="5">5 = REFUSED</option>
-            <option value="6">6 = Not Tracked</option>
-        </select>
+
+        <div class="form-group row">
+            <label for="score">Score of goal</label>
+            <div class="col-md-8">
+                <select id="score" name="form_score">
+                    <option value="1">1 = Independently</option>
+                    <option value="2">2 = Verbal PROMPT</option>
+                    <option value="3">3 = Demonstartion PROMPT</option>
+                    <option value="4">4 = Physical Assistance</option>
+                    <option value="5">5 = REFUSED</option>
+                    <option value="6">6 = Not Tracked</option>
+                </select>
+            </div>
+        </div>
+
         <br>
         <label>Community/Volunteer Activity:<br></label>
         <input type="text" size="45">
         <br>
-        <label>Staff Initials:<br></label>
-        <input type="text" name="initials">
 
 {% endblock %}

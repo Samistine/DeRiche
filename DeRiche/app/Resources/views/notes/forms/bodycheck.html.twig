@@ -1,39 +1,38 @@
-{% extends 'base.html.twig' %}
+{% extends 'notes/forms/template.html.twig' %}
 {% block title %}Body Check Form{% endblock %}
-{% block body %}
+{% block form %}
+
     <h3 style="margin-bottom:0">Body Check Report</h3>
     <canvas id="bodycheck" width="673" height="514" style="margin-top: 10px;"></canvas>
     <br/>
     <button href="#" onclick='bodyclear()' type="clear">Clear</button>
-    <form id="bodyForm" name="bodyForm" action="/form/{{ note.uuid }}/submit/{{ type }}" method="post"
-          style="padding-top: 10px;">
-        Patient First Name:<br>
-        <input type="text" name="form_firstName" value=""><br>
-        Patient Last Name:<br>
-        <input type="text" name="form_lastName"><br>
-        Explain what happened:<br>
-        <textarea name="form_what" rows="4" cols="50"></textarea><br>
-        Where did it happen:<br>
-        <input type="text" name="form_where"><br>
-        When did it happen:<br>
-        <input type="text" name="form_when"><br>
-        Why did it happen:<br>
-        <textarea name="form_why" rows="4" cols="50"></textarea><br>
-        What did you do? Describe First Aid administered and follow up:<br>
-        <textarea name="form_firstAid" rows="4" cols="50"></textarea><br>
-        Recommendations for follow up: (Admin Only)<br>
-        <textarea name="form_recommend" rows="4" cols="50"></textarea>
 
-        <canvas id="signature"></canvas>
-        <br/>
-        <input type="button" value="Clear Signature" style="top:180px; background:white; border:2px solid;"
-               onclick="Sclear()">
+    Patient First Name:<br>
+    <input type="text" name="form_firstName" value=""><br>
+    Patient Last Name:<br>
+    <input type="text" name="form_lastName"><br>
+    Explain what happened:<br>
+    <textarea name="form_what" rows="4" cols="50"></textarea><br>
+    Where did it happen:<br>
+    <input type="text" name="form_where"><br>
+    When did it happen:<br>
+    <input type="text" name="form_when"><br>
+    Why did it happen:<br>
+    <textarea name="form_why" rows="4" cols="50"></textarea><br>
+    What did you do? Describe First Aid administered and follow up:<br>
+    <textarea name="form_firstAid" rows="4" cols="50"></textarea><br>
+    Recommendations for follow up: (Admin Only)<br>
+    <textarea name="form_recommend" rows="4" cols="50"></textarea>
 
-        <br><br>
-        <input type="submit" onClick="save()" value="Submit"/> <input type="reset" value="Clear"/>
-        <input type="hidden" name="form_bodyData" id="bodyData" value="">
-        <input type="hidden" name="form_sigData" id="sigData" value="">
-    </form><br>
+    <canvas id="signature"></canvas>
+    <br/>
+    <input type="button" value="Clear Signature" style="top:180px; background:white; border:2px solid;"
+           onclick="Sclear()">
+
+    <br><br>
+    <input type="submit" onClick="save()" value="Submit"/> <input type="reset" value="Clear"/>
+    <input type="hidden" name="form_bodyData" id="bodyData" value="">
+    <input type="hidden" name="form_sigData" id="sigData" value="">
     <button onclick="myFunction()" type="help">Help</button>
 {% endblock %}
 
@@ -78,7 +77,16 @@
         // TODO: Replace this.
         function myFunction() {
             alert(
-                "1.Mark on the chart below any abnormities observed\n2.Enter Participant name in the field provided (First name and last name) \n3.In the Explain what happened section, please type out how Participant received any abnormalities\n4.In the Where / When section, please type out Where & When Participant received any abnormalities\n5.In the What did you do? Describe First Aid administered and follow up section, please type out exactly what First Aid was administered and what steps were taken to follow up\n6.In the Recommendations for follow up section, only if you are an Admin, please type in any recommendations you have for the participant\n7.Enter your name in the field provided\n8.Sign the signature box with the mouse\n11.Select date from the Date Picker\n");
+                "1.Mark on the chart below any abnormities observed\n" +
+                "2.Enter Participant name in the field provided (First name and last name) \n" +
+                "3.In the Explain what happened section, please type out how Participant received any abnormalities\n" +
+                "4.In the Where / When section, please type out Where & When Participant received any abnormalities\n" +
+                "5.In the What did you do? Describe First Aid administered and follow up section, please type out exactly what First Aid was administered and what steps were taken to follow up\n" +
+                "6.In the Recommendations for follow up section, only if you are an Admin, please type in any recommendations you have for the participant\n" +
+                "7.Enter your name in the field provided\n" +
+                "8.Sign the signature box with the mouse\n" +
+                "11.Select date from the Date Picker\n"
+            );
         }
     </script>
 {% endblock %}

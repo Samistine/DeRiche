@@ -5,7 +5,19 @@
         <h2 style="font-size:33px">{{ block('title') }}</h2>
         <hr/>
 
-        <form>
+        <form action="/form/{{ note.uuid }}/submit/{{ type }}" method="post">
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label">Date & Time</label>
+                <div class="col-md-4">
+                    <input name="form_date" class="form-control" type="date" value="{{ date()|date("Y-m-d") }}">
+                    <small class="form-text text-muted">Month/Day/Year</small>
+                </div>
+                <div class="col-md-4">
+                    <input name="form_time" id="form_time" class="form-control" type="time">
+                    <small id="form_date" class="form-text text-muted">Time</small>
+                </div>
+            </div>
+
             {% block form %}{% endblock %}
 
             <div>
@@ -17,7 +29,7 @@
 
             <br/>
 
-            <input type="submit" value="Submit">
+            <input type="submit" onClick="save()" value="Submit"/>
         </form>
 
     </section>
@@ -36,6 +48,20 @@
         $(document).ready(function () {
             signatureCanvas.jqScribble();
             signatureCanvas.data("jqScribble").update({backgroundImage: "{{ asset('sigImg.png') }}"});
+            $('*[name^="form"]').prop('required', true);
+        });
+
+        $(document).ready(function () {
+            {% if data %}
+            // If there is data, that means we're viewing it so we can make some changes to the template.
+            var data = {{ data|json_encode()|raw }};
+            // Hide the Submit/Clear button and turn all inputs to disabled within the form.
+            $('input:submit, input[type="reset"], button[type="help"], button[type="clear"]').hide();
+            // Iterate over array and fill inputs as needed.
+            $.each(data, function (key, value) {
+                $('*[name="' + key + '"]').val(value).attr('disabled', 'disabled');
+            });
+            {% endif %}
         });
     </script>
 {% endblock %}
