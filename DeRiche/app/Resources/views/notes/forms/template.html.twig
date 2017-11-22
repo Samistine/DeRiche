@@ -22,7 +22,7 @@
 
             <div>
                 <canvas id="signature"></canvas>
-                <input type="hidden" name="sigData" id="sigData"/>
+                <input type="hidden" id="sigData" name="form_sigData">
                 <br/>
                 <input type="button" value="Clear Signature" class="signature-clear" onclick="clearSignatureCanvas()">
             </div>
@@ -39,19 +39,23 @@
     <script src="{{ asset('jquery.jqscribble.js') }}"></script>
     <script>
         var signatureCanvas = $("#signature");
+        var signatureDataField = ('#sigData');
 
         function clearSignatureCanvas() {
             signatureCanvas.data("jqScribble").clear();
             signatureCanvas.data("jqScribble").update({backgroundImage: "{{ asset('sigImg.png') }}"});
         }
 
-        $(document).ready(function () {
-            signatureCanvas.jqScribble();
-            signatureCanvas.data("jqScribble").update({backgroundImage: "{{ asset('sigImg.png') }}"});
-            $('*[name^="form"]').prop('required', true);
+        $("form").submit(function (event) {
+            signatureDataField.val(
+                signatureCanvas.get(0).toDataURL()
+            );
         });
 
         $(document).ready(function () {
+            clearSignatureCanvas();
+            $('*[name^="form"]').prop('required', true);
+
             {% if data %}
             // If there is data, that means we're viewing it so we can make some changes to the template.
             var data = {{ data|json_encode()|raw }};

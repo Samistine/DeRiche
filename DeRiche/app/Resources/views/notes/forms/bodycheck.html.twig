@@ -1,73 +1,80 @@
 {% extends 'notes/forms/template.html.twig' %}
 {% block title %}Body Check Form{% endblock %}
 {% block form %}
-
-    <h3 style="margin-bottom:0">Body Check Report</h3>
     <canvas id="bodycheck" width="673" height="514" style="margin-top: 10px;"></canvas>
     <br/>
-    <button href="#" onclick='bodyclear()' type="clear">Clear</button>
+    <button onclick='clearBodyCheckCanvas()' type="button">Clear</button>
 
-    Patient First Name:<br>
-    <input type="text" name="form_firstName" value=""><br>
-    Patient Last Name:<br>
-    <input type="text" name="form_lastName"><br>
-    Explain what happened:<br>
-    <textarea name="form_what" rows="4" cols="50"></textarea><br>
-    Where did it happen:<br>
-    <input type="text" name="form_where"><br>
-    When did it happen:<br>
-    <input type="text" name="form_when"><br>
-    Why did it happen:<br>
-    <textarea name="form_why" rows="4" cols="50"></textarea><br>
-    What did you do? Describe First Aid administered and follow up:<br>
-    <textarea name="form_firstAid" rows="4" cols="50"></textarea><br>
-    Recommendations for follow up: (Admin Only)<br>
-    <textarea name="form_recommend" rows="4" cols="50"></textarea>
+    <div class="form-group row">
+        <label for="type" class="col-md-3 col-form-label">If yes, which type?</label>
+        <div class="col-md-4">
+            <textarea id="type" name="form_type" class="form-control"></textarea>
+        </div>
+    </div>
 
-    <canvas id="signature"></canvas>
-    <br/>
-    <input type="button" value="Clear Signature" style="top:180px; background:white; border:2px solid;"
-           onclick="Sclear()">
+    <div class="form-group row">
+        <label for="what" class="col-md-3 col-form-label">Explain what happened</label>
+        <div class="col-md-4">
+            <textarea id="what" name="form_what" rows="4" cols="50"></textarea>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="where" class="col-md-3 col-form-label">Where did it happen</label>
+        <div class="col-md-4">
+            <input id="where" name="form_where" type="text">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="when" class="col-md-3 col-form-label">When did it happen</label>
+        <div class="col-md-4">
+            <input id="when" name="form_when" type="text">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="why" class="col-md-3 col-form-label">Why did it happen</label>
+        <div class="col-md-4">
+            <textarea id="why" name="form_why" rows="4" cols="50"></textarea>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="firstAid" class="col-md-3 col-form-label">
+            What did you do? Describe First Aid administered and follow up
+        </label>
+        <div class="col-md-4">
+            <textarea id="firstAid" name="form_firstAid" rows="4" cols="50"></textarea>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="recommend">Recommendations for follow up: (Admin Only)</label>
+        <div class="col-md-4">
+            <textarea id="recommend" name="form_recommend" rows="4" cols="50"></textarea>
+        </div>
+    </div>
 
     <br><br>
     <input type="submit" onClick="save()" value="Submit"/> <input type="reset" value="Clear"/>
     <input type="hidden" name="form_bodyData" id="bodyData" value="">
-    <input type="hidden" name="form_sigData" id="sigData" value="">
-    <button onclick="myFunction()" type="help">Help</button>
+    <button onclick="myFunction()" type="button">Help</button>
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('jquery.jqscribble.js') }}"></script>
+    {{ parent() }}
     <script>
-        $(document).ready(function () {
-            {% if data is defined %}
-            // If there is data, that means we're viewing it so we can make some changes to the template.
-            var data = {{ data|json_encode()|raw }};
-            // Hide the Submit/Clear button and turn all inputs to disabled within the form.
-            $('input:submit, input[type="reset"], button[type="help"], button[type="clear"]').hide();
-            // Iterate over array and fill inputs as needed.
-            $.each(data, function (key, value) {
-                $('*[name="' + key + '"]').val(value);
-            });
-            {% endif %}
+        var bodyCheckCanvas = $("#bodycheck");
 
-            $("#bodycheck").jqScribble();
-            $("#bodycheck").data("jqScribble").update({backgroundImage: "{{ asset('check.png') }}"});
+        $(document).ready(function () {
             // Need to edit jqscribble to fix this issue. TODO: Troubleshoot and remove the timeout.
-            setTimeout(function () {
-                $("#signature").jqScribble();
-                $("#signature").data("jqScribble").update({backgroundImage: "{{ asset('sigImg.png') }}"});
-            }, 50);
+            setTimeout(clearBodyCheckCanvas, 50);
         });
 
-        function bodyclear() {
-            $("#bodycheck").data("jqScribble").clear();
-            $("#bodycheck").data("jqScribble").update({backgroundImage: "{{ asset('check.png') }}"});
-        }
-
-        function Sclear() {
-            $("#signature").data("jqScribble").clear();
-            $("#signature").data("jqScribble").update({backgroundImage: "{{ asset('sigImg.png') }}"});
+        function clearBodyCheckCanvas() {
+            bodyCheckCanvas.data("jqScribble").clear();
+            bodyCheckCanvas.data("jqScribble").update({backgroundImage: "{{ asset('check.png') }}"});
         }
 
         //  This is the actual way to save the canvas (base64) - can save this to a variable and POST it.

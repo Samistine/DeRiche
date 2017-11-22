@@ -10,31 +10,30 @@
         </div>
     </div>
 
-    <form>
-        <div class="form-group row">
-            <label>Goal/Objective</label>
-            <textarea id="goal" name="form_goal"></textarea>
+    <div class="form-group row">
+        <label>Goal/Objective</label>
+        <textarea id="goal" name="form_goal"></textarea>
+    </div>
+
+    <br>
+
+    <div class="form-group row">
+        <label for="score">Score of goal</label>
+        <div class="col-md-8">
+            <select id="score" name="form_score">
+                <option value="1">1 = Independently</option>
+                <option value="2">2 = Verbal PROMPT</option>
+                <option value="3">3 = Demonstartion PROMPT</option>
+                <option value="4">4 = Physical Assistance</option>
+                <option value="5">5 = REFUSED</option>
+                <option value="6">6 = Not Tracked</option>
+            </select>
         </div>
+    </div>
 
-        <br>
-
-        <div class="form-group row">
-            <label for="score">Score of goal</label>
-            <div class="col-md-8">
-                <select id="score" name="form_score">
-                    <option value="1">1 = Independently</option>
-                    <option value="2">2 = Verbal PROMPT</option>
-                    <option value="3">3 = Demonstartion PROMPT</option>
-                    <option value="4">4 = Physical Assistance</option>
-                    <option value="5">5 = REFUSED</option>
-                    <option value="6">6 = Not Tracked</option>
-                </select>
-            </div>
-        </div>
-
-        <br>
-        <label>Community/Volunteer Activity:<br></label>
-        <input type="text" size="45">
-        <br>
+    <br>
+    <label>Community/Volunteer Activity:<br></label>
+    <input type="text" size="45">
+    <br>
 
 {% endblock %}
