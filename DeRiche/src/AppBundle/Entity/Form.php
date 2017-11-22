@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Types\FormType;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -77,7 +78,6 @@ class Form implements \JsonSerializable
     public function setData($data)
     {
         $this->data = $data;
-
         return $this;
     }
 

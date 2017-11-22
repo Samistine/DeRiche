@@ -33,7 +33,7 @@ class FormController extends Controller
         }
 
         return $this->render(FormType::getTwigTemplate($form_type),
-            array('note' => $note, 'type' => $form_type)
+            array('note' => $note, 'type' => $form_type, 'data' => array())
         );
     }
 
@@ -55,20 +55,46 @@ class FormController extends Controller
                 $formData[$k] = $o;
             }
         }
-
         // TODO: FINISH THIS PORTION OF THE CONTROLLER. ALSO we need to edit the template for notes.
         // That way we can show the added forms and give them the ability to remove it if the note is a draft.
         // etc, etc. Also - need to fix note checkboxes.
+
         // Create a new form using the data we have and persist it.
         $form = new Form();
-        // Set some default values
         $form->setNote($note);
-        $form->setType($patient);
-
-        // Submit the draft so we can update it later
+        $form->setType($form_type);
+        $form->setData($formData);
         $em = $this->getDoctrine()->getManager();
         $em->persist($form);
         $em->flush();
-        die(var_dump($formData));
+
+        return $this->redirect('/note/create/' . $note->getPatient()->getUuid());
+    }
+
+    /**
+     * @Route("view/{form}", name="View Form")
+     */
+    public function viewForm(Form $form)
+    {
+        return $this->render(FormType::getTwigTemplate($form->getType()),
+            array('data' => $form->getData(), 'note' => $form->getNote(),
+                'type' => $form->getType())
+        );
+    }
+
+    /**
+     * @Route("delete/{form}", name="Delete Form")
+     */
+    public function deleteForm(Form $form=null, Request $request)
+    {
+        if ($form) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($form);
+            $em->flush();
+        }
+
+        // Send them back
+        $referrer = $request->headers->get('referer');
+        return $this->redirect($referrer);
     }
 }

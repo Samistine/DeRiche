@@ -3,10 +3,12 @@
 {% block body %}
     <h3 style="margin-bottom:0">Body Check Report</h3>
     <canvas id="bodycheck" width="673" height="514" style="margin-top: 10px;"></canvas>
-    <br/><button href="#" onclick='bodyclear()'>Clear</button>
-    <form id="bodyForm" name="bodyForm" action="/form/{{ note.uuid }}/submit/{{ type }}" method="post" style="padding-top: 10px;">
+    <br/>
+    <button href="#" onclick='bodyclear()' type="clear">Clear</button>
+    <form id="bodyForm" name="bodyForm" action="/form/{{ note.uuid }}/submit/{{ type }}" method="post"
+          style="padding-top: 10px;">
         Patient First Name:<br>
-        <input type="text" name="form_firstName"><br>
+        <input type="text" name="form_firstName" value=""><br>
         Patient Last Name:<br>
         <input type="text" name="form_lastName"><br>
         Explain what happened:<br>
@@ -22,39 +24,51 @@
         Recommendations for follow up: (Admin Only)<br>
         <textarea name="form_recommend" rows="4" cols="50"></textarea>
 
-        <canvas id="signature"></canvas><br/>
-        <input type="button" value="Clear Signature" style="top:180px; background:white; border:2px solid;" onclick="Sclear()">
+        <canvas id="signature"></canvas>
+        <br/>
+        <input type="button" value="Clear Signature" style="top:180px; background:white; border:2px solid;"
+               onclick="Sclear()">
 
         <br><br>
         <input type="submit" onClick="save()" value="Submit"/> <input type="reset" value="Clear"/>
         <input type="hidden" name="form_bodyData" id="bodyData" value="">
         <input type="hidden" name="form_sigData" id="sigData" value="">
     </form><br>
-    <button onclick="myFunction()">Help</button>
+    <button onclick="myFunction()" type="help">Help</button>
 {% endblock %}
 
 {% block javascripts %}
     <script src="{{ asset('jquery.jqscribble.js') }}"></script>
-    {#<script src="{{ asset('bodycheck.js') }}"></script>#}
     <script>
         $(document).ready(function () {
+            {% if data is defined %}
+            // If there is data, that means we're viewing it so we can make some changes to the template.
+            var data = {{ data|json_encode()|raw }};
+            // Hide the Submit/Clear button and turn all inputs to disabled within the form.
+            $('input:submit, input[type="reset"], button[type="help"], button[type="clear"]').hide();
+            // Iterate over array and fill inputs as needed.
+            $.each(data, function (key, value) {
+                $('*[name="' + key + '"]').val(value);
+            });
+            {% endif %}
+
             $("#bodycheck").jqScribble();
-            $("#bodycheck").data("jqScribble").update({backgroundImage: "{{  asset('check.png') }}"});
+            $("#bodycheck").data("jqScribble").update({backgroundImage: "{{ asset('check.png') }}"});
             // Need to edit jqscribble to fix this issue. TODO: Troubleshoot and remove the timeout.
             setTimeout(function () {
                 $("#signature").jqScribble();
-                $("#signature").data("jqScribble").update({backgroundImage: "{{  asset('sigImg.png') }}"});
+                $("#signature").data("jqScribble").update({backgroundImage: "{{ asset('sigImg.png') }}"});
             }, 50);
         });
 
         function bodyclear() {
             $("#bodycheck").data("jqScribble").clear();
-            $("#bodycheck").data("jqScribble").update({backgroundImage: "{{  asset('check.png') }}"});
+            $("#bodycheck").data("jqScribble").update({backgroundImage: "{{ asset('check.png') }}"});
         }
 
         function Sclear() {
             $("#signature").data("jqScribble").clear();
-            $("#signature").data("jqScribble").update({backgroundImage: "{{  asset('sigImg.png') }}"});
+            $("#signature").data("jqScribble").update({backgroundImage: "{{ asset('sigImg.png') }}"});
         }
 
         //  This is the actual way to save the canvas (base64) - can save this to a variable and POST it.
