@@ -20,42 +20,97 @@
 
             {% block form %}{% endblock %}
 
-            <div>
-                <canvas id="signature"></canvas>
-                <input type="hidden" id="sigData" name="form_sigData">
+            <div class="drawing-block">
+                <canvas id="signature" data-background="{{ asset('sigImg.png') }}"></canvas>
+                <input type="hidden" name="form_signature_canvas">
                 <br/>
-                <input type="button" value="Clear Signature" class="signature-clear" onclick="clearSignatureCanvas()">
+                <button type="button" class="signature-clear">Clear Signature</button>
             </div>
 
             <br/>
 
-            <input type="submit" onClick="save()" value="Submit"/>
+            <input id="Submit" type="submit" value="Submit"/>
         </form>
 
     </section>
 {% endblock %}
 
+{% block stylesheets %}
+    <style>
+        .canvas-bodyCheck {
+            width: 673px;
+            height: 514px;
+        }
+    </style>
+{% endblock %}
+
 {% block javascripts %}
     <script src="{{ asset('jquery.jqscribble.js') }}"></script>
     <script>
+        {% if data %}
+        var creatingNew = false;
+        {% else %}
+        var creatingNew = true;
+        {% endif %};
+
+        String.prototype.endsWith = function (suffix) {
+            return this.indexOf(suffix, this.length - suffix.length) !== -1;
+        };
+
         var signatureCanvas = $("#signature");
-        var signatureDataField = ('#sigData');
+        var signatureDataField = $('#sigData');
 
         function clearSignatureCanvas() {
-            signatureCanvas.data("jqScribble").clear();
-            signatureCanvas.data("jqScribble").update({backgroundImage: "{{ asset('sigImg.png') }}"});
+            // signatureCanvas.data("jqScribble").clear();
+            //signatureCanvas.data("jqScribble").update({backgroundImage: "{{ asset('sigImg.png') }}"});
         }
 
-        $("form").submit(function (event) {
-            signatureDataField.val(
-                signatureCanvas.get(0).toDataURL()
-            );
+        $('.drawing-block').each(function (e) {
+            var block = $(this);
+            try {
+                var canvas = block.find('canvas');
+                var input = block.find('input:hidden');
+                var clear = block.find('button');
+
+                //Init jsScribble
+                if (creatingNew && canvas.attr('data-background') !== "undefined") {
+                    canvas.jqScribble({backgroundImage: canvas.attr('data-background')});
+                } else {
+                    canvas.jqScribble()
+                }
+
+                var clearCanvasFunction = function () {
+                    console.log('Canvas', "Clearing " + canvas.get(0).id);
+                    canvas.data("jqScribble").clear();
+
+                    //Set background image
+                    if (canvas.attr('data-background') !== "undefined") {
+                        canvas.data("jqScribble").update({backgroundImage: canvas.attr('data-background')});
+                    }
+                };
+
+                //Set clear handler.
+                clear.click(clearCanvasFunction);
+
+                //save canvas on submit
+                block.closest('form').submit(function () {
+                    console.log(block);
+                    input.val(
+                        canvas.get(0).toDataURL()
+                    );
+                    return true;
+                });
+            } catch (ex) {
+                console.log('Drawing Canvas Error', ex);
+            }
         });
 
         $(document).ready(function () {
-            clearSignatureCanvas();
-            $('*[name^="form"]').prop('required', true);
+            //make all form entries required
+            //This **** up javascripts ability to set variable values on form submission
+            // $('*[name^="form"]').prop('required', true);
 
+            //load existing data into forms for viewing and lock from editing
             {% if data %}
             // If there is data, that means we're viewing it so we can make some changes to the template.
             var data = {{ data|json_encode()|raw }};
@@ -63,7 +118,27 @@
             $('input:submit, input[type="reset"], button[type="help"], button[type="clear"]').hide();
             // Iterate over array and fill inputs as needed.
             $.each(data, function (key, value) {
-                $('*[name="' + key + '"]').val(value).attr('disabled', 'disabled');
+                var input = $('*[name="' + key + '"]');
+
+                if (key.endsWith('_canvas')) {
+                    var block = input.closest('.drawing-block');
+
+                    //Lock reset
+                    block.find('button').prop('disabled', true);
+                    block.find('button').remove();
+
+                    //Disable Editing
+                    block.find('canvas').css('pointer-events', 'none');
+
+                    //Set canvas
+                    block.find('canvas').data('jqScribble').update({
+                        backgroundImage: value
+                    });
+                }
+
+                input
+                    .val(value)
+                    .attr('disabled', 'disabled');
             });
             {% endif %}
         });

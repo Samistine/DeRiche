@@ -29,22 +29,9 @@
                     Create Form
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="/form/{{ note.uuid }}/create/bodycheck">Body Check</a>
-                    <a class="dropdown-item" href="/form/{{ note.uuid }}/create/internal_incident">Internal Incident</a>
-                    <a class="dropdown-item" href="form/{{ note.uuid }}/create/bowel_movement">Bowel Movement Daily
-                        Check
-                        List</a>
-                    <a class="dropdown-item" href="form/{{ note.uuid }}/create/internal_incident">Community Connection
-                        Activity
-                        Sheet</a>
-                    <a class="dropdown-item" href="form/{{ note.uuid }}/create/internal_incident">Goal Tracking
-                        Sheet</a>
-                    <a class="dropdown-item" href="form/{{ note.uuid }}/create/internal_incident">Multiple Absences</a>
-                    <a class="dropdown-item" href="form/{{ note.uuid }}/create/internal_incident">Repositioning Log</a>
-                    <a class="dropdown-item" href="form/{{ note.uuid }}/create/internal_incident">Seizure Activity
-                        Checklist</a>
-                    <a class="dropdown-item" href="form/{{ note.uuid }}/create/internal_incident">Single Absence</a>
-                    <a class="dropdown-item" href="form/{{ note.uuid }}/create/internal_incident">Weight & BP Chart</a>
+                    {% for key,value in form_types %}
+                        <a class="dropdown-item" href="/form/{{ note.uuid }}/create/{{ key }}">{{ value }}</a>
+                    {% endfor %}
                 </div>
             </div>
             <div class="col-6 col-sm-3">

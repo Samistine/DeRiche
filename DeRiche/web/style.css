@@ -59,6 +59,6 @@ canvas#signature, .signature {
     border: 2px solid;
 }
 
-.signature-clear {
+.signature-clear, .clear {
     top: 180px; background: white; border: 2px solid;
 }

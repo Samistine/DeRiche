@@ -24,7 +24,7 @@ class FormController extends Controller
     }
 
     /**
-     * @Route("{note}/create/{form_type}", name="Create Form")
+     * @Route("{note}/create/{form_type}", name="forms_create")
      */
     public function renderForm(Note $note, $form_type)
     {

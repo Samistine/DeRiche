@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Patient;
 use AppBundle\Entity\Note;
+use AppBundle\Entity\Types\FormType;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -135,14 +136,16 @@ class SubmitterController extends Controller
                 'form' => $form->createView(),
                 'note' => $note,
                 'content' => $note->getContent(),
-                'objectives' => $patient->getObjectives()->toArray()
+                'objectives' => $patient->getObjectives()->toArray(),
+                'form_types' => FormType::getReadableValues()
             ));
         } else {
             return $this->render('notes/create.html.twig', array(
                 'patient' => $patient,
                 'form' => $form->createView(),
                 'note' => $note,
-                'objectives' => $patient->getObjectives()->toArray()
+                'objectives' => $patient->getObjectives()->toArray(),
+                'form_types' => FormType::getReadableValues()
             ));
         }
     }
