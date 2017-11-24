@@ -23,8 +23,8 @@ class Form implements \JsonSerializable
     private $id;
 
     /**
-     * Many Notes have one Comment.
-     * @ORM\ManyToOne(targetEntity="Note", inversedBy="comments")
+     * Forms are attached to a single Note.
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Note", inversedBy="forms")
      * @ORM\JoinColumn(name="note_id", referencedColumnName="uuid")
      */
     private $note;
