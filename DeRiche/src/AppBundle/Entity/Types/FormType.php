@@ -15,14 +15,15 @@ class FormType extends AbstractEnumType
     const INTERNAL_INCIDENT = 'internal_incident';
     const BOWEL_CHECKLIST = 'bowel_checklist';
     const COMMUNITY_SHEET = 'community_sheet';
-    const GOAL_TRACKING = 'goal_tracking';
     const BODY_CHECK = 'bodycheck';
+    const SEIZURE_ACTIVITY = "seizure_activity";
 
     protected static $choices = [
         self::INTERNAL_INCIDENT => 'Internal Incidents',
         self::BOWEL_CHECKLIST => 'Bowel Checklist',
         self::COMMUNITY_SHEET => 'Community Sheet',
-        self::BODY_CHECK => 'Body Check'
+        self::BODY_CHECK => 'Body Check',
+        self::SEIZURE_ACTIVITY => 'Seizure Activity Checklist'
     ];
 
     static function getTwigTemplate($type)

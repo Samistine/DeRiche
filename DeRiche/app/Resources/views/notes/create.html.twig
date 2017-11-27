@@ -18,6 +18,12 @@
             <strong>Comment:</strong> {{ note.comment }}
         </div>
     {% endif %}
+    <div class="alert alert-warning" role="alert" id="seizurewarn" style="display: none;">
+        <strong>Form Missing:</strong> Please add the seizure activity checklist form or change the value.
+    </div>
+    <div class="alert alert-warning" role="alert" id="bowelwarn" style="display: none;">
+        <strong>Form Missing:</strong> Please add the bowel activity form or change the value.
+    </div>
     <div class="card">
         <h3 class="card-header">Forms</h3>
         <div class="card-block row">
@@ -60,36 +66,79 @@
             {% endif %}
             {{ form_widget(form.signature) }}
             {% if note.patient.seizure %}
-                {{ form_row(form.seizure) }}
+                <label style="margin-top:5px;" for="seizure" class="required">Seizures:</label>
+                <select id="seizure" name="seizure" required>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                    <option value="possible">Possible</option>
+                </select><br/>
             {% endif %}
             {% if note.patient.bowel %}
-                {{ form_row(form.bowel) }}
+                <label style="margin-top:5px;" for="bowel" class="required">Bowel Movements (that need to be
+                    tracked):</label>
+                <select id="bowel" name="bowel" required>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
             {% endif %}
         </div>
-        <div class="col-sm-4">
-            <p>Objectives:
-                <button type="button" style="margin-bottom: 10px;" onclick="showObjectives()">
-                    reload
-                </button>
-            </p>
-
-            {% for objective in objectives %}
-                <div>
-                    <p style="margin-bottom:2px;">{{ objective.name }} - {{ objective.goaltext }}</p>
-
-                    <button type="button" class="btn btn-primary"
-                            {#onclick="addObjective('{{ objective.name }}', '{{ objective.objectiveText }}')"#}
-                            data-toggle="modal"
-                            data-target="#addGoalModal"
-                            data-goal-name="{{ objective.name }}"
-                            data-goal-text="{{ objective.objectiveText }}"
-                            data-goal-guidance="{{ objective.guidanceNotes }}"
-                            data-goal-objective="{{ objective.objectiveText }}">Add to Note
-                    </button>
+        <div class="col-sm-4" style="padding-top: 50px;">
+            {#<button type="button" style="margin-bottom: 10px;" onclick="showObjectives()">#}
+            {#reload#}
+            {#</button>#}
+            {% if "/Day" in objectives|keys %}
+                <h4>Daily Objectives</h4>
+                <div style="border-style: solid;border-width: small; padding:5px;margin-bottom:3px;">
+                    {% for objective in objectives["/Day"] %}
+                        <p style="margin-bottom:2px;">{{ objective.name }} - {{ objective.goaltext }}</p>
+                        <button type="button" class="btn btn-primary"
+                                data-toggle="modal"
+                                data-target="#addGoalModal"
+                                data-goal-name="{{ objective.name }}"
+                                data-goal-text="{{ objective.objectiveText }}"
+                                data-goal-guidance="{{ objective.guidanceNotes }}"
+                                data-goal-objective="{{ objective.objectiveText }}">Add to Note
+                        </button>
+                    {% endfor %}
                 </div>
-            {% endfor %}
+            {% endif %}
+
+            {% if "/Week" in objectives|keys %}
+                <h4>Weekly Objectives</h4>
+                <div style="border-style: solid;border-width: small; padding:5px;margin-bottom:3px;">
+                    {% for objective in objectives["/Week"] %}
+                        <p style="margin-bottom:2px;">{{ objective.name }} - {{ objective.goaltext }}</p>
+                        <button type="button" class="btn btn-primary"
+                                data-toggle="modal"
+                                data-target="#addGoalModal"
+                                data-goal-name="{{ objective.name }}"
+                                data-goal-text="{{ objective.objectiveText }}"
+                                data-goal-guidance="{{ objective.guidanceNotes }}"
+                                data-goal-objective="{{ objective.objectiveText }}">Add to Note
+                        </button>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if "/Month" in objectives|keys %}
+                <h4>Monthly Objectives</h4>
+                <div style="border-style: solid;border-width: small; padding:5px;margin-bottom:3px;">
+                    {% for objective in objectives["/Month"] %}
+                        <p style="margin-bottom:2px;">{{ objective.name }} - {{ objective.goaltext }}</p>
+                        <button type="button" class="btn btn-primary"
+                                data-toggle="modal"
+                                data-target="#addGoalModal"
+                                data-goal-name="{{ objective.name }}"
+                                data-goal-text="{{ objective.objectiveText }}"
+                                data-goal-guidance="{{ objective.guidanceNotes }}"
+                                data-goal-objective="{{ objective.objectiveText }}">Add to Note
+                        </button>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
         <div class="form-group col-sm-12">
+            <img src="{{ asset('sigImg.png') }}" style="display: none;" />
             <canvas id="signature"></canvas>
             <br>
             <input type="button" value="Clear Signature" style="top:180px; background:white; border:2px solid;"
@@ -178,9 +227,7 @@
 
         function updatedraft() {
             uuid = $("#note_id").val();
-
             postval = $("#form_content").val();
-            console.log(postval);
             $.post("../updatedraft/" + uuid, {content: postval});
         }
 
@@ -190,10 +237,6 @@
             updatedraft();
         }, 1000));//Limit to once a second
 
-        //        $(function () {
-        //            // get the ID of the note and submit a draft every 1 seconds.
-        //            setInterval(updatedraft, 1000);
-        //        });
     </script>
     <script type="text/javascript">
         function addObjective(x) {
@@ -238,9 +281,12 @@
         var blanksig = "";
         $(document).ready(function () {
             $("canvas#signature").jqScribble();
+            $("canvas#signature").data("jqScribble").clear();
             $("canvas#signature").data("jqScribble").update({backgroundImage: "{{ asset('sigImg.png') }}"});
             // Save the default value of the signature image to know whether the user signed it or not.
-            getBase64FromImageUrl("{{ asset('sigImg.png') }}");
+            setTimeout(function(){
+                blanksig = document.getElementById('signature').toDataURL();
+            }, 300);
         });
 
         function Sclear() {
@@ -249,29 +295,36 @@
         }
 
         $("#noteform").submit(function (event) {
+            event.preventDefault();
             // Get current signature and compare to verify that a signature was added.
             currentsig = document.getElementById('signature').toDataURL();
-            if (currentsig == blanksig) {
+            if (currentsig === blanksig) {
                 $('#sigModal').modal('show');
                 event.preventDefault();
+                return;
             } else {
                 $('#form_signature').val(currentsig);
             }
+            // Let's also make sure that if this patient suffers from bowel movements or seizures
+            // that there is a form attached.
+            forms = [];
+            {%  if note.forms %}
+                forms = {{ note.forms.getValues|json_encode|raw }};
+            {% endif %}
+            if ($.inArray($('#seizure').val(), ["yes", "possible"]) >  -1) {
+                if (forms.filter(function (form) { return form.type == "seizure_activity" }).length == 0) {
+                    $("#seizurewarn").show();
+                    $("#seizurewarn").get(0).scrollIntoView();
+                    event.preventDefault();
+                }
+            }
+            if ($('#bowel').val() == "yes") {
+                if (forms.filter(function (form) { return form.type == "bowel_checklist" }).length == 0) {
+                    $("#bowelwarn").show();
+                    $("#bowelwarn").get(0).scrollIntoView();
+                    event.preventDefault();
+                }
+            }
         });
-
-        function getBase64FromImageUrl(url) {
-            var img = new Image();
-            img.setAttribute('crossOrigin', 'anonymous');
-            img.onload = function () {
-                var canvas = document.createElement("canvas");
-                canvas.width = this.width;
-                canvas.height = 145; // doesn't get proper height.
-                var ctx = canvas.getContext("2d");
-                ctx.drawImage(this, 0, 0);
-                dataURL = canvas.toDataURL();
-                blanksig = dataURL;
-            };
-            img.src = url;
-        }
     </script>
 {% endblock %}

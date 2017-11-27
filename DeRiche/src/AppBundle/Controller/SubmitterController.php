@@ -107,12 +107,6 @@ class SubmitterController extends Controller
             ->add('content', TextareaType::class, array(
                 'attr' => array('rows' => '25'),))
             ->add('signature', HiddenType::class)
-            ->add('bowel', CheckboxType::class, array(
-                'label'    => 'Abnormal Bowel Movement?',
-                'required' => false))
-            ->add('seizure', CheckboxType::class, array(
-                'label'    => 'Seizure Information',
-                'required' => false))
             ->getForm();
 
         $form->handleRequest($request);
@@ -128,15 +122,17 @@ class SubmitterController extends Controller
 
             return $this->redirectToRoute('home page');
         }
-
-
+        $objArray = array();
+        foreach ($patient->getObjectives()->toArray() as $item) {
+            $objArray[$item->getFreqKind()][] = $item;
+        }
         if ($update) {
             return $this->render('notes/create.html.twig', array(
                 'patient' => $patient,
                 'form' => $form->createView(),
                 'note' => $note,
                 'content' => $note->getContent(),
-                'objectives' => $patient->getObjectives()->toArray(),
+                'objectives' => $objArray,
                 'form_types' => FormType::getReadableValues()
             ));
         } else {
@@ -144,7 +140,7 @@ class SubmitterController extends Controller
                 'patient' => $patient,
                 'form' => $form->createView(),
                 'note' => $note,
-                'objectives' => $patient->getObjectives()->toArray(),
+                'objectives' => $objArray,
                 'form_types' => FormType::getReadableValues()
             ));
         }

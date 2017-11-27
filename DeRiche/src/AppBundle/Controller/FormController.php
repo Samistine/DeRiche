@@ -55,9 +55,6 @@ class FormController extends Controller
                 $formData[$k] = $o;
             }
         }
-        // TODO: FINISH THIS PORTION OF THE CONTROLLER. ALSO we need to edit the template for notes.
-        // That way we can show the added forms and give them the ability to remove it if the note is a draft.
-        // etc, etc. Also - need to fix note checkboxes.
 
         // Create a new form using the data we have and persist it.
         $form = new Form();
