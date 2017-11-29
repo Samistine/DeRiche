@@ -60,12 +60,10 @@ class SubmitterController extends Controller
             ]);
 
         $count = count($patients);
-
         if ($count === 0) {
             //TODO: Redirect to same page and display error.
             throw $this->createNotFoundException('No individual found for ' . $patientName);
         }
-
         if ($count === 1) {
             return $this->redirect('../create/' . $patients[0]->getUuid());
         }

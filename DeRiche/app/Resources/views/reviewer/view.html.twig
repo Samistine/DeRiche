@@ -10,7 +10,7 @@
         <div class="col col-md-10" style="display: flex; align-items: center;"><h4 class="pagination-centered">Review
                 Note:</h4></div>
         <div class="col-6 col-md-2">
-            <button id="correct" type="button" class="btn btn-info">Export PDF</button>
+            <a href="../export/{{ note.uuid }}" download target="_blank"><button id="export" type="button" class="btn btn-info">Export PDF</button></a>
         </div>
     </div>
     {% if note.comment %}
@@ -52,11 +52,10 @@
     <div class="card" style="margin-top: 15px;">
         <h3 class="card-header">Forms - Attached Forms Below</h3>
         <div class="card-block row">
-            <div class="col-6 col-sm-3" style="margin: 20px">
+            <div class="col-6 col-sm-5" style="margin: 20px">
                 {% for form in note.forms %}
                     <div>
                         <a href="/form/view/{{ form.id }}"><span>{{ form.type|readable_enum }}</span></a>
-                        <a href="/form/delete/{{ form.id }}" type="button" class="btn btn-danger">&times;</a>
                         </button>
                     </div>
                 {% endfor %}

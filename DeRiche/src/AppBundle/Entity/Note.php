@@ -44,20 +44,13 @@ class Note implements \JsonSerializable
     private $modifiedAt;
 
     /**
-     * The last time a staff member submitted this for review.
+     * The date and time this was submitted to the database.
      *
      * @var \DateTime
      * @ORM\Column(name="submitted_at", type="datetime", nullable=true)
      */
     private $submittedAt;
 
-    /**
-     * The time this note was accepted by a reviewer at.
-     *
-     * @var \DateTime
-     * @ORM\Column(name="accepted_at", type="datetime", nullable=true)
-     */
-    private $acceptedAt;
 
     /**
      * Many Notes have one Patient.
@@ -175,7 +168,6 @@ class Note implements \JsonSerializable
             'createdAt' => $this->getCreatedAt(),
             'modifiedAt' => $this->getModifiedAt(),
             'submittedAt' => $this->getSubmittedAt(),
-            'acceptedAt' => $this->getAcceptedAt(),
             'patient' => $this->getPatient()->getUuid(),
             'staff' => $this->getStaff()->getUuid(),
             'reviewer' => is_object($this->getReviewer()) ? $this->getReviewer()->getUuid() : null,
@@ -278,30 +270,6 @@ class Note implements \JsonSerializable
     public function getSubmittedAt()
     {
         return $this->submittedAt;
-    }
-
-    /**
-     * Set acceptedAt
-     *
-     * @param \DateTime $acceptedAt
-     *
-     * @return Note
-     */
-    public function setAcceptedAt($acceptedAt)
-    {
-        $this->acceptedAt = $acceptedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get acceptedAt
-     *
-     * @return \DateTime
-     */
-    public function getAcceptedAt()
-    {
-        return $this->acceptedAt;
     }
 
     /**

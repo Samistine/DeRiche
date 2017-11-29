@@ -84,7 +84,9 @@ class FormController extends Controller
      */
     public function deleteForm(Form $form=null, Request $request)
     {
-        if ($form) {
+        $n = $form->getNote();
+        // We only delete forms from drafts.
+        if ($form && $n->getState() == $n::DRAFT) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($form);
             $em->flush();

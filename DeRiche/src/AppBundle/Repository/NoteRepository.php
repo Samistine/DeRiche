@@ -10,4 +10,18 @@ namespace AppBundle\Repository;
  */
 class NoteRepository extends \Doctrine\ORM\EntityRepository
 {
+    // Added by Syed A. to search between dates for auditing.
+    public function getBetweenDates(\Datetime $start, \DateTime $end)
+    {
+        $from = new \DateTime($start->format("Y-m-d")." 00:00:00");
+        $to   = new \DateTime($end->format("Y-m-d")." 23:59:59");
+
+        $qb = $this->createQueryBuilder("e");
+        $qb
+            ->andWhere('e.submittedAt BETWEEN :from AND :to')
+            ->setParameter('from', $from )
+            ->setParameter('to', $to);
+        $result = $qb->getQuery()->getResult();
+        return $result;
+    }
 }

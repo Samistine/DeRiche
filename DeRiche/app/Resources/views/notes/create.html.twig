@@ -40,7 +40,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="col-6 col-sm-3">
+            <div class="col-6 col-sm-5">
                 {% for form in note.forms %}
                     <div>
                         <a href="/form/view/{{ form.id }}"><span>{{ form.type|readable_enum }}</span></a>
@@ -295,7 +295,6 @@
         }
 
         $("#noteform").submit(function (event) {
-            event.preventDefault();
             // Get current signature and compare to verify that a signature was added.
             currentsig = document.getElementById('signature').toDataURL();
             if (currentsig === blanksig) {
