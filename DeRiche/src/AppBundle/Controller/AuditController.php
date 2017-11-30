@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -66,5 +67,37 @@ class AuditController extends Controller
             ->getRepository(Note::class)
             ->getBetweenDates($startDate, $endDate);
         return $this->render('admin/audit.html.twig', array('notes' => $notes));
+    }
+
+    /**
+     * @Route("db-backup", name="Audit - Full Backup")
+     */
+    public function dbBackup(EntityManagerInterface $em, Request $request)
+    {
+        $dbuser = $em->getConnection()->getUsername();
+        $dbpasswd = $em->getConnection()->getPassword();
+        $database = $em->getConnection()->getDatabase();
+        if(substr($database, -7) == ".sqlite") {
+            // Let's do a SQLite backup. For the dev environment (tested).
+            $output = shell_exec("sqlite3 $database .dump");
+
+            $response = new RespAonse();
+            $response->headers->set('Content-Type', 'text/plain');
+            $response->headers->set('Content-disposition', 'attachment;filename=full_backup.sql');
+            $response->setContent($output);
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->sendHeaders();
+            $response->send();
+        }
+        // Actual MySQL Dump function (untested).
+        $output = shell_exec("mysqldump -u $dbuser --password=$dbpasswd $database | gzip --best");
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/x-gzip');
+        $response->headers->set('Content-disposition', 'attachment;filename=full_backup.sql.gz');
+        $response->setContent($output);
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->sendHeaders();
+        $response->send();
     }
 }

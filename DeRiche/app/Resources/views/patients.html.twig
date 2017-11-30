@@ -10,9 +10,6 @@
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#create" role="tab">Create</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#export" role="tab">Export</a>
-        </li>
     </ul>
 
     <br/>
@@ -31,15 +28,6 @@
                     <th>Manage</th>
                 </tr>
                 </thead>
-                <tfoot>
-                <tr>
-                    {#<th>ID</th>#}
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Medical ID</th>
-                    <th>Manage</th>
-                </tr>
-                </tfoot>
                 <tbody>
                 {% for patient in patientsQuery.active %}
                     <tr>
@@ -56,14 +44,11 @@
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <h6 class="dropdown-header">Create</h6>
-                                    <a class="dropdown-item" href="#">Internal Incident</a>
-                                    <a class="dropdown-item" href="#">Body Check</a>
-                                    <a class="dropdown-item" href="#">Bowl Movement</a>
-                                    <div class="dropdown-divider"></div>
                                     <h6 class="dropdown-header">Manage Data</h6>
-                                    <a class="dropdown-item confirm-link"
-                                       data-patient-name="{{ patient.firstName }} {{ patient.lastName }}"
+                                    <a class="dropdown-item confirm-link text-warning"
+                                       data-confirm-title="Archive User"
+                                       data-confirm-message="Are you sure you wish to <b>archive</b> {{ patient.firstName }} {{ patient.lastName }}"
+                                       data-bootstrap-color="warning"
                                        data-link="{{ patient.uuid }}/archive">Archive</a>
                                 </div>
                             </div>
@@ -121,35 +106,6 @@
             </form>
             <!-- End Add Patient Form -->
         </div>
-
-        <div class="tab-pane" id="export" role="tabpanel">...</div>
-    </div>
-
-
-    <!-- Modals -->
-    <div class="modal fade" id="archivePatientConfirmationModal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Archiving Patient</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <br/>
-                    <div class="alert alert-warning" role="alert">
-                        <strong>Confirmation: </strong>
-                        <span class="warning-message">
-                            Are you sure you wish to archive <span class="patientName">patientX</span>
-                        </span>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-warning confirm">Archive Patient</a>
-                </div>
-            </div>
-        </div>
     </div>
 {% endblock %}
 
@@ -198,29 +154,6 @@
             $(wrapper).on("click",".remove_field", function(e){ // when they click "remove objective"
                 e.preventDefault(); $(this).parent('div').remove();
             })
-        });
-    </script>
-    <!--Modal-->
-    <script>
-        $('#archivePatientConfirmationModal').on('shown.bs.modal', function () {
-            var link = $(this).data('link');
-            var patientName = $(this).data('patient-name');
-            $(this).find('.warning-message .patientName').text(patientName);
-        })
-
-        $('.confirm-link').on('click', function (e) {
-            e.preventDefault();
-
-            var link = $(this).data('link');
-            var patientName = $(this).data('patient-name');
-            $('#archivePatientConfirmationModal').data({'link': link, 'patient-name': patientName}).modal('show');
-        });
-
-        $('#archivePatientConfirmationModal .confirm').click(function () {
-            // handle redirect here
-            var link = $('#archivePatientConfirmationModal').data('link');
-            location.href = link;
-            $('#archivePatientConfirmationModal').modal('hide');
         });
     </script>
 {% endblock %}

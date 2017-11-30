@@ -22,7 +22,12 @@
             <button type="submit" class="btn btn-primary btn-block">Get Notes</button>
         </div>
     </form>
-
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-8"></div>
+        <div class="col-md-4">
+            <a href="db-backup" download target="_blank"><button type="backupdb" class="btn btn-primary btn-block">Backup Database</button></a>
+        </div>
+    </div>
     {% if notes is defined %}
         <div>
             <hr>

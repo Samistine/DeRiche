@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class PatientsController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/", name="Patient List")
      */
     public function indexAction()
     {
@@ -231,5 +231,18 @@ class PatientsController extends Controller
             $em->flush();
         }
         return $this->render('patient.html.twig', array('patient' => $patient));
+    }
+
+    /**
+     * @Route("/{id}/archive", name="Archive Patient")
+     */
+    public function archivePatient(Request $request, Patient $patient)
+    {
+        // Disable the user and update the database.
+        $patient->setActive(false);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($patient);
+        $em->flush();
+        return $this->redirectToRoute('Patient List');
     }
 }

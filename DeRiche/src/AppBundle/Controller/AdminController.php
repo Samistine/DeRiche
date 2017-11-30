@@ -24,19 +24,15 @@ class AdminController extends Controller
      */
     public function indexAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        // 1) build the form
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
-        // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             // 3) Encode the password (you could also do this via Doctrine listener)
             $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
 
-            // 4) save the User!
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
@@ -63,10 +59,8 @@ class AdminController extends Controller
         $em->persist($user);
         $em->flush();
 
-        //Get the page the browser was on before coming here
+        //Get the page the browser was on before coming here and send em' out.
         $referer = $request->headers->get('referer');
-
-        //Send them back
         return $this->redirect($referer);
     }
 
@@ -87,20 +81,17 @@ class AdminController extends Controller
         if (!$user->getReviewedNotes()->isEmpty())
             throw new ConflictHttpException('Can not delete a user that has reviewed notes!');
 
-
         $em->remove($user);
         $em->flush();
 
-        //Get the page the browser was on before coming here
+        //Get the page the browser was on before coming here and send em' out.
         $referer = $request->headers->get('referer');
-
-        //Send them back
         return $this->redirect($referer);
     }
 
     /**
-     * @Route("secondaryrole/{username}", name="Update Secondary Role for User")
-     */
+ * @Route("secondaryrole/{username}", name="Update Secondary Role for User")
+ */
     public function secondaryRole(User $user, EntityManagerInterface $em, Request $request)
     {
         // Get the role and add it as third value (After ROLE_USER)
@@ -120,6 +111,24 @@ class AdminController extends Controller
         $referer = $request->headers->get('referer');
 
         //Send them back
+        return $this->redirect($referer);
+    }
+
+    /**
+     * @Route("password/{username}", name="Update Password for User")
+     */
+    public function setPassword(User $user, EntityManagerInterface $em, Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        // Get the password and encode it.
+        $password = $request->get('password');
+        $password = $passwordEncoder->encodePassword($user, $password);
+        // Now we set the password and send it to the DB.
+        $user->setPassword($password);
+        $em->persist($user);
+        $em->flush();
+
+        //Get the page the browser was on before coming here and send em' out.
+        $referer = $request->headers->get('referer');
         return $this->redirect($referer);
     }
 }
