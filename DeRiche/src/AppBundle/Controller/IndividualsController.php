@@ -274,6 +274,20 @@ class IndividualsController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($individual);
         $em->flush();
-        return $this->redirectToRoute('Individual List');
+        return $this->redirectToRoute('individuals');
+    }
+
+    /**
+     * UnArchive a individual, essentially disabling them.
+     * @Route("/{id}/unarchive", name="UnArchive Individual")
+     */
+    public function unArchiveIndividual(Request $request, Individual $individual)
+    {
+        // Enable the user and update the database.
+        $individual->setActive(true);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($individual);
+        $em->flush();
+        return $this->redirectToRoute('individuals');
     }
 }
