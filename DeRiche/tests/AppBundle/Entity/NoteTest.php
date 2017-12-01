@@ -18,11 +18,11 @@ use PHPUnit\Framework\TestCase;
 
 class NoteTest extends TestCase {
     public function createIndividual() {
-        $patient = new Individual();
-        $patient->setFirstName('John');
-        $patient->setLastName('Adams');
-        $patient->setMedicalId(random_int(1, 9000000));
-        return $patient;
+        $individual = new Individual();
+        $individual->setFirstName('John');
+        $individual->setLastName('Adams');
+        $individual->setMedicalId(random_int(1, 9000000));
+        return $individual;
     }
 
     public function createStaff() {
@@ -34,36 +34,36 @@ class NoteTest extends TestCase {
         return $staff;
     }
 
-    public function createNote($patient, $staff) {
+    public function createNote($individual, $staff) {
         $note = new Note();
         $note->setContent("This is a note for Today");
         $note->setModifiedAt(new \DateTime());
         $note->setSubmittedAt(new \DateTime());
         $note->setState(Note::AWAITING_APPROVAL);
-        $note->setIndividual($patient);
+        $note->setIndividual($individual);
         $note->setStaff($staff);
-        $patient->addNote($note); // Attach the note to patient
+        $individual->addNote($note); // Attach the note to individual
         $staff->addAuthoredNote($note); // Attach the note to staff.
         $note->setComment("Test Comment - Assert Later");
         return $note;
     }
 
     public function testNote() {
-        // Create the patient and assign it to a variable.
-        $patient = $this->createIndividual();
+        // Create the individual and assign it to a variable.
+        $individual = $this->createIndividual();
         // Create the staff member and assign it to a variable.
         $staff = $this->createStaff();
         // Create the note and assign it to a variable.
-        $note = $this->createNote($patient, $staff);
+        $note = $this->createNote($individual, $staff);
 
         // Now that we've created all the variables we need, let's actually test.
         
         // Make sure the note has the same staff member.
         $this->assertEquals($staff, $note->getStaff());
-        // Make sure the note has the same patient.
-        $this->assertEquals($patient, $note->getIndividual());
-        // Make sure the patient has the note.
-        $this->assertEquals($note, $patient->getNotes()[0]);
+        // Make sure the note has the same individual.
+        $this->assertEquals($individual, $note->getIndividual());
+        // Make sure the individual has the note.
+        $this->assertEquals($note, $individual->getNotes()[0]);
         // Make sure the staff member has the note.
         $this->assertEquals($note, $staff->getAuthoredNotes()[0]);
         // Make sure the note has the comment.
