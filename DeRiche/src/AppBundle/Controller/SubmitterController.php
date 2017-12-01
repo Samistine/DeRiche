@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Individual;
 use AppBundle\Entity\Note;
 use AppBundle\Entity\Types\FormType;
+use AppBundle\Entity\User;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,20 +29,26 @@ class SubmitterController extends Controller
      */
     public function indexAction()
     {
-        // Get the draft and kicked back notes.
-        $draftnotes = $backnotes = [];
-        if($this->getUser()) {
-            foreach ($this->getUser()->getAuthoredNotes() as $n) {
-                if ($n->getState() == $n::DRAFT) {
-                    $draftnotes[] = $n;
-                } elseif ($n->getState() == $n::KICKED_BACK) {
-                    $backnotes[] = $n;
-                }
+        $draftNotes = [];
+        $backNotes = [];
+
+        if ($this->getUser()) {
+            /** @var User $user */
+            $user = $this->getUser();
+
+            // Get the draft and kicked back notes.
+            foreach ($user->getAuthoredNotes() as $note) {
+                //Sort notes into groups based on state
+                if ($note->getState() === $note::DRAFT) $draftNotes[] = $note;
+                if ($note->getState() == $note::KICKED_BACK) $backNotes[] = $note;
             }
         }
-        // Send it to the template as a $backnotes variable.
-        return $this->render('notes/home.html.twig', array('draftnotes' => $draftnotes,
-            'backnotes' => $backnotes));
+
+        // Send it to the template as a $backNotes variable.
+        return $this->render('notes/home.html.twig', array(
+            'draftnotes' => $draftNotes,
+            'backnotes' => $backNotes
+        ));
     }
 
     /**
@@ -52,6 +59,7 @@ class SubmitterController extends Controller
     {
         // We get the name that the Author wants to look up.
         $individualName = $request->get('name');
+
         // We then separate the name into two so we can search by first and last name.
         $names = explode(' ', $individualName, 2);
         $givenName = $names[0];

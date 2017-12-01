@@ -88,7 +88,7 @@ class FormController extends Controller
      * This can ONLY be done when a note is in the draft state.
      * @Route("delete/{form}", name="Delete Form")
      */
-    public function deleteForm(Form $form=null, Request $request)
+    public function deleteForm(Form $form = null, Request $request)
     {
         // We get the note that's attached to the form.
         $n = $form->getNote();

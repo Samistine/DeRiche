@@ -122,7 +122,7 @@ class Individual implements JsonSerializable
     /**
      * Get uuid
      *
-     * @return guid
+     * @return string
      */
     public function getUuid()
     {
