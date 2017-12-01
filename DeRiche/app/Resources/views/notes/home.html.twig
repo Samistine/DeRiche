@@ -11,7 +11,7 @@
                 <thead>
                 <tr>
                     {#<th>ID</th>#}
-                    <th>Patient</th>
+                    <th>Individual</th>
                     <th>Creation Date</th>
                     <th>Manage</th>
                 </tr>
@@ -19,9 +19,9 @@
                 <tbody>
                 {% for note in backnotes %}
                     <tr>
-                        <td>{{ note.patient.firstName }} {{ note.patient.lastName }}</td>
+                        <td>{{ note.individual.firstName }} {{ note.individual.lastName }}</td>
                         <td>{{ note.createdAt|default(date('0'))|date('F j, Y h:m A') }}</td>
-                        <td><a href="create/{{ note.patient.uuid }}">
+                        <td><a href="create/{{ note.individual.uuid }}">
                                 <button type="button" class="btn btn-primary">Edit</button>
                             </a></td>
                         </td>
@@ -38,7 +38,7 @@
                 <thead>
                 <tr>
                     {#<th>ID</th>#}
-                    <th>Patient</th>
+                    <th>Individual</th>
                     <th>Last Modification Date</th>
                     <th>Manage</th>
                 </tr>
@@ -46,9 +46,9 @@
                 <tbody>
                 {% for note in draftnotes %}
                     <tr>
-                        <td>{{ note.patient.firstName }} {{ note.patient.lastName }}</td>
+                        <td>{{ note.individual.firstName }} {{ note.individual.lastName }}</td>
                         <td>{{ note.modifiedAt|default(date('0'))|date('F j, Y h:m A') }}</td>
-                        <td><a href="create/{{ note.patient.uuid }}">
+                        <td><a href="create/{{ note.individual.uuid }}">
                                 <button type="button" class="btn btn-primary">Edit</button>
                             </a></td>
                         </td>
@@ -58,11 +58,11 @@
             </table>
         </section>
     {% endif %}
-    <section id="UserSelectPatient">
+    <section id="UserSelectIndividual">
         <h1>Create Note</h1>
         <!-- Look up user to create note -->
         <h5>Type in Individual's Name</h5>
-        <form class="container form" action="findpatient/" type="POST">
+        <form class="container form" action="findindividual/" type="POST">
             <div class="row">
                 <div class="form-group col-sm-8">
                     <label for="name" class="col-form-label">Individual Name</label>

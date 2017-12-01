@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Objective
+ * Individuals' Objective
  *
  * @ORM\Table(name="objective")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ObjectiveRepository")
@@ -22,53 +22,59 @@ class Objective
     private $uuid;
 
     /**
-     * The patient of this Objective.
+     * The individual of this Objective.
      *
-     * Many Objectives have one Patient.
+     * Many Objectives have one Individual.
      *
-     * @ORM\ManyToOne(targetEntity="Patient", inversedBy="objectives")
-     * @ORM\JoinColumn(name="patient_uuid", referencedColumnName="uuid", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Individual", inversedBy="objectives")
+     * @ORM\JoinColumn(name="individual_uuid", referencedColumnName="uuid", nullable=false)
      */
-    private $patient;
+    private $individual;
 
     /**
-     * @var string
+     * The objective's name text.
      *
+     * @var string
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
-     * @var string
+     * The objective's goal text.
      *
+     * @var string
      * @ORM\Column(name="goal_text", type="text")
      */
     private $goalText;
 
     /**
-     * @var string
+     * The objective's objective text.
      *
+     * @var string
      * @ORM\Column(name="objective_text", type="text")
      */
     private $objectiveText;
 
     /**
-     * @var string
+     * The objective's 'guidance note' text.
      *
+     * @var string
      * @ORM\Column(name="guidance_notes", type="text")
      */
     private $guidanceNotes;
 
     /**
-     * @var int
+     * The objective's frequency amount.
      *
+     * @var int
      * @ORM\Column(name="freq_amount", type="integer")
      */
     private $freqAmount;
 
     /**
-     * @var string
+     * The objective's frequency kind.
      *
+     * @var string
      * @ORM\Column(name="freq_kind", type="string", length=255)
      */
     private $freqKind;
@@ -205,27 +211,27 @@ class Objective
     }
 
     /**
-     * Set patient
+     * Set individual
      *
-     * @param \AppBundle\Entity\Patient $patient
+     * @param \AppBundle\Entity\Individual $individual
      *
      * @return Objective
      */
-    public function setPatient(\AppBundle\Entity\Patient $patient)
+    public function setIndividual(\AppBundle\Entity\Individual $individual)
     {
-        $this->patient = $patient;
+        $this->individual = $individual;
 
         return $this;
     }
 
     /**
-     * Get patient
+     * Get individual
      *
-     * @return \AppBundle\Entity\Patient
+     * @return \AppBundle\Entity\Individual
      */
-    public function getPatient()
+    public function getIndividual()
     {
-        return $this->patient;
+        return $this->individual;
     }
 
     /**

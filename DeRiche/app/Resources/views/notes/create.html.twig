@@ -4,7 +4,7 @@
     <div class="row" style="margin-bottom: -15px;">
         <div class="form-group col-sm-10">
             <strong>Participant Name</strong><br/>
-            {{ patient.firstname }} {{ patient.lastname }}<br/>
+            {{ individual.firstname }} {{ individual.lastname }}<br/>
         </div>
         <div class="col-sm-2">
             <strong>Month/Year</strong>
@@ -62,10 +62,10 @@
                     'value': note.content}) }}
             {% else %}
                 {{ form_widget(form.content, { 'attr': {'class': 'form-control'},
-                    'value': note.createdAt|date("(m/d/Y)") ~ " " ~ patient.firstname ~ " "}) }}
+                    'value': note.createdAt|date("(m/d/Y)") ~ " " ~ individual.firstname ~ " "}) }}
             {% endif %}
             {{ form_widget(form.signature) }}
-            {% if note.patient.seizure %}
+            {% if note.individual.seizure %}
                 <label style="margin-top:5px;" for="seizure" class="required">Seizures:</label>
                 <select id="seizure" name="seizure" required>
                     <option value="yes">Yes</option>
@@ -73,7 +73,7 @@
                     <option value="possible">Possible</option>
                 </select><br/>
             {% endif %}
-            {% if note.patient.bowel %}
+            {% if note.individual.bowel %}
                 <label style="margin-top:5px;" for="bowel" class="required">Bowel Movements (that need to be
                     tracked):</label>
                 <select id="bowel" name="bowel" required>
@@ -304,7 +304,7 @@
             } else {
                 $('#form_signature').val(currentsig);
             }
-            // Let's also make sure that if this patient suffers from bowel movements or seizures
+            // Let's also make sure that if this individual suffers from bowel movements or seizures
             // that there is a form attached.
             forms = [];
             {%  if note.forms %}

@@ -67,7 +67,7 @@ class FormController extends Controller
         $em->persist($form);
         $em->flush();
         // Forward the user back to the actual note creation page with the form attached.
-        return $this->redirect('/note/create/' . $note->getPatient()->getUuid());
+        return $this->redirect('/note/create/' . $note->getIndividual()->getUuid());
     }
 
     /**

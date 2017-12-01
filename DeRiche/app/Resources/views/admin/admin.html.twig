@@ -34,7 +34,7 @@
                 <tbody>
                 {% for user in users %}
                     <tr>
-                        {#<td>{{ patient.id }}</td>#}
+                        {#<td>{{ individual.id }}</td>#}
                         <td>{{ user.username }}</td>
                         <td>{{ user.firstName }} {{ user.lastName }}</td>
                         <td>{{ user.getroles()[0] }}</td>
@@ -156,7 +156,7 @@
 
             <button type="submit">Register!</button>
             {{ form_end(form) }}
-            <!-- End Add Patient Form -->
+            <!-- End Add Individual Form -->
         </div>
     </div>
 {% endblock %}
@@ -168,7 +168,7 @@
     <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#patients').DataTable();
+            $('#individuals').DataTable();
             $('[data-toggle="tooltip"]').tooltip()
         });
     </script>

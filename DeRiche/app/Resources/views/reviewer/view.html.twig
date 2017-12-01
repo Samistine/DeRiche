@@ -20,8 +20,8 @@
     {% endif %}
     <hr/>
     <form name="form" method="post" class="container form" id="noteform" action="edit/{{ note.uuid }}">
-        <h5>Patient Name:</h5>
-        <p>{{ note.patient.firstName }} {{ note.patient.lastName }}</p>
+        <h5>Individual Name:</h5>
+        <p>{{ note.individual.firstName }} {{ note.individual.lastName }}</p>
         <h5>Note Creation Date:</h5>
         <p>{{ note.createdAt|date("m/d/Y") }}</p>
         <h5>Submitted By:</h5>
@@ -44,8 +44,8 @@
             <div id="commentdiv" style="display:none;">
                 <textarea id="comment" name="comment" required="required" rows="10" class="form-control"
                       style="margin-bottom:5px;margin-top:5px" placeholder="Comment Text Goes here..">{{ note.comment }}</textarea>
-                <input name="savecomment" type="submit" class="btn btn-warning" value="Add Comment"></input>
-                <input name="correctsubmit" type="submit" class="btn btn-warning" value="Send Back for Correction"></input>
+                <input name="savecomment" type="submit" class="btn btn-warning" value="Add Comment">
+                <input name="correctsubmit" type="submit" class="btn btn-warning" value="Send Back for Correction">
             </div>
         </form>
     {% endif %}
@@ -56,7 +56,6 @@
                 {% for form in note.forms %}
                     <div>
                         <a href="/form/view/{{ form.id }}"><span>{{ form.type|readable_enum }}</span></a>
-                        </button>
                     </div>
                 {% endfor %}
             </div>

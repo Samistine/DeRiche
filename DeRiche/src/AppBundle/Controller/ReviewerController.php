@@ -16,7 +16,7 @@ class ReviewerController extends Controller
 {
     /**
      * Generate a list of notes and send it on to Twig to render.
-     * @Route("/", name="Reviewer Home")
+     * @Route("/", name="reviewer")
      */
     public function indexAction()
     {
@@ -112,11 +112,11 @@ class ReviewerController extends Controller
         // Let's generate the PDF using a library called Mpdf, you need to use the composer.json file to install it.
         $mpdf = new \Mpdf\Mpdf();
         // Set the header.
-        $mpdf->SetHeader("Patient Note: " . $note->getPatient()->getFirstName() . " " . $note->getPatient()->getLastName());
+        $mpdf->SetHeader("Individual Note: " . $note->getIndividual()->getFirstName() . " " . $note->getIndividual()->getLastName());
         // Set the title of the note.
-        $mpdf->SetTitle('Patient Note: ' . $note->getPatient()->getFirstName() . " " . $note->getPatient()->getLastName());
+        $mpdf->SetTitle('Individual Note: ' . $note->getIndividual()->getFirstName() . " " . $note->getIndividual()->getLastName());
         // Write the basic note data.
-        $mpdf->WriteHTML("<h3>Patient Name:</h3><p>" . $note->getPatient()->getFirstName() . " " . $note->getPatient()->getLastName() . "</p>");
+        $mpdf->WriteHTML("<h3>Individual Name:</h3><p>" . $note->getIndividual()->getFirstName() . " " . $note->getIndividual()->getLastName() . "</p>");
         $mpdf->WriteHTML("<h3>Note Creation Date:</h3><p>" . $note->getCreatedAt()->format('m/d/Y') . "</p>");
         $mpdf->WriteHTML("<h3>Staff Member:</h3><p>" . $note->getStaff()->getFirstName() . " " . $note->getStaff()->getLastName() . "</p>");
         $mpdf->WriteHTML("<h3>Content:</h3><p>" . $note->getContent() . "</p>");
@@ -139,6 +139,6 @@ class ReviewerController extends Controller
         }
         // Generate the output and send it back with a file name.
         // The filename would be Note_Oliver-10-22.pdf for example.
-        $mpdf->Output('Note_'.$note->getPatient()->getLastName().'-'.$note->getCreatedAt()->format("m-d").'.pdf', 'I');
+        $mpdf->Output('Note_'.$note->getIndividual()->getLastName().'-'.$note->getCreatedAt()->format("m-d").'.pdf', 'I');
     }
 }

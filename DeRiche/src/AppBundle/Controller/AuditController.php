@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Note;
-use AppBundle\Entity\Patient;
+use AppBundle\Entity\Individual;
 use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
 use Doctrine\ORM\EntityManager;
@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * Main route for auditing tools, primarily, auditing by patient, daterange and doing a full backup.
+ * Main route for auditing tools, primarily, auditing by individual, daterange and doing a full backup.
  * @Route("/audit/")
  */
 class AuditController extends Controller
@@ -25,42 +25,42 @@ class AuditController extends Controller
 
     /**
      * Main index for the audit panel which just loads the template.
-     * @Route(name="Audit Panel")
+     * @Route(name="audit")
      */
-    public function indexAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function indexAction()
     {
         return $this->render('admin/audit.html.twig');
     }
 
     /**
-     * Route for when the admin wants to audit by patient.
-     * @Route("patient", name="Audit By Patient")
+     * Route for when the admin wants to audit by individual.
+     * @Route("individual", name="Audit By Individual")
      */
-    public function auditPatient(Request $request)
+    public function auditIndividual(Request $request)
     {
         // We get the name that the Admin wants to look up.
-        $patientName = $request->get('name');
+        $individualName = $request->get('name');
         // We then separate the name into two so we can search by first and last name.
-        $names = explode(' ', $patientName, 2);
+        $names = explode(' ', $individualName, 2);
         $givenName = $names[0];
         $familyName = isset($names[1]) ? $names[1] : null;
         // The actual look up function.
-        $patients = $this->getDoctrine()
-            ->getRepository(Patient::class)
+        $individuals = $this->getDoctrine()
+            ->getRepository(Individual::class)
             ->findBy([
                 'firstName' => $givenName,
                 'lastName' => $familyName
             ]);
-        // We then make sure that only one patient has that name.
-        $count = count($patients);
+        // We then make sure that only one individual has that name.
+        $count = count($individuals);
         if ($count === 0) {
-            // If a patient was not found with that name.
-            throw $this->createNotFoundException('No individual found for ' . $patientName);
+            // If a individual was not found with that name.
+            throw $this->createNotFoundException('No individual found for ' . $individualName);
         }
         if ($count === 1) {
-            // If a patient was found then we render the template with the notes.
-            return $this->render('admin/audit.html.twig', array('notes' => $patients[0]->getNotes(),
-                'patient' => $patients[0]->getFirstName() . ' ' . $patients[0]->getLastName()));
+            // If a individual was found then we render the template with the notes.
+            return $this->render('admin/audit.html.twig', array('notes' => $individuals[0]->getNotes(),
+                'individual' => $individuals[0]->getFirstName() . ' ' . $individuals[0]->getLastName()));
         }
     }
 
@@ -94,7 +94,7 @@ class AuditController extends Controller
         $dbpasswd = $em->getConnection()->getPassword();
         $database = $em->getConnection()->getDatabase();
         // This is primarily for the demo as we use SQLite in the backend.
-        if(substr($database, -7) == ".sqlite") {
+        if (substr($database, -7) == ".sqlite") {
             $output = shell_exec("sqlite3 $database .dump");
 
             // We generate a response object and send it back to the enduser.

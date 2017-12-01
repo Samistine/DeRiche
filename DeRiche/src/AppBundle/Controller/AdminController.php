@@ -23,7 +23,7 @@ class AdminController extends Controller
     /**
      * Main panel for admins. This is the initial route that the /admin link will touch.
      * It shows a panel of Create/View that Administrators can use for creating other users/admins.
-     * @Route(name="Admin Panel")
+     * @Route(name="admin")
      */
     public function indexAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {

@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Patient;
+use AppBundle\Entity\Individual;
 use AppBundle\Entity\Note;
 use AppBundle\Entity\Types\FormType;
 use DateTime;
@@ -24,7 +24,7 @@ class SubmitterController extends Controller
     /**
      * Main page which is essentially just a starting point.
      * It shows kicked back/draft notes and the search button.
-     * @Route("/", name="Note Creation Main Page")
+     * @Route("/", name="note")
      */
     public function indexAction()
     {
@@ -45,49 +45,49 @@ class SubmitterController extends Controller
     }
 
     /**
-     * Search for a patient for use and then forward a customer to the note creation system.
-     * @Route("/findpatient/", name="Writer Find Patient")
+     * Search for a individual for use and then forward a customer to the note creation system.
+     * @Route("/findindividual/", name="Writer Find Individual")
      */
-    public function findPatient(Request $request)
+    public function findIndividual(Request $request)
     {
         // We get the name that the Author wants to look up.
-        $patientName = $request->get('name');
+        $individualName = $request->get('name');
         // We then separate the name into two so we can search by first and last name.
-        $names = explode(' ', $patientName, 2);
+        $names = explode(' ', $individualName, 2);
         $givenName = $names[0];
         $familyName = isset($names[1]) ? $names[1] : null;
 
         // The actual look up function.
-        $patients = $this->getDoctrine()
-            ->getRepository(Patient::class)
+        $individuals = $this->getDoctrine()
+            ->getRepository(Individual::class)
             ->findBy([
                 'firstName' => $givenName,
                 'lastName' => $familyName
             ]);
 
-        // We then make sure that only one patient has that name.
-        $count = count($patients);
+        // We then make sure that only one individual has that name.
+        $count = count($individuals);
         if ($count === 0) {
-            // If a patient was not found with that name.
-            throw $this->createNotFoundException('No individual found for ' . $patientName);
+            // If a individual was not found with that name.
+            throw $this->createNotFoundException('No individual found for ' . $individualName);
         }
         if ($count === 1) {
-            // If a patient was found then we push them to the note creation page.
-            return $this->redirect('../create/' . $patients[0]->getUuid());
+            // If a individual was found then we push them to the note creation page.
+            return $this->redirect('../create/' . $individuals[0]->getUuid());
         }
     }
 
     /**
-     * The actual note creation page, this uses the patient ID rather than note ID.
+     * The actual note creation page, this uses the individual ID rather than note ID.
      * That is the only odd part of this function as it should be using the draft ID and generating one
-     * in the findpatient method.
+     * in the findindividual method.
      * @Route("/create/{id}", name="Writer Create Note")
      */
-    public function create(Request $request, Patient $patient)
+    public function create(Request $request, Individual $individual)
     {
-        // Check if there's a note for this patient done today and whether it's a draft.
+        // Check if there's a note for this individual done today and whether it's a draft.
         $update = false;
-        foreach ($patient->getNotes() as $n) {
+        foreach ($individual->getNotes() as $n) {
             $ts = $n->getCreatedAt()->getTimeStamp();
             if (date('Y-m-d', strtotime("today")) == date('Y-m-d', $ts)) {
                 // Verify that it's a draft before using it as the base.
@@ -103,7 +103,7 @@ class SubmitterController extends Controller
             $note = new Note();
             // Set some default values
             $note->setStaff($this->getUser());
-            $note->setPatient($patient);
+            $note->setIndividual($individual);
 
             // Submit the draft so we can update it later
             $em = $this->getDoctrine()->getManager();
@@ -134,14 +134,14 @@ class SubmitterController extends Controller
 
         // We get the objectives to send to the template
         $objArray = array();
-        foreach ($patient->getObjectives()->toArray() as $item) {
+        foreach ($individual->getObjectives()->toArray() as $item) {
             $objArray[$item->getFreqKind()][] = $item;
         }
         // We send a different render if this is an update because we need to include
         // the $note->getContent()
         if ($update) {
             return $this->render('notes/create.html.twig', array(
-                'patient' => $patient,
+                'individual' => $individual,
                 'form' => $form->createView(),
                 'note' => $note,
                 'content' => $note->getContent(),
@@ -150,7 +150,7 @@ class SubmitterController extends Controller
             ));
         } else {
             return $this->render('notes/create.html.twig', array(
-                'patient' => $patient,
+                'individual' => $individual,
                 'form' => $form->createView(),
                 'note' => $note,
                 'objectives' => $objArray,

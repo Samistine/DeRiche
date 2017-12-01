@@ -8,15 +8,15 @@
 
 namespace Tests\AppBundle\Entity;
 
-use AppBundle\Entity\Patient;
+use AppBundle\Entity\Individual;
 use AppBundle\Entity\Objective;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use PHPUnit\Framework\TestCase;
 
-class PatientTest extends TestCase {
-    public function createPatient() {
-        $patient = new Patient();
+class IndividualTest extends TestCase {
+    public function createIndividual() {
+        $patient = new Individual();
         $patient->setFirstName('John');
         $patient->setLastName('Adams');
         $patient->setMedicalId(random_int(1, 9000000));
@@ -26,7 +26,7 @@ class PatientTest extends TestCase {
     public function createObjective($patient) {
         $objective = new Objective();
         $objective
-            ->setPatient($patient)
+            ->setIndividual($patient)
             ->setName('O1')
             ->setGoalText('GoalText')
             ->setObjectiveText('ObjectiveText')
@@ -36,9 +36,9 @@ class PatientTest extends TestCase {
         return $objective;
     }
 
-    public function testPatient() {
+    public function testIndividual() {
         // Create the patient and assign it to a variable.
-        $patient = $this->createPatient();
+        $patient = $this->createIndividual();
         // Create the objectives and attach it to the patient.
         $objective = $this->createObjective($patient);
         $patient->addObjective($objective);
@@ -52,7 +52,7 @@ class PatientTest extends TestCase {
         // Make sure the patient has the objective.
         $this->assertEquals($objective, $patient->getObjectives()[0]);
         // Make sure the objective is assigned to the patient.
-        $this->assertEquals($objective->getPatient(), $patient);
+        $this->assertEquals($objective->getIndividual(), $patient);
         // Make sure the objective has the right frequency.
         $this->assertEquals("/Week", $objective->getFreqKind());
     }

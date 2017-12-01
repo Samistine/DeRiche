@@ -4,13 +4,13 @@
     <section id="ReviewerNotes">
         <h2 class="text-primary">Notes Awaiting Approval</h2>
         <hr/>
-        <!-- Show pending notes grouped by patient -->
+        <!-- Show pending notes grouped by individual -->
         <section>
             <table id="ReviewerNotes" class="table table-striped table-bordered" cellspacing="0">
                 <thead>
                 <tr>
                     {#<th>ID</th>#}
-                    <th>Patient</th>
+                    <th>Individual</th>
                     <th>Staff</th>
                     <th>Date Modified</th>
                     <th>Manage</th>
@@ -19,9 +19,9 @@
                 <tbody>
                 {% for note in notes if note.state == constant('AWAITING_APPROVAL', note) %}
                     <tr>
-                        <td>{{ note.patient.firstName }} {{ note.patient.lastName }}</td>
+                        <td>{{ note.individual.firstName }} {{ note.individual.lastName }}</td>
                         <td>{{ note.staff.firstName }} {{ note.staff.lastName }}</td>
-                        <td>{{ note.modifiedAt|default(date('0'))|date('F j, Y h:m A') }}</td>
+                        <td>{{ note.modifiedAt|default(date('0'))|date('F j, Y h:i A') }}</td>
                         <td><a href="review/{{ note.uuid }}"><button type="button" class="btn btn-primary">Manage</button></a></td>
                         </td>
                     </tr>
@@ -35,7 +35,7 @@
                 <thead>
                 <tr>
                     {#<th>ID</th>#}
-                    <th>Patient</th>
+                    <th>Individual</th>
                     <th>Staff</th>
                     <th>Date Approved</th>
                     <th>Manage</th>
@@ -44,9 +44,9 @@
                 <tbody>
                 {% for note in notes if note.state == constant('ACCEPTED', note) %}
                     <tr>
-                        <td>{{ note.patient.firstName }} {{ note.patient.lastName }}</td>
+                        <td>{{ note.individual.firstName }} {{ note.individual.lastName }}</td>
                         <td>{{ note.staff.firstName }} {{ note.staff.lastName }}</td>
-                        <td>{{ note.submittedAt|default(date('0'))|date('F j, Y h:m A') }}</td>
+                        <td>{{ note.submittedAt|default(date('0'))|date('F j, Y h:i A') }}</td>
                         <td><a href="review/{{ note.uuid }}"><button type="button" class="btn btn-primary">View</button></a></td>
                         </td>
                     </tr>
@@ -60,7 +60,7 @@
                 <thead>
                 <tr>
                     {#<th>ID</th>#}
-                    <th>Patient</th>
+                    <th>Individual</th>
                     <th>Staff</th>
                     <th>Date Sent Back</th>
                     <th>Manage</th>
@@ -69,9 +69,9 @@
                 <tbody>
                 {% for note in notes if note.state == constant('KICKED_BACK', note) %}
                     <tr>
-                        <td>{{ note.patient.firstName }} {{ note.patient.lastName }}</td>
+                        <td>{{ note.individual.firstName }} {{ note.individual.lastName }}</td>
                         <td>{{ note.staff.firstName }} {{ note.staff.lastName }}</td>
-                        <td>{{ note.modifiedAt|default(date('0'))|date('F j, Y h:m A') }}</td>
+                        <td>{{ note.modifiedAt|default(date('0'))|date('F j, Y h:i A') }}</td>
                         <td><a href="review/{{ note.uuid }}"><button type="button" class="btn btn-primary">View</button></a></td>
                         </td>
                     </tr>

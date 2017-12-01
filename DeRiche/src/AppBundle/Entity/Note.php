@@ -2,9 +2,10 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+//use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use DateTime;
 
 /**
  * Note
@@ -30,7 +31,9 @@ class Note implements \JsonSerializable
     private $uuid;
 
     /**
-     * @var \DateTime
+     * The moment this note was created at.
+     *
+     * @var DateTime
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
@@ -38,7 +41,7 @@ class Note implements \JsonSerializable
     /**
      * The last time this entity was modified at.
      *
-     * @var \DateTime
+     * @var DateTime
      * @ORM\Column(name="modified_at", type="datetime")
      */
     private $modifiedAt;
@@ -46,24 +49,25 @@ class Note implements \JsonSerializable
     /**
      * The date and time this was submitted to the database.
      *
-     * @var \DateTime
+     * @var DateTime
      * @ORM\Column(name="submitted_at", type="datetime", nullable=true)
      */
     private $submittedAt;
 
 
     /**
-     * Many Notes have one Patient.
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Patient", inversedBy="notes")
-     * @ORM\JoinColumn(name="patient_uuid", referencedColumnName="uuid")
+     * The individual this note is written for.
+     *
+     * Many Notes have one Individual.
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Individual", inversedBy="notes")
+     * @ORM\JoinColumn(name="individual_uuid", referencedColumnName="uuid")
      */
-    private $patient;
+    private $individual;
 
     /**
      * The writer of the note.
      *
      * Many Notes have one Staff.
-     *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="authoredNotes")
      * @ORM\JoinColumn(name="staff_uuid", referencedColumnName="uuid", nullable=false)
      */
@@ -74,7 +78,6 @@ class Note implements \JsonSerializable
      * This is null until the note is either accepted or kicked back for corrections.
      *
      * Many Notes have one or no Reviewer.
-     *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="reviewedNotes")
      * @ORM\JoinColumn(name="reviewer_uuid", referencedColumnName="uuid", nullable=true)
      */
@@ -82,14 +85,16 @@ class Note implements \JsonSerializable
 
     /**
      * Seizure - Yes, No, Possibly?
+     *
      * @Assert\Choice({"Yes", "No", "Possibly"})
      * @ORM\Column(name="seizure", type="text", nullable=true)
      */
     private $seizure;
 
     /**
-     * @var boolean
      * Bowel Movement - was one done?
+     *
+     * @var boolean
      * @ORM\Column(name="bowel", type="boolean", nullable=true)
      */
     private $bowel = true;
@@ -103,7 +108,7 @@ class Note implements \JsonSerializable
     private $content;
 
     /**
-     * Writer's signature base64
+     * Writer's signature, encoded as base64.
      *
      * @var string
      * @ORM\Column(name="signature", type="text", nullable=true)
@@ -119,7 +124,10 @@ class Note implements \JsonSerializable
     private $comment;
 
     /**
+     * Forms, which may be, attached to this note.
+     *
      * One Note has many Forms.
+     * @var \Doctrine\Common\Collections\Collection
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Form", mappedBy="note")
      */
     private $forms;
@@ -138,20 +146,23 @@ class Note implements \JsonSerializable
     private $state = 10;
 
     /**
+     * This gets called when the note is created.
+     *
      * @ORM\PrePersist
      */
-    public function setCreateAt()
+    public function _setCreateAt()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new DateTime();
     }
 
     /**
+     * This gets called when the note is created or saved
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function updateModifiedDatetime()
+    public function _updateModifiedDatetime()
     {
-        $this->setModifiedAt(new \DateTime());
+        $this->setModifiedAt(new DateTime());
     }
 
     /**
@@ -168,7 +179,7 @@ class Note implements \JsonSerializable
             'createdAt' => $this->getCreatedAt(),
             'modifiedAt' => $this->getModifiedAt(),
             'submittedAt' => $this->getSubmittedAt(),
-            'patient' => $this->getPatient()->getUuid(),
+            'individual' => $this->getIndividual()->getUuid(),
             'staff' => $this->getStaff()->getUuid(),
             'reviewer' => is_object($this->getReviewer()) ? $this->getReviewer()->getUuid() : null,
             'content' => $this->getContent(),
@@ -184,13 +195,6 @@ class Note implements \JsonSerializable
     }
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * Get uuid
      *
      * @return integer
@@ -203,7 +207,7 @@ class Note implements \JsonSerializable
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return Note
      */
@@ -217,7 +221,7 @@ class Note implements \JsonSerializable
     /**
      * Get createdAt
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -227,7 +231,7 @@ class Note implements \JsonSerializable
     /**
      * Set modifiedAt
      *
-     * @param \DateTime $modifiedAt
+     * @param DateTime $modifiedAt
      *
      * @return Note
      */
@@ -241,7 +245,7 @@ class Note implements \JsonSerializable
     /**
      * Get modifiedAt
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getModifiedAt()
     {
@@ -251,7 +255,7 @@ class Note implements \JsonSerializable
     /**
      * Set submittedAt
      *
-     * @param \DateTime $submittedAt
+     * @param DateTime $submittedAt
      *
      * @return Note
      */
@@ -265,7 +269,7 @@ class Note implements \JsonSerializable
     /**
      * Get submittedAt
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getSubmittedAt()
     {
@@ -321,27 +325,27 @@ class Note implements \JsonSerializable
     }
 
     /**
-     * Set patient
+     * Set individual
      *
-     * @param \AppBundle\Entity\Patient $patient
+     * @param \AppBundle\Entity\Individual $individual
      *
      * @return Note
      */
-    public function setPatient(\AppBundle\Entity\Patient $patient = null)
+    public function setIndividual(Individual $individual = null)
     {
-        $this->patient = $patient;
+        $this->individual = $individual;
 
         return $this;
     }
 
     /**
-     * Get patient
+     * Get individual
      *
-     * @return \AppBundle\Entity\Patient
+     * @return \AppBundle\Entity\Individual
      */
-    public function getPatient()
+    public function getIndividual()
     {
-        return $this->patient;
+        return $this->individual;
     }
 
     /**

@@ -3,7 +3,7 @@
 {% block body %}
     <h2>Audit Dashboard</h2>
     <p>This page will be used by the admin to generate audits.</p>
-    <form action="patient" type="POST">
+    <form action="individual" type="POST">
         <div class="form-group col-sm-8">
             <label for="name" class="col-form-label">Generate an audit based on the individual:</label>
             <input id="name" name="name" class="form-control" placeholder="John Oliver" required=""
@@ -31,8 +31,8 @@
     {% if notes is defined %}
         <div>
             <hr>
-            {% if patient is defined %}
-                <h2>Patient: {{ patient }}</h2>
+            {% if individual is defined %}
+                <h2>Individual: {{ individual }}</h2>
             {% endif %}
             <table id="AllNotes" class="table table-striped table-bordered" cellspacing="0">
                 <thead>
