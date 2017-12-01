@@ -18,6 +18,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
 
+/**
+ * This is the actual controller for logging in as dictated by the documentation page here:
+ * https://symfony.com/doc/current/security/form_login_setup.html
+ * Class SecurityController
+ * @package AppBundle\Controller
+ */
 class SecurityController extends Controller
 {
     /**
@@ -26,12 +32,13 @@ class SecurityController extends Controller
      */
     public function loginAction(Request $request, AuthenticationUtils $authUtils)
     {
-        // get the login error if there is one
+        // Get the login error we need to display if there is one.
         $error = $authUtils->getLastAuthenticationError();
 
-        // last username entered by the user
+        // Get the last username that we need.
         $lastUsername = $authUtils->getLastUsername();
 
+        // Render the actual login page.
         return $this->render('login.html.twig', array(
             'last_username' => $lastUsername,
             'error' => $error,

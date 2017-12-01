@@ -83,19 +83,23 @@ class AuditController extends Controller
     }
 
     /**
-     * This is when
+     * This is when the Administrator wants to do a full backup of the database.
+     * We use shell_exec to pull a backup from the various databases.
      * @Route("db-backup", name="Audit - Full Backup")
      */
     public function dbBackup(EntityManagerInterface $em, Request $request)
     {
+        // We pull the database values from Doctrine/Symfony that we'll need for the commands below.
         $dbuser = $em->getConnection()->getUsername();
         $dbpasswd = $em->getConnection()->getPassword();
         $database = $em->getConnection()->getDatabase();
+        // This is primarily for the demo as we use SQLite in the backend.
         if(substr($database, -7) == ".sqlite") {
-            // Let's do a SQLite backup. For the dev environment (tested).
             $output = shell_exec("sqlite3 $database .dump");
 
+            // We generate a response object and send it back to the enduser.
             $response = new Response();
+            // This is a TEXT file that we name .sql because it is generating raw SQL in $output
             $response->headers->set('Content-Type', 'text/plain');
             $response->headers->set('Content-disposition', 'attachment;filename=full_backup.sql');
             $response->setContent($output);
@@ -103,10 +107,13 @@ class AuditController extends Controller
             $response->sendHeaders();
             $response->send();
         }
-        // Actual MySQL Dump function (untested).
+        // Actual MySQL Dump function - this uses the backend function.
         $output = shell_exec("mysqldump -u $dbuser --password=$dbpasswd $database | gzip --best");
 
+        // We generate a response object and send it back to the enduser.
         $response = new Response();
+        // This is a gzipped file that we name .sql because it is generating a gzipped out that we'll provide
+        // to the enduser for download.
         $response->headers->set('Content-Type', 'application/x-gzip');
         $response->headers->set('Content-disposition', 'attachment;filename=full_backup.sql.gz');
         $response->setContent($output);
