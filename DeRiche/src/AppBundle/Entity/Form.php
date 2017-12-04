@@ -6,7 +6,7 @@ use AppBundle\Entity\Types\FormType;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Comment
+ * This is the form that gets attached to a note.
  *
  * @ORM\Table(name="form")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\FormRepository")

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
 /**
- * Individual
+ * This is the Individual's representation in the database.
  *
  * @ORM\Table(name="individual")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\IndividualRepository")

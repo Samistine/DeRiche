@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use DateTime;
 
 /**
- * Note
+ * This is the backbone of the system, the Note.
  *
  * @ORM\Table(name="note")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\NoteRepository")
