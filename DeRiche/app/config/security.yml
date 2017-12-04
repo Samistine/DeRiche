@@ -38,7 +38,7 @@ security:
         - { path: ^/individuals, roles: ROLE_ADMIN }
         - { path: ^/note, roles: ROLE_WRITER }
         - { path: ^/reviewer, roles: ROLE_REVIEWER }
-        - { path: ^/form, rolextes: [ROLE_REVIEWER, ROLE_WRITER] }
+        - { path: ^/form, roles: [ROLE_REVIEWER, ROLE_WRITER] }
 
     role_hierarchy:
             ROLE_WRITER:      [ROLE_WRITE_NOTE, ROLE_ATTACH_FORM, ROLE_ATTACH_GOAL, ROLE_SUBMIT_FOR_REVIEW]
