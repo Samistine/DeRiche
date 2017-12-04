@@ -70,7 +70,8 @@ class SubmitterController extends Controller
             ->getRepository(Individual::class)
             ->findBy([
                 'firstName' => $givenName,
-                'lastName' => $familyName
+                'lastName' => $familyName,
+                'active' => true
             ]);
 
         // We then make sure that only one individual has that name.
@@ -82,6 +83,10 @@ class SubmitterController extends Controller
         if ($count === 1) {
             // If a individual was found then we push them to the note creation page.
             return $this->redirect('../create/' . $individuals[0]->getUuid());
+        }
+        if ($count > 1) {
+            // If more than one individual was found then display an error.
+            return $this->redirect('../../note/?error=Multiple');
         }
     }
 

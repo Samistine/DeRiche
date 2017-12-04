@@ -49,7 +49,8 @@ class AuditController extends Controller
             ->getRepository(Individual::class)
             ->findBy([
                 'firstName' => $givenName,
-                'lastName' => $familyName
+                'lastName' => $familyName,
+                'active' => true
             ]);
         // We then make sure that only one individual has that name.
         $count = count($individuals);

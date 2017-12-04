@@ -1,9 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {% if app.request.query.get("error") == "Multiple" %}
+        <div class="alert alert-danger" role="alert">
+            <strong>Unable to Create Note:</strong> Multiple patients were found. We do not deal with this conflict well. Please change one of the patient names.
+        </div>
+    {% endif %}
     {% if backnotes != [] %}
         <div class="alert alert-danger" role="alert">
-            <strong>Warning!</strong> You have kicked-back notes. Please correct these issues before submitting a new note.
+            <strong>Warning!</strong> You have kicked-back notes. Please correct these issues before submitting a new
+            note.
         </div>
         <section id="backnotes">
             <h1>Kicked-Back Notes</h1>
@@ -59,19 +65,20 @@
         </section>
     {% endif %}
     <section id="UserSelectIndividual">
-        <h1>Create Note</h1>
+        <h2>Create Note</h2>
         <!-- Look up user to create note -->
         <h5>Type in Individual's Name</h5>
         <form class="container form" action="findindividual/" type="POST">
             <div class="row">
                 <div class="form-group col-sm-8">
                     <label for="name" class="col-form-label">Individual Name</label>
-                    <input id="name" name="name" class="form-control" placeholder="John Oliver" required>
+                    <input id="name" name="name" class="form-control" placeholder="Fill in patient name" required>
                 </div>
             </div>
             <div class="row">
-                <button type="submit" class="btn btn-warning btn-block">Submit</button>
-            </div>
+                <div class="col-sm-8">
+                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                </div>
         </form>
     </section>
 {% endblock %}

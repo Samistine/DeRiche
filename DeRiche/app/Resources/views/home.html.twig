@@ -2,7 +2,7 @@
 
 {% block body %}
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        <h2>Welcome <b>{{ app.user.firstName }}</b></h2>
+        <h2>Welcome, <b>{{ app.user.firstName }}</b></h2>
         <hr/>
     {% endif %}
 
