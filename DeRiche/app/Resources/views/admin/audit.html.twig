@@ -39,6 +39,7 @@
                 <thead>
                 <tr>
                     <th>Staff</th>
+                    <th>Individual</th>
                     <th>Status</th>
                     <th>Date</th>
                     <th>Export</th>
@@ -48,6 +49,7 @@
                 {% for note in notes if note.state != constant('DRAFT', note) %}
                     <tr>
                         <td>{{ note.staff.firstName }} {{ note.staff.lastName }}</td>
+                        <td> {{ note.individual.firstName }} {{ note.individual.lastName }}</td>
                         {% set statusarray = { 10: 'Draft', 20: 'Awaiting Approval', 30: 'Pending Correction', 40: 'In Database' } %}
                         <td>{{ statusarray[note.state] }}</td>
                         {% if note.state == 10 or note.state == 20 or note.state == 30 %}

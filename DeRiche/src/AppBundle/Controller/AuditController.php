@@ -49,16 +49,14 @@ class AuditController extends Controller
             ->getRepository(Individual::class)
             ->findBy([
                 'firstName' => $givenName,
-                'lastName' => $familyName,
-                'active' => true
+                'lastName' => $familyName
             ]);
         // We then make sure that only one individual has that name.
         $count = count($individuals);
         if ($count === 0) {
             // If a individual was not found with that name.
             throw $this->createNotFoundException('No individual found for ' . $individualName);
-        }
-        if ($count === 1) {
+        } else {
             // If a individual was found then we render the template with the notes.
             return $this->render('admin/audit.html.twig', array('notes' => $individuals[0]->getNotes(),
                 'individual' => $individuals[0]->getFirstName() . ' ' . $individuals[0]->getLastName()));
@@ -97,7 +95,6 @@ class AuditController extends Controller
         // This is primarily for the demo as we use SQLite in the backend.
         if (substr($database, -7) == ".sqlite") {
             $output = shell_exec("sqlite3 $database .dump");
-
             // We generate a response object and send it back to the enduser.
             $response = new Response();
             // This is a TEXT file that we name .sql because it is generating raw SQL in $output
